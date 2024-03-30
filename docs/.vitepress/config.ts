@@ -3,7 +3,7 @@ import { sidebar, nav } from './relaConf';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  base: '/docs-demo/',
+ // base: '/docs-demo/',
   title: 'mondaylab-demo-blog',
   description: 'A VitePress Site',
 
