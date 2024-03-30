@@ -68,7 +68,7 @@ export const nav: DefaultTheme.NavItem[] = [
       },
       {
         text:'深入浅出QT程序设计',
-        link:'column/CPlusPlus/深入浅出QT程序设计'
+        link:'column/CPlusPlus/深入浅出QT程序设计/'
       },
       {
         text:'深入浅出WINDOWS程序设计',

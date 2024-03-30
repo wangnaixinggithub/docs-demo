@@ -71,6 +71,21 @@ export const sidebar: DefaultTheme.Sidebar = {
         }
       ]
     },
+  ],
+
+  '/column/CPlusPlus/深入浅出QT程序设计':
+  [
+    {
+      text: '深入浅出QT程序设计',
+      items: [
+        {
+          text: 'C++ Qt开发：SpinBox数值微调框组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/08-C++ Qt开发：SpinBox数值微调框组件'
+        }
+      ]
+
+    }
+  
 
   ]
 };
