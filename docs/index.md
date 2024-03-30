@@ -4,13 +4,13 @@ layout: home
 home: true
 
 # https://vitepress.dev/reference/default-theme-home-page
-title: 周一的博客
+title: JacksonWang的博客
 titleTemplate: Hi，终于等到你
 editLink: true
 lastUpdated: true
 
 hero:
-    name: 周一同学
+    name: JacksonWang
     text: Stay foolish, Stay hungry.
     tagline: /斜杠青年/人间清醒/工具控/
     image:
@@ -25,8 +25,8 @@ hero:
       link: /column/Growing/
 features:
   - icon: 🤹‍♀️
-    title: Web前端
-    details: 大厂程序媛，国内某互联网厂搬砖。
+    title: Web后端
+    details: 大厂程序猿，国内某厂搬砖。
     link: /column/views/guide
   - icon: 👩‍🎨‍
     title: 喜欢美学

@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 
 ```
 
-![image-20240330103418907](./30-C++%20Boost%20应用JSON解析库.assets/image-20240330103418907-17117660600881.png)
+![image-20240330103418907](/docs/column/CPlusPlus/C++基础不牢地动山摇/30-C++%20Boost%20应用JSON解析库.assets/image-20240330103418907-17117660600881.png)
 
 ## 8.2 解析单个列表
 

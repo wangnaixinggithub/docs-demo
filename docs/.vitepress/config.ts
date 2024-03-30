@@ -3,10 +3,10 @@ import { sidebar, nav } from './relaConf';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  base: '/docs-demo/',
-  title: 'mondaylab-demo-blog',
+  //base: '/docs-demo/',
+  title: 'JacksonWangBlog',
   description: 'A VitePress Site',
-
+  head: [["link", { rel: "icon", href: "/avatar.png" }]],
   // 配置markdown写作风格
   // markdown: {
   //   toc: {
@@ -29,8 +29,7 @@ export default defineConfig({
   // },
 
   themeConfig: {
-    logo: '/avatar.png',
-    // https://vitepress.dev/reference/default-theme-config
+    logo: '/avatar.png', // 表示docs/public/avartar.png
     nav: nav,
     sidebar: sidebar,
 
@@ -38,20 +37,30 @@ export default defineConfig({
     //  provider: 'local'
     //},
 
+
+
+    
     outline: {
+      label: '目录',
       level: [2, 6],
-      label: '目录'
+  
     },
+
+
 
     i18nRouting: true,
 
-    carbonAds: {
-      code: 'your-carbon-code',
-      placement: 'your-carbon-placement'
-    },
+   // carbonAds: {
+     // code: 'your-carbon-code',
+     // placement: 'your-carbon-placement'
+    //},
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-    ]
-  }
+    ],
+    footer:{
+      copyright:'Copyright@ 2024 Jackson Wang'
+    }
+  },
+
 });
