@@ -27,5 +27,22 @@ export const sidebar: DefaultTheme.Sidebar = {
         }
       ]
     }
+  ],
+  '/column/CPlusPlus/C++基础不牢地动山摇':
+  [
+    {
+      text: 'C++基础不牢地动山摇',
+      items: [
+        {
+          text: 'C++ Boost 文件目录操作库',
+          link: '/column/CPlusPlus/C++基础不牢地动山摇/28-C++ Boost 文件目录操作库'
+        },
+        {
+          text: 'C++ Boost 应用JSON解析库',
+          link: '/column/CPlusPlus/C++基础不牢地动山摇/30-C++ Boost 应用JSON解析库'
+        }
+      ]
+    },
+
   ]
 };

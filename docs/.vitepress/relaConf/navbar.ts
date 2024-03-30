@@ -1,23 +1,13 @@
 import { DefaultTheme } from 'vitepress';
 
 export const nav: DefaultTheme.NavItem[] = [
+
   {
     text: '首页',
     link: '/'
   },
-  {
-    text: '个人成长',
-    items: [
-      {
-        text: '大江南北游记',
-        link: '/column/Travel/'
-      },
-      {
-        text: '所思·所想',
-        link: '/column/Growing/'
-      }
-    ]
-  },
+
+//===================TestDemo======================
   {
     text: '前端开发',
     items: [
@@ -27,7 +17,159 @@ export const nav: DefaultTheme.NavItem[] = [
       }
     ]
   },
+
+  //===================CPlusPlus======================
   {
+    text: 'C++',
+    items: [
+      {
+        text: 'C++并发编程实战',
+        link: '/column/CPlusPlus/C++并发编程实战'
+      },
+      {
+        text: 'C++Linux编程',
+        link: '/column/CPlusPlus/C++Linux编程'
+      },
+      {
+        text: 'C++基础不牢地动山摇',
+        link: '/column/CPlusPlus/C++基础不牢地动山摇/'
+      },
+      {
+        text:'OpenCV学习笔记',
+        link:'column/CPlusPlus/OpenCV学习笔记'
+      },
+      {
+        text:'UNIX环境高级编程',
+        link:'column/CPlusPlus/UNIX环境高级编程'
+      },
+      {
+        text:'VC++深入详解',
+        link:'column/CPlusPlus/VC++深入详解'
+      },
+      {
+        text:'Win32开发笔记',
+        link:'column/CPlusPlus/Win32开发笔记'
+      },
+      {
+        text:'Window内核编程',
+        link:'column/CPlusPlus/Window内核编程'
+      },
+      {
+        text:'第三方库整合笔记',
+        link:'column/CPlusPlus/第三方库整合笔记'
+      },
+      {
+        text:'嵌入式开发笔记',
+        link:'column/CPlusPlus/嵌入式开发笔记'
+      },
+      {
+        text:'深入浅出OpenGL',
+        link:'column/CPlusPlus/深入浅出OpenGL'
+      },
+      {
+        text:'深入浅出QT程序设计',
+        link:'column/CPlusPlus/深入浅出QT程序设计'
+      },
+      {
+        text:'深入浅出WINDOWS程序设计',
+        link:'column/CPlusPlus/深入浅出WINDOWS程序设计'
+      },
+      {
+        text:'深入浅出WINDOW驱动程序开发',
+        link:'column/CPlusPlus/深入浅出WINDOW驱动程序开发'
+      }
+    ]
+
+
+  },
+  //===================CPlusPlus======================
+
+  //===================CSharp=========================
+  {
+    text: 'CSharp',
+    items: [
+      {
+        text: 'CSharp程序设计基础入门教程',
+        link: 'column/CSharp/CSharp程序设计基础入门教程'
+      },
+      {
+        text: 'CSharp基础不牢地动山摇',
+        link: 'column/CSharp/CSharp基础不牢地动山摇'
+      },
+    ]
+  },
+   //===================CSharp=========================
+
+   //===================JavaScript======================
+    {
+      text: 'JavaScript',
+      items: [
+        {
+          text: '吃螃蟹咯HarmonyOs真香',
+          link: 'column/CPlusPlus/吃螃蟹咯HarmonyOs真香'
+        },
+        {
+          text: '开源项目学习',
+          link: 'column/CPlusPlus/开源项目学习'
+        },
+        {
+          text: '小兔鲜电商项目实战',
+          link: 'column/CPlusPlus/小兔鲜电商项目实战'
+        },
+      ]
+    },
+   //===================JavaScript======================
+
+
+   //===================Java======================
+   {
+    text: 'Java',
+    items: [
+      {
+        text: 'Java基础不牢地动山摇！',
+        link: 'column/Java/Java基础不牢地动山摇！'
+      },
+      {
+        text: 'Java开源项目学习',
+        link: 'column/Java/Java开源项目学习'
+      },
+      {
+        text: 'SpringBoot整合第三方库',
+        link: 'column/Java/SpringBoot整合第三方库'
+      },
+    ]
+   },
+   //===================Java======================
+   
+
+  //===================Python======================
+  {
+    text: 'Python',
+    items: [
+      {
+        text: 'Python玩OpenCV也是有一手的！',
+        link: 'column/Python/Python玩OpenCV也是有一手的！'
+      },
+      {
+        text: '你对象不会也在学测试吧',
+        link: 'column/Python/你对象不会也在学测试吧'
+      },
+    ]
+  },
+  //===================Python======================
+  {
+    text: '设计模式',
+    link: 'column/设计模式'
+  
+  },
+  {
+    text: '算法',
+    link: 'column/算法'
+  },
+
+
+  //===================Link======================
+   {
     text: '关于我',
     items: [
       { text: 'Github', link: 'https://github.com/Jacqueline712' },
@@ -44,5 +186,6 @@ export const nav: DefaultTheme.NavItem[] = [
         link: 'https://www.zhihu.com/people/zheng-zi-ji-67-89/posts'
       }
     ]
-  }
+   }
+  //===================Link======================
 ];

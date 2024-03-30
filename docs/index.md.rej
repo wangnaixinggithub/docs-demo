@@ -1,0 +1,24 @@
+diff a/docs/index.md b/docs/index.md	(rejected hunks)
+@@ -4,18 +4,18 @@
+ home: true
+ 
+ # https://vitepress.dev/reference/default-theme-home-page
+-title: 周一的博客
++title: 嘿，小爱同学
+ titleTemplate: Hi，终于等到你
+ editLink: true
+ lastUpdated: true
+ 
+ hero:
+-    name: 周一同学
++    name: 好记性不如烂笔头
+     text: Stay foolish, Stay hungry.
+     tagline: /斜杠青年/人间清醒/工具控/
+     image:
+-        src: /avatar.png
+-        alt: avatar
++        src: /background.png
++        alt: 背景图
+     actions:
+     - theme: brand
+       text: 进入主页
