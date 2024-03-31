@@ -23,64 +23,82 @@ export const nav: DefaultTheme.NavItem[] = [
     text: 'C++',
     items: [
       {
-        text: 'C++并发编程实战',
-        link: '/column/CPlusPlus/C++并发编程实战'
+        text: '❤️C++内功心法❤️',
+        items:[
+          {
+            text: '✍️C++基础不牢地动山摇✍️',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/'
+          },
+          {
+            text: '✍️C++并发编程实战✍️',
+            link: '/column/CPlusPlus/C++并发编程实战'
+          },
+          {
+            text:'✍️第三方库整合笔记✍️',
+            link:'column/CPlusPlus/第三方库整合笔记'
+          },
+        ]
       },
       {
-        text: 'C++Linux编程',
-        link: '/column/CPlusPlus/C++Linux编程'
+        text:'❤️Linux 操作系统应用开发❤️',
+        items:[
+          {
+            text: '✍️C++Linux编程✍️',
+            link: '/column/CPlusPlus/C++Linux编程/'
+          },
+          {
+            text:'✍️UNIX环境高级编程✍️',
+            link:'column/CPlusPlus/UNIX环境高级编程'
+          },
+        ]
       },
       {
-        text: 'C++基础不牢地动山摇',
-        link: '/column/CPlusPlus/C++基础不牢地动山摇/'
+        text:'❤️Windows 操作系统应用开发❤️',
+        items:[
+          {
+            text:'✍️VC++深入详解✍️',
+            link:'column/CPlusPlus/VC++深入详解/'
+          },
+          {
+            text:'✍️Win32开发笔记✍️',
+            link:'column/CPlusPlus/Win32开发笔记'
+          },
+          {
+            text:'✍️Window内核编程✍️',
+            link:'column/CPlusPlus/Window内核编程'
+          },
+          {
+            text:'✍️深入浅出QT程序设计✍️',
+            link:'column/CPlusPlus/深入浅出QT程序设计/'
+          },
+          {
+            text:'✍️深入浅出WINDOWS程序设计✍️',
+            link:'column/CPlusPlus/深入浅出WINDOWS程序设计'
+          },
+          {
+            text:'✍️深入浅出WINDOW驱动程序开发✍️',
+            link:'column/CPlusPlus/深入浅出WINDOW驱动程序开发'
+          }
+        ]
       },
       {
-        text:'OpenCV学习笔记',
-        link:'column/CPlusPlus/OpenCV学习笔记'
+        text:'❤️计算机图形视觉开发❤️',
+        items:[
+          {
+            text:'✍️嵌入式开发笔记✍️',
+            link:'column/CPlusPlus/嵌入式开发笔记'
+          },
+          {
+            text:'✍️深入浅出OpenGL✍️',
+            link:'column/CPlusPlus/深入浅出OpenGL'
+          },
+          {
+            text:'✍️OpenCV学习笔记✍️',
+            link:'column/CPlusPlus/OpenCV学习笔记/'
+          },
+        ]
       },
-      {
-        text:'UNIX环境高级编程',
-        link:'column/CPlusPlus/UNIX环境高级编程'
-      },
-      {
-        text:'VC++深入详解',
-        link:'column/CPlusPlus/VC++深入详解'
-      },
-      {
-        text:'Win32开发笔记',
-        link:'column/CPlusPlus/Win32开发笔记'
-      },
-      {
-        text:'Window内核编程',
-        link:'column/CPlusPlus/Window内核编程'
-      },
-      {
-        text:'第三方库整合笔记',
-        link:'column/CPlusPlus/第三方库整合笔记'
-      },
-      {
-        text:'嵌入式开发笔记',
-        link:'column/CPlusPlus/嵌入式开发笔记'
-      },
-      {
-        text:'深入浅出OpenGL',
-        link:'column/CPlusPlus/深入浅出OpenGL'
-      },
-      {
-        text:'深入浅出QT程序设计',
-        link:'column/CPlusPlus/深入浅出QT程序设计/'
-      },
-      {
-        text:'深入浅出WINDOWS程序设计',
-        link:'column/CPlusPlus/深入浅出WINDOWS程序设计'
-      },
-      {
-        text:'深入浅出WINDOW驱动程序开发',
-        link:'column/CPlusPlus/深入浅出WINDOW驱动程序开发'
-      }
     ]
-
-
   },
   //===================CPlusPlus======================
 

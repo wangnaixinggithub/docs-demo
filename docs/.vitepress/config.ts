@@ -4,9 +4,11 @@ import { sidebar, nav } from './relaConf';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   //base: '/docs-demo/',
+ 
   title: 'JacksonWangBlog',
   description: 'A VitePress Site',
   head: [["link", { rel: "icon", href: "/avatar.png" }]],
+  
   // 配置markdown写作风格
   // markdown: {
   //   toc: {

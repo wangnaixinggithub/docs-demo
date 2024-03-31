@@ -87,5 +87,43 @@ export const sidebar: DefaultTheme.Sidebar = {
     }
   
 
+  ],
+  '/column/CPlusPlus/VC++深入详解':
+  [
+    {
+      text: 'VC++深入详解',
+      items: [
+        {
+          text: 'Window程序内部运行机制',
+          link: '/column/CPlusPlus/VC++深入详解/01_Window程序内部运行机制'
+        },
+        {
+          text: 'MFC框架程序剖析',
+          link: '/column/CPlusPlus/VC++深入详解/03_MFC框架程序剖析'
+        },
+      ]
+    }
+  ],
+  '/column/CPlusPlus/C++Linux编程':
+  [
+    {
+      text: 'C++Linux编程',
+      items: [
+        {
+          text: '快速搭建Linux编程的HelloWorld',
+          link: '/column/CPlusPlus/C++Linux编程/01_快速搭建Linux编程的HelloWorld.md'
+        },
+        {
+          text: 'VSCode安装和配置',
+          link: '/column/CPlusPlus/C++Linux编程/02_VSCode安装和配置.md'
+        },
+        {
+          text: '生成测试数据',
+          link: '/column/CPlusPlus/C++Linux编程/12_生成测试数据.md'
+        },
+  
+      ]
+    }
+
   ]
 };
