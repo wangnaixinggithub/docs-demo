@@ -95,9 +95,9 @@ Host 192.168.28.132
 
 保存，并启用此配置，之后会让你输入该`root` 账户的密码，输入成功。
 
-![image-20231214230417495](03_VSCode安装和配置.assets/image-20231214230417495-17025662589833.png)
 
 
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20231214230417495.png)
 
 之后可通过`查看 >> 找到终端`，从而在VSCode下放出现`Shell` 窗口后，出现远程shell终端，则可以确定完成了配置工作。
 
