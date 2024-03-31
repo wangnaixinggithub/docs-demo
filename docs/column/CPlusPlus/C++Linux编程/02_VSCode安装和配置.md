@@ -123,7 +123,7 @@ Host 192.168.28.132
 
 
 
-![](E:\javascript-projects\docs-demo\docs\column\CPlusPlus\C++Linux编程\02_VSCode安装和配置.assets\image-20231214230648804.png)
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20231214230648804.png)
 
 
 
@@ -175,9 +175,9 @@ drwxr-xr-x. 6 root root      133 12月 13 01:47 vscode-server-linux-x64
 https://update.code.visualstudio.com/commit:<提交序列号>/server-linux-x64/stable
 ```
 
-<img src="03_VSCode安装和配置.assets/image-20231214231351228.png" alt="image-20231214231351228" style="zoom:50%;" />
 
 
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20231214231351228-17025668335585.png)
 
 将本机下载的安装包上传到服务器`/root/.vscode-server/bin/<序列号>`目录下并解压。
 
