@@ -76,9 +76,7 @@ C:\Users\82737>
 
 - Terminal SSH
 
-<img src="03_VSCode安装和配置.assets/image-20231214230114906-17025660775442.png" alt="image-20231214230114906" style="zoom:50%;" />
-
-
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20231214230114906.png)
 
 ## 配置实现远程连接Linux服务器
 
