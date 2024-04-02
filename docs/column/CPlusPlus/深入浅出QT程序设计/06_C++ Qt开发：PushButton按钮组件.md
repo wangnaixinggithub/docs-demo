@@ -83,13 +83,19 @@ HelloQT::~HelloQT()
 
 ```
 
-上述代码中我们通过`new QPushButton`的方式创建了两个按钮，并分别调整了按钮的常规属性包括按钮的高度宽度以及按钮的大小、按钮标题等，通过`connect`分别为按钮绑定了两个事件，以用于推出和触发打印函数，效果如下所示：
+上述代码中我们通过`new QPushButton`的方式创建了两个按钮，并分别调整了按钮的常规属性包括按钮的高度宽度以及按钮的大小、按钮标题等，通过`connect`分别为按钮绑定了两个事件，以用于推出和触发打印函数。
 
-<img src="06_C++ Qt开发：PushButton按钮组件.assets/代码形式创建Pushbutton.gif" style="zoom:50%;" />
+
+
+
 
 如果说，读者的程序运行之后，没有控制台窗口出现，可以通过配置项目属性来解决。具体步骤如下图所示：
 
-<img src="06_C++ Qt开发：PushButton按钮组件.assets/image-20240114115631180.png" alt="image-20240114115631180" style="zoom: 50%;" />
+
+
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240114115631180.png)
 
 ## 图形界面创建
 
@@ -99,7 +105,11 @@ HelloQT::~HelloQT()
 
 
 
-<img src="06_C++ Qt开发：PushButton按钮组件.assets/image-20240114120101148.png" alt="image-20240114120101148" style="zoom:50%;" />
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240114120101148.png)
+
+
+
+
 
 总的来说，使用QSS，开发者可以很容易地改变应用程序的外观，使其适应不同的用户界面设计需求，或者根据应用程序的主题进行个性化定制。
 
@@ -127,15 +137,21 @@ HelloQT::~HelloQT()
 
 ```
 
-<img src="06_C++ Qt开发：PushButton按钮组件.assets/image-20240114120605687.png" alt="image-20240114120605687" style="zoom:67%;" />
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240114120605687.png)
+
+
+
+
 
 
 
 如果读者是使用VS开发，可能会出现我们在`可视化ui界面`修改之后后在VS中运行却没有变化的问题，处理该问题很简单。我们只需要找到ui文件，笔者这里是`HelloQT.ui`  进行编译即可！
 
-<img src="06_C++ Qt开发：PushButton按钮组件.assets/image-20240114120504056.png" alt="image-20240114120504056" style="zoom:67%;" />
 
 
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240114120504056.png)
 
 
 
@@ -147,13 +163,23 @@ this->setStyleSheet("background:blue");
 
 除了使用代码来设置样式表外，也可以在设计模式中为添加到界面上的部件设置样式表，这样更加直观。先注释掉上面添加的代码，然后进入设计模式。在界面上右击，在弹出的菜单中选择“改变样式表”.
 
-<img src="06_C++ Qt开发：PushButton按钮组件.assets/image-20240114121132781.png" alt="image-20240114121132781" style="zoom: 50%;" />
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240114121132781%5B1%5D.png)
+
+
 
 
 
 这时会出现编辑样式表对话框，在其中输入如下代码，如图；
 
-![image-20240114121217278](06_C++ Qt开发：PushButton按钮组件.assets/image-20240114121217278-17052055383776.png)
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240114121217278-17052055383776.png)
+
+
+
+
 
 则此时将会针对所有的`pushButton`组件生效，当程序运行时所有的组件都见变为蓝色，当然了在某些时候我们还是希望能对单独的组件进行控制，例如将第二个按钮上色第一个保持不变，则此时需要将规则由；
 
@@ -174,7 +200,11 @@ QPushButton#pushButton_2
 
 此时再次运行程序，则只有第二个按钮被标记为蓝色，第一个按钮将会保持默认色，如下图；
 
-![image-20240114121318104](06_C++ Qt开发：PushButton按钮组件.assets/image-20240114121318104-17052055992687.png)
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240114121318104-17052055992687.png)
+
+
 
 
 
@@ -217,7 +247,9 @@ QPushButton:pressed
 
 此时会呈现三种状态，当默认未被选中时会使用`QPushButton`来渲染，而`QPushButton:hover`则用于悬停时的显示，最后的`QPushButton:pressed`则是被按下是的颜色渲染，如下所示；
 
-![](06_C++ Qt开发：PushButton按钮组件.assets/前端CSS在QT中直接用.gif)
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/%E5%89%8D%E7%AB%AFCSS%E5%9C%A8QT%E4%B8%AD%E7%9B%B4%E6%8E%A5%E7%94%A8.gif)
 
 
 
@@ -227,25 +259,31 @@ QPushButton:pressed
 
 - Qt_threeStatus_ok.png
 
-![](06_C++ Qt开发：PushButton按钮组件.assets/Qt_threeStatus_ok.png)
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/Qt_threeStatus_ok.png)
 
 - Qt_threeStatus_ok1.png
 
-![Qt_threeStatus_ok1](06_C++ Qt开发：PushButton按钮组件.assets/Qt_threeStatus_ok1.png)
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/Qt_threeStatus_ok1.png)
 
 - Qt_threeStatus_ok2.png
 
-![Qt_threeStatus_ok2](06_C++ Qt开发：PushButton按钮组件.assets/Qt_threeStatus_ok2.png)
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/Qt_threeStatus_ok2.png)
+
+
+
+
 
 接着就是要把这些图片添加到Qt中的资源中去，如果你用的工具是`QT Creator`，则在项目主目录上右键选中`Add New...`按钮，并找到`Qt`下的`Qt Resource File`选项卡，并点击`Choose...`按钮，如下图所示:
 
-<img src="06_C++ Qt开发：PushButton按钮组件.assets/image-20240114124452404.png" alt="image-20240114124452404" style="zoom:50%;" />
 
 
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240114124452404.png)
 
 笔者用的工具是`VS2022`，所以是采用添加新建项的方式。读者可自行命名该资源名称这里我就叫`jacksonWang.qrc`
 
-<img src="06_C++ Qt开发：PushButton按钮组件.assets/image-20240114124659890.png" alt="image-20240114124659890" style="zoom: 33%;" />
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240114124659890.png)
 
 然后对`jacksonWang.qrc` 文件进行编辑，这里不能直接在`VS2022` 直接处理，有BUG.所以笔者这里用`QT Creator` 对此文件进行编辑，完成添加图片资源的工作。
 
@@ -253,15 +291,25 @@ QPushButton:pressed
 
 点击`Add Prefix`按钮，并在项目根目录新建一个`jacksonWang`目录并将所需文件拖拽到该目录下，如下图；
 
-<img src="06_C++ Qt开发：PushButton按钮组件.assets/image-20240114125130998.png" alt="image-20240114125130998" style="zoom:50%;" />
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240114125130998.png)
 
 
 
-![image-20240114125241069](06_C++ Qt开发：PushButton按钮组件.assets/image-20240114125241069-170520796203711.png)
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240114125241069-170520796203711.png)
+
+
+
+
 
 按钮依次选中资源并添加到项目源文件中，当添加结束后按下`Ctrl+S`保存RC文件，即可看到如下图所示；
 
-![image-20240114125903283](06_C++ Qt开发：PushButton按钮组件.assets/image-20240114125903283-170520834486813.png)
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240114125903283-170520834486813.png)
 
 
 
@@ -335,6 +383,10 @@ QPushButton:pressed
 
 
 
-![](06_C++ Qt开发：PushButton按钮组件.assets/使用图片资源-170520846554914.gif)
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/%E4%BD%BF%E7%94%A8%E5%9B%BE%E7%89%87%E8%B5%84%E6%BA%90-170520846554914.gif)
+
+
+
+
 
 当然，此类按钮的美化完全可以使用`QSS`来实现并不需要导入样式图，这种方法比上面用图标作为背景的好处就是可以不需要设计背景图，而且在样式不设置字体的情况下，可以随意更改文字以及文字的大小、位置、字体等显示效果。
