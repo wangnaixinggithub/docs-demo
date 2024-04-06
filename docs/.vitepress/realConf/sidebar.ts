@@ -62,7 +62,6 @@ export const sidebar: DefaultTheme.Sidebar = {
   
 
   ],
-
   '/column/CPlusPlus/深入浅出QT程序设计':
   [
     {
@@ -168,5 +167,129 @@ export const sidebar: DefaultTheme.Sidebar = {
       ]
     }
 
+  ],
+  'column/Java/SpringBoot整合第三方库':
+  [
+    {
+      text: '🚩SpringBoot整合第三方库🚩',
+      items: [
+        {
+          text: '👉SpringBoot整合 ZXing',
+          link: '/column/Java/SpringBoot整合第三方库/01_SpringBoot整合 ZXing.md'
+        },
+        {
+          text: '👉SpringBoot实现PDF添加水印',
+          link: '/column/Java/SpringBoot整合第三方库/02_SpringBoot实现PDF添加水印.md'
+        },
+        {
+          text: '👉SpringBoot 优雅实现超大文件上传，通用方案',
+          link: '/column/Java/SpringBoot整合第三方库/03_SpringBoot 优雅实现超大文件上传，通用方案.md'
+        },
+        {
+          text: '👉组装生成复杂父子树形结构， Stream + Lambda优雅搞定！',
+          link: '/column/Java/CSpringBoot整合第三方库/04_组装生成复杂父子树形结构StreamLambda优雅搞定.md'
+        },
+        {
+          text: '👉05_SpringBoot 中实现订单30分钟自动取消的策略',
+          link: '/column/Java/SpringBoot整合第三方库/05_SpringBoot 中实现订单30分钟自动取消的策略.md'
+        },
+        {
+          text: '👉06_在SpringBoot中如何优雅实现接口请求重试？这里有8种解决方案！',
+          link: '/column/Java/SpringBoot整合第三方库/06_在SpringBoot中如何优雅实现接口请求重试？这里有8种解决方案！.md'
+        },
+        {
+          text: '👉07_SpringBoot 对接支付宝完成扫码支付，完整流程梳理！',
+          link: '/column/Java/SpringBoot整合第三方库/07_SpringBoot 对接支付宝完成扫码支付，完整流程梳理！.md'
+        },
+        {
+          text: '👉08_SpringBoot+ThreadPoolTaskScheduler，定时任务还可以这么玩',
+          link: '/column/Java/SpringBoot整合第三方库/08_SpringBoot+ThreadPoolTaskScheduler，定时任务还可以这么玩.md'
+        },
+        {
+          text: '👉09_手把手教你 Java 文件断点下载',
+          link: '/column/Java/SpringBoot整合第三方库/09_手把手教你 Java 文件断点下载.md'
+        },
+        {
+          text: '👉10_网站提示用微信扫码登录，他们是怎么实现的？.md',
+          link: '/column/Java/10_网站提示用微信扫码登录，他们是怎么实现的？.md'
+        },
+        {
+          text: '👉11_优雅的对树形结构进行高性能分页，闭包表才是yyds',
+          link: '/column/Java/11_优雅的对树形结构进行高性能分页，闭包表才是yyds.md'
+        },
+        {
+          text: '👉12_SpringBoot+Minio实现上传凭证、分片上传、秒传和断点续传',
+          link: '/column/Java/12_SpringBoot+Minio实现上传凭证、分片上传、秒传和断点续传.md'
+        },
+        {
+          text: '👉13_Spring源码中的16种设计模式实现',
+          link: '/column/Java/13_Spring源码中的16种设计模式实现.md'
+        },
+        {
+          text: '👉14_SpringBoot + Apache tika 轻松实现各种文档内容解析',
+          link: '/column/Java/14_SpringBoot + Apache tika 轻松实现各种文档内容解析.md'
+        },
+        {
+          text: '👉15_Spring Boot集成AJ-Captcha实现滑动验证码功能',
+          link: '/column/Java/15_Spring Boot集成AJ-Captcha实现滑动验证码功能.md'
+        },
+      ]
+    }
+  ],
+  '/column/JavaScript/小兔鲜电商项目实战/':
+  [
+    {
+      text: '🚩小兔鲜电商项目实战🚩',
+      items:
+      [
+        {
+          text: '开始',
+          link: '/column/JavaScript/小兔鲜电商项目实战/01_开始.md'
+        },
+        {
+          text: 'LayOut首页开发',
+          link: '/column/JavaScript/小兔鲜电商项目实战/02_LayOut首页开发.md'
+        },
+        {
+          text: 'Home页开发',
+          link: '/column/JavaScript/小兔鲜电商项目实战/03_Home页开发.md'
+        },
+        {
+          text: '一级分类页开发',
+          link: '/column/JavaScript/小兔鲜电商项目实战/04_一级分类页开发.md'
+        },
+        {
+          text: '二级分类页开发',
+          link: '/column/JavaScript/小兔鲜电商项目实战/05_二级分类页开发.md'
+        },
+        {
+          text: '商品详情页开发',
+          link: '/column/JavaScript/小兔鲜电商项目实战/06_商品详情页开发.md'
+        },
+        {
+          text: '登录页开发',
+          link: '/column/JavaScript/小兔鲜电商项目实战/07_登录页开发.md'
+        },
+        {
+          text: '购物车页开发',
+          link: '/column/JavaScript/小兔鲜电商项目实战/08_购物车页开发.md'
+        },
+        {
+          text: '订单页开发',
+          link: '/column/JavaScript/小兔鲜电商项目实战/09_订单页开发.md'
+        },
+        {
+          text: '支付页开发',
+          link: '/column/JavaScript/小兔鲜电商项目实战/10_支付页开发.md'
+        },
+      ]
+    }
+  
+        
+
+
   ]
+
+
+
 };

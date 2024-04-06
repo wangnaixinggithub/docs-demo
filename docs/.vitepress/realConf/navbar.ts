@@ -111,16 +111,16 @@ export const nav: DefaultTheme.NavItem[] = [
       text: 'JavaScript',
       items: [
         {
+          text: '✍️小兔鲜电商项目实战✍️',
+          link: 'column/JavaScript/小兔鲜电商项目实战/'
+        },
+        {
           text: '吃螃蟹咯HarmonyOs真香',
-          link: 'column/CPlusPlus/吃螃蟹咯HarmonyOs真香'
+          link: 'column/JavaScript/吃螃蟹咯HarmonyOs真香/'
         },
         {
           text: '开源项目学习',
-          link: 'column/CPlusPlus/开源项目学习'
-        },
-        {
-          text: '小兔鲜电商项目实战',
-          link: 'column/CPlusPlus/小兔鲜电商项目实战'
+          link: 'column/JavaScript/开源项目学习/'
         },
       ]
     },
@@ -141,7 +141,7 @@ export const nav: DefaultTheme.NavItem[] = [
       },
       {
         text: 'SpringBoot整合第三方库',
-        link: 'column/Java/SpringBoot整合第三方库'
+        link: 'column/Java/SpringBoot整合第三方库/'
       },
     ]
    },
