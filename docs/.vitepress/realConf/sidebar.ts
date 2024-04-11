@@ -48,35 +48,78 @@ export const sidebar: DefaultTheme.Sidebar = {
       {
         text: '🚩基础不牢地动山摇🚩',
         items: [
-
-
+          
           {
-            text:'👉CC++ 实现FTP文件上传下载',
-            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/37-CC++ 实现FTP文件上传下载.md'
+            text:'👉函数模板的基本概念',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/51-函数模板的基本概念.md'
           },
           {
-            text:'👉CC++ 通过HTTP实现文件上传下载',
-            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/38-CC++ 通过HTTP实现文件上传下载.md'
+            text:'👉函数模板的注意事项',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/52-函数模板的注意事项.md'
+          },
+          {
+            text:'👉函数模板的具体化',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/53-函数模板的具体化.md'
+          },
+          {
+            text:'👉函数模板分文件编写',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/54-函数模板分文件编写.md'
+          },
+          {
+            text:'👉函数模板高级',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/55-函数模板高级.md'
+          },  
+          {
+            text:'👉模板类的基本概念',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/44-模板类的基本概念.md'
+          },
+          {
+            text:'👉嵌套和递归使用模板类',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/45-嵌套和递归使用模板类.md'
+          },
+          {
+            text:'👉模板类具体化',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/56-模板类具体化.md'
+          },
+          {
+            text:'👉模板类与继承',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/46-模板类与继承.md'
+          },
+          {
+            text:'👉模板类与函数',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/47-模板类与函数.md'
+          },
+          {
+            text:'👉模板类与友元',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/48-模板类与友元.md'
+          },
+          {
+            text:'👉成员模板类',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/49-成员模板类.md'
+          },
+          {
+            text:'👉将模板类用作参数',
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/50-将模板类用作参数.md'
           },
           {
             text:'👉C++11新标准',
-            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/39-C++11新标准.md'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/39-C++11新标准.md'
           },
           {
             text:'👉委托构造和继承构造',
-            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/40-委托构造和继承构造.md'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/40-委托构造和继承构造.md'
           },
           {
             text:'👉lambda函数',
-            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/41-lambda函数.md'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/41-lambda函数.md'
           },
           {
             text:'👉右值引用',
-            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/42-右值引用.md'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/42-右值引用.md'
           },
           {
             text:'👉移动语义',
-            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/43-移动语义.md'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/43-移动语义.md'
           },
 
         ]
@@ -161,6 +204,21 @@ export const sidebar: DefaultTheme.Sidebar = {
   '/column/CPlusPlus/C++Windows编程':
   [
     {
+      text: '🚩WINDOWS API🚩',
+      items: [
+       
+    {
+      text:'👉CC++ 实现FTP文件上传下载',
+      link: '/column/CPlusPlus/C++Windows编程/Windows/37-CC++ 实现FTP文件上传下载.md'
+    },
+    {
+      text:'👉CC++ 通过HTTP实现文件上传下载',
+      link: '/column/CPlusPlus/C++Windows编程/Windows/38-CC++ 通过HTTP实现文件上传下载.md'
+    },
+      ]
+    },
+
+    {
       text: '🚩MFC🚩',
       items: [
         {
@@ -175,13 +233,18 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: '👉菜单',
           link: '/column/CPlusPlus/C++Windows编程/MFC/06_菜单.md'
         },
+        {
+          text: '👉对话框',
+          link: '/column/CPlusPlus/C++Windows编程/MFC/07_对话框.md'
+        },
       ]
     }
+
   ],
   '/column/CPlusPlus/C++Linux编程':
   [
     {
-      text: '🚩C++Linux编程🚩',
+      text: '🚩C++中高级工程师，直通Offer🚩',
       items: [
         {
           text: '👉Linux编程的HelloWorld',
@@ -216,12 +279,32 @@ export const sidebar: DefaultTheme.Sidebar = {
           link: '/column/CPlusPlus/C++Linux编程/08_剑指进程和进程控制.md'
         },
         {
+          text: '👉剑指网络编程基础',
+          link: '/column/CPlusPlus/C++Linux编程/09_剑指网络编程基础.md'
+        },
+        {
+          text: '👉项目开发框架',
+          link: '/column/CPlusPlus/C++Linux编程/10_项目开发框架.md'
+        },
+        {
           text: '👉生成测试数据',
           link: '/column/CPlusPlus/C++Linux编程/12_生成测试数据.md'
         },
   
       ]
+    },
+
+    {
+      text: '🚩C++Linux编程🚩',
+      items: [
+        {
+          text: '👉socket+epoll封装 服务器客户端举例',
+          link: '/column/CPlusPlus/C++Linux编程/11_socket+epoll封装 服务器客户端举例.md'
+        },
+
+      ]
     }
+  
 
   ],
   'column/Java/SpringBoot整合第三方库':
