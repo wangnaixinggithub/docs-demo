@@ -18,7 +18,7 @@ man -3 strcpy
 
 ```
 
-# ✌️HelloWorld✌️
+# HelloWorld
 
 写一个HelloWorld程序, `HelloWorld.cpp`. 
 
@@ -51,30 +51,17 @@ int main(int argc, char* argv[])
 [root@localhost ~]# g++ -o HelloWorld HelloWorld.cpp 
 [root@localhost ~]# ll
 总用量 22312
--rw-r--r--. 1 root root      254 12月 11 18:57 \
--rw-------. 1 root root     2789 12月 11 17:06 anaconda-ks.cfg
-drwxr-xr-x. 5 root root      176 12月 11 23:57 compressOps
--rw-r--r--. 1 root root      270 12月 11 19:56 create_database.sql
--rw-r--r--. 1 root root        0 12月 11 17:34 DM
--rw-r--r--. 1 root root       20 12月 11 17:22 file
--rw-r--r--. 1 root root       24 12月 11 17:23 file2
--rw-r--r--. 1 root root       48 12月 11 19:35 happy.txt.gz
+...
 -rwxr-xr-x. 1 root root     8896 12月 12 01:11 HelloWorld
 -rw-r--r--. 1 root root      148 12月 12 01:09 HelloWorld.cpp
--rw-r--r--. 1 root root        0 12月 11 19:53 hi.txt
--rw-r--r--. 1 root root       13 12月 11 19:40 log
--rw-r--r--. 1 root root       38 12月 11 19:35 merge
--rw-r--r--. 1 root root 22790924 12月 11 18:07 night.wav
--rw-------. 1 root root     2069 12月 11 17:06 original-ks.cfg
-drwxr-xr-x. 3 root root       19 12月 11 20:21 work
+...
 [root@localhost ~]# ./HelloWorld 
 Linux HelloWorld!
 [root@localhost ~]# 
-
 # 不指定 -o 附加参数，则生成的可执行文件为a.out
 [root@localhost ~]# g++ HelloWorld.cpp 
 [root@localhost ~]# ls
-\  anaconda-ks.cfg  a.out  compressOps  create_database.sql  DM  file  file2  happy.txt.gz  HelloWorld.cpp  hi.txt  log  merge  night.wav  original-ks.cfg  work
+... a.out  HelloWorld.cpp  ...
 [root@localhost ~]# 
 
 ```

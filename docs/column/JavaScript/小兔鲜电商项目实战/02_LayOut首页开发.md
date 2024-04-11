@@ -14,7 +14,7 @@
 
 ![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240406212202049.png)
 
-`LayoutNav.vue`
+::: details  `LayoutNav.vue`
 
 ```js
 <script setup>
@@ -84,7 +84,7 @@
 </style>
 ```
 
-`LayoutHeader.vue`
+::: details `LayoutHeader.vue`
 
 ```vue
 <script setup>
@@ -220,7 +220,11 @@
 </style>
 ```
 
-`LayoutFooter.vue`
+:::
+
+
+
+::: details  `LayoutFooter.vue`
 
 ```vue
 <template>
@@ -453,7 +457,11 @@
 </style>
 ```
 
-`Layout/index.vue`
+::::
+
+
+
+:::details `Layout/index.vue`
 
 ```vue{8-11}
 <script setup>
@@ -469,6 +477,8 @@ import LayoutFooter from './components/LayoutFooter.vue'
   <LayoutFooter />
 </template>
 ```
+
+:::
 
 ## 字体图标引入
 
@@ -657,9 +667,7 @@ export function getCategoryAPI () {
 
 ### 准备组件静态结构
 
-`LayoutFixed.vue`
-
-
+::: details `LayoutFixed.vue`
 
 ```vue
 <script setup>
@@ -800,6 +808,10 @@ export function getCategoryAPI () {
 }
 </style>
 ```
+
+:::
+
+
 
 分析样式可以知道，如果想控制吸顶导航组件 显示还是隐藏，可以通过控制show样式来实现，无show样式，则不显示，有show样式则显示置顶。
 

@@ -4,43 +4,43 @@ export const sidebar: DefaultTheme.Sidebar = {
   [
     
       {
-        text: '🚩C++基础不牢地动山摇🚩',
+        text: '🚩Boost库大牛写的好框架🚩',
         items: [
           {
             text: '👉C++ Boost 文件目录操作库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/28-C++ Boost 文件目录操作库'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/28-C++ Boost 文件目录操作库'
           },
           {
             text: '👉C++ Boost 日期时间操作库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/29-C++ Boost 日期时间操作库'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/29-C++ Boost 日期时间操作库'
           },
           {
             text: '👉C++ Boost 应用JSON解析库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/30-C++ Boost 应用JSON解析库'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/30-C++ Boost 应用JSON解析库'
           },
           {
             text: '👉C++ Boost 字符串处理库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/31-C++ Boost 字符串处理库'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/31-C++ Boost 字符串处理库'
           },
           {
             text:'👉C++ Boost 内存池管理库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/32-C++ Boost 内存池管理库'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/32-C++ Boost 内存池管理库'
           },
           {
             text:'👉C++ Boost ThreadPool 线程池',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/33-C++ Boost ThreadPool 线程池'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/33-C++ Boost ThreadPool 线程池'
           },
           {
             text:'👉C++ Boost 多线程并发库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/34-C++ Boost 多线程并发库'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/34-C++ Boost 多线程并发库'
           },
           {
             text:'👉C++ Boost 数据集序列化库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/35-C++ Boost 数据集序列化库'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/35-C++ Boost 数据集序列化库'
           },
           {
             text:'👉C++ Boost 函数绑定回调库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/36-C++ Boost 函数绑定回调库'
+            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/36-C++ Boost 函数绑定回调库'
           }
         ]
       },
@@ -48,16 +48,48 @@ export const sidebar: DefaultTheme.Sidebar = {
       {
         text: '🚩基础不牢地动山摇🚩',
         items: [
+
+
           {
             text:'👉CC++ 实现FTP文件上传下载',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/37-CC++ 实现FTP文件上传下载.md'
+            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/37-CC++ 实现FTP文件上传下载.md'
           },
           {
             text:'👉CC++ 通过HTTP实现文件上传下载',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/38-CC++ 通过HTTP实现文件上传下载.md'
-          }
+            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/38-CC++ 通过HTTP实现文件上传下载.md'
+          },
+          {
+            text:'👉C++11新标准',
+            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/39-C++11新标准.md'
+          },
+          {
+            text:'👉委托构造和继承构造',
+            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/40-委托构造和继承构造.md'
+          },
+          {
+            text:'👉lambda函数',
+            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/41-lambda函数.md'
+          },
+          {
+            text:'👉右值引用',
+            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/42-右值引用.md'
+          },
+          {
+            text:'👉移动语义',
+            link: '/column/CPlusPlus/Base/C++基础不牢地动山摇/43-移动语义.md'
+          },
+
         ]
       },
+
+      {
+        text: '🚩进军多线程🚩',
+        items: [
+
+
+        ]
+      },
+
 
   
 
@@ -126,22 +158,22 @@ export const sidebar: DefaultTheme.Sidebar = {
   
 
   ],
-  '/column/CPlusPlus/VC++深入详解':
+  '/column/CPlusPlus/C++Windows编程':
   [
     {
-      text: '🚩VC++深入详解🚩',
+      text: '🚩MFC🚩',
       items: [
         {
           text: '👉Window程序内部运行机制',
-          link: '/column/CPlusPlus/VC++深入详解/01_Window程序内部运行机制.md'
+          link: '/column/CPlusPlus/C++Windows编程/MFC/01_Window程序内部运行机制.md'
         },
         {
           text: '👉MFC框架程序剖析',
-          link: '/column/CPlusPlus/VC++深入详解/03_MFC框架程序剖析.md'
+          link: '/column/CPlusPlus/C++Windows编程/MFC/03_MFC框架程序剖析.md'
         },
         {
           text: '👉菜单',
-          link: '/column/CPlusPlus/VC++深入详解/06_菜单.md'
+          link: '/column/CPlusPlus/C++Windows编程/MFC/06_菜单.md'
         },
       ]
     }
@@ -152,12 +184,36 @@ export const sidebar: DefaultTheme.Sidebar = {
       text: '🚩C++Linux编程🚩',
       items: [
         {
-          text: '👉快速搭建Linux编程的HelloWorld',
-          link: '/column/CPlusPlus/C++Linux编程/01_快速搭建Linux编程的HelloWorld.md'
+          text: '👉Linux编程的HelloWorld',
+          link: '/column/CPlusPlus/C++Linux编程/01_Linux编程的HelloWorld.md'
         },
         {
           text: '👉VSCode安装和配置',
           link: '/column/CPlusPlus/C++Linux编程/02_VSCode安装和配置.md'
+        },
+        {
+          text: '👉动态库和静态库',
+          link: '/column/CPlusPlus/C++Linux编程/03_动态库和静态库.md'
+        },
+        {
+          text: '👉makefile',
+          link: '/column/CPlusPlus/C++Linux编程/04_makefile.md'
+        },
+        {
+          text: '👉Main函数的参数与操作环境变量',
+          link: '/column/CPlusPlus/C++Linux编程/05_Main函数的参数与操作环境变量.md'
+        },
+        {
+          text: '👉gdb调试程序',
+          link: '/column/CPlusPlus/C++Linux编程/06_gdb调试程序.md'
+        },
+        {
+          text: '👉时间 目录 系统错误 目录文件',
+          link: '/column/CPlusPlus/C++Linux编程/07_时间目录系统错误目录文件.md'
+        },
+        {
+          text: '👉剑指进程和进程控制',
+          link: '/column/CPlusPlus/C++Linux编程/08_剑指进程和进程控制.md'
         },
         {
           text: '👉生成测试数据',
@@ -211,27 +267,27 @@ export const sidebar: DefaultTheme.Sidebar = {
         },
         {
           text: '👉10_网站提示用微信扫码登录，他们是怎么实现的？.md',
-          link: '/column/Java/10_网站提示用微信扫码登录，他们是怎么实现的？.md'
+          link: '/column/Java/SpringBoot整合第三方库/10_网站提示用微信扫码登录，他们是怎么实现的？.md'
         },
         {
           text: '👉11_优雅的对树形结构进行高性能分页，闭包表才是yyds',
-          link: '/column/Java/11_优雅的对树形结构进行高性能分页，闭包表才是yyds.md'
+          link: '/column/Java/SpringBoot整合第三方库/11_优雅的对树形结构进行高性能分页，闭包表才是yyds.md'
         },
         {
           text: '👉12_SpringBoot+Minio实现上传凭证、分片上传、秒传和断点续传',
-          link: '/column/Java/12_SpringBoot+Minio实现上传凭证、分片上传、秒传和断点续传.md'
+          link: '/column/Java/SpringBoot整合第三方库/12_SpringBoot+Minio实现上传凭证、分片上传、秒传和断点续传.md'
         },
         {
           text: '👉13_Spring源码中的16种设计模式实现',
-          link: '/column/Java/13_Spring源码中的16种设计模式实现.md'
+          link: '/column/Java/SpringBoot整合第三方库/13_Spring源码中的16种设计模式实现.md'
         },
         {
           text: '👉14_SpringBoot + Apache tika 轻松实现各种文档内容解析',
-          link: '/column/Java/14_SpringBoot + Apache tika 轻松实现各种文档内容解析.md'
+          link: '/column/Java/SpringBoot整合第三方库/14_SpringBoot + Apache tika 轻松实现各种文档内容解析.md'
         },
         {
           text: '👉15_Spring Boot集成AJ-Captcha实现滑动验证码功能',
-          link: '/column/Java/15_Spring Boot集成AJ-Captcha实现滑动验证码功能.md'
+          link: '/column/Java/SpringBoot整合第三方库/15_Spring Boot集成AJ-Captcha实现滑动验证码功能.md'
         },
       ]
     }
