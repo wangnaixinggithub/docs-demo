@@ -29,9 +29,7 @@
 
 画个下单流程的时序图：
 
-<img src="07_SpringBoot 对接支付宝完成扫码支付，完整流程梳理！.assets/image-20240221211501375.png" alt="image-20240221211501375" style="zoom:50%;" />
-
-大致流程：
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240221211501375.png)
 
 - 用户下单，系统A组装信息后（订单信息、回调地址、签名），调用支付宝预下单接口，返回二维码链接
 - 系统A将二维码链接转二维码图片
