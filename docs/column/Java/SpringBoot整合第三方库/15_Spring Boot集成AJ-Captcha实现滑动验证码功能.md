@@ -404,7 +404,7 @@ yarn install
 yarn run dev
 ```
 
-浏览器登录 http://localhost:8081/#/
+浏览器登录 `http://localhost:8081/#/`
 
 
 
@@ -414,5 +414,5 @@ yarn run dev
 
 ## 4.引用
 
-- https://gitee.com/anji-plus/captcha
-- http://www.liuhaihua.cn/archives/710384.html
+- `https://gitee.com/anji-plus/captcha`
+- `http://www.liuhaihua.cn/archives/710384.html`
