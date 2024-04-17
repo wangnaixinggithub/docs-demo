@@ -87,8 +87,12 @@ export const nav: DefaultTheme.NavItem[] = [
       text: 'JavaScript',
       items: [
         {
-          text: '✍️小兔鲜电商项目实战✍️',
+          text: '✍️小兔鲜电商VUE3项目实战✍️',
           link: 'column/JavaScript/小兔鲜电商项目实战/'
+        },
+        {
+          text: '✍️本地生活微信小程序项目实战✍️',
+          link: 'column/JavaScript/本地生活微信小程序/'
         },
         // {
         //   text: '吃螃蟹咯HarmonyOs真香',
