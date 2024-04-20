@@ -237,6 +237,10 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: '👉对话框',
           link: '/column/CPlusPlus/C++Windows编程/MFC/07_对话框.md'
         },
+        {
+          text: '👉文件和注册表的操作',
+          link: '/column/CPlusPlus/C++Windows编程/MFC/12_文件和注册表的操作.md'
+        },
       ]
     }
 
