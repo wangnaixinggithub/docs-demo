@@ -546,8 +546,51 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: 'WXML模板语法-事件绑定tap&input',
           link: '/column/JavaScript/本地生活微信小程序/10-WXML模板语法-事件绑定tap&input.md'
         },
+        {
+          text: 'WXML模板语法-条件渲染wxif&hidden',
+          link: '/column/JavaScript/本地生活微信小程序/11-WXML 模板语法-条件渲染wxif&hidden.md'
+        },
+        {
+          text: 'WXML模板语法-列表渲染-wxfor&wxkey',
+          link: '/column/JavaScript/本地生活微信小程序/12-WXML模板语法-列表渲染-wxfor&wxkey.md'
+        },
+        {
+          text: 'WXSS模板样式-rpx&import',
+          link: '/column/JavaScript/本地生活微信小程序/13-WXSS模板样式-rpx&import.md'
+        },  
+        {
+          text: 'WXSS模板样式-rpx&import',
+          link: '/column/JavaScript/本地生活微信小程序/13-WXSS模板样式-rpx&import.md'
+        },
+        {
+          text: 'WXSS模板样式-全局样式和局部样式',
+          link: '/column/JavaScript/本地生活微信小程序/14-WXSS 模板样式-全局样式和局部样式.md'
+        },   
+        {
+          text: '全局配置-window-导航栏',
+          link: '/column/JavaScript/本地生活微信小程序/15-全局配置-window-导航栏.md'
+        }, 
+        {
+          text: '全局配置 -window -下拉刷新&上拉触底',
+          link: '/column/JavaScript/本地生活微信小程序/16-全局配置 -window -下拉刷新&上拉触底.md'
+        }, 
+        {
+          text: '全局配置-tabBar',
+          link: '/column/JavaScript/本地生活微信小程序/17-全局配置-tabBar.md'
+        }, 
+        {
+          text: '页面配置',
+          link: '/column/JavaScript/本地生活微信小程序/18-页面配置.md'
+        }, 
+        {
+          text: '网络数据请求',
+          link: '/column/JavaScript/本地生活微信小程序/19-网络数据请求.md'
+        }, 
+        {
+          text: '案例-本地生活',
+          link: '/column/JavaScript/本地生活微信小程序/20-案例-本地生活.md'
+        }, 
 
-       
       ]
     }   
   ]
