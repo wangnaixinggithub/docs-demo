@@ -46,4 +46,12 @@ Qt 是一个跨平台C++图形界面开发库，利用Qt可以快速开发跨平
 [👉C++ Qt开发：DateTime日期时间组件👈](./14-C++%20Qt开发：DateTime日期时间组件.md) 
 
 
+[👉C++ Qt开发：ToolBar与MenuBar菜单组件👈](./15-C++%20Qt开发：ToolBar与MenuBar菜单组件.md) 
+
+
+
+[👉C++ Qt开发：Tab与Tree组件实现分页菜单👈](./16-C++%20Qt开发：Tab与Tree组件实现分页菜单.md) 
+
+
+
 :::

@@ -25,8 +25,8 @@ hero:
       link: /column/Growing/
 features:
   - icon: 🤹‍♀️
-    title: Web后端
-    details: 大厂程序猿，国内某厂搬砖。
+    title: 后端开发
+    details: 某厂程序猿，国内某厂搬砖。
     link: /column/views/guide
   - icon: 👩‍🎨‍
     title: 喜欢美学

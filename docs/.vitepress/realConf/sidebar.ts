@@ -194,6 +194,39 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: '👉C++ Qt开发：DateTime日期时间组件',
           link: '/column/CPlusPlus/深入浅出QT程序设计/14-C++ Qt开发：DateTime日期时间组件.md'
         },
+        {
+          text: '👉C++ Qt开发：ToolBar与MenuBar菜单组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/15-C++ Qt开发：ToolBar与MenuBar菜单组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：Tab与Tree组件实现分页菜单',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/16-C++ Qt开发：Tab与Tree组件实现分页菜单.md'
+        },
+        {
+          text: '👉C++ Qt开发：标准Dialog对话框组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/17-C++ Qt开发：标准Dialog对话框组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：自定义Dialog对话框组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/18-C++ Qt开发：自定义Dialog对话框组件.md'
+        },
+        {
+          text: '👉C++ Qt 开发：ListWidget列表框组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/19-C++ Qt 开发：ListWidget列表框组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：TreeWidget 树形选择组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/20-C++ Qt开发：TreeWidget 树形选择组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：MdiArea多窗体组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/21-C++ Qt开发：MdiArea多窗体组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：TableWidget表格组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/22-C++ Qt开发：TableWidget表格组件.md'
+        },
+
 
       ]
 
@@ -214,6 +247,34 @@ export const sidebar: DefaultTheme.Sidebar = {
     {
       text:'👉CC++ 通过HTTP实现文件上传下载',
       link: '/column/CPlusPlus/C++Windows编程/Windows/38-CC++ 通过HTTP实现文件上传下载.md'
+    },
+    {
+      text:'👉C++ 实现的Ping类的封装',
+      link: '/column/CPlusPlus/C++Windows编程/Windows/39-C++ 实现的Ping类的封装.md'
+    },
+    {
+      text:'👉CC++ 通过SQLiteSDK增删改查',
+      link: '/column/CPlusPlus/C++Windows编程/Windows/40-CC++ 通过SQLiteSDK增删改查.md'
+    },
+    {
+      text:'👉CC++ 运用WMI接口查询系统信息',
+      link: '/column/CPlusPlus/C++Windows编程/Windows/41-CC++ 运用WMI接口查询系统信息.md'
+    },
+    {
+      text:'👉CC++ 进程线程操作技术',
+      link: '/column/CPlusPlus/C++Windows编程/Windows/42-CC++ 进程线程操作技术.md'
+    },
+    {
+      text:'👉CC++ 开发SCM服务管理组件',
+      link: '/column/CPlusPlus/C++Windows编程/Windows/43-CC++ 开发SCM服务管理组件.md'
+    },
+    {
+      text:'👉CC++ 判断进程是否存在',
+      link: '/column/CPlusPlus/C++Windows编程/Windows/44-CC++ 判断进程是否存在.md'
+    },
+    {
+      text:'👉CC++ 应用层遍历驱动列表',
+      link: '/column/CPlusPlus/C++Windows编程/Windows/45-CC++ 应用层遍历驱动列表.md'
     },
       ]
     },
@@ -294,7 +355,18 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: '👉生成测试数据',
           link: '/column/CPlusPlus/C++Linux编程/12_生成测试数据.md'
         },
-  
+        {
+          text: '👉服务程序的监控和调度',
+          link: '/column/CPlusPlus/C++Linux编程/13_服务程序的监控和调度.md'
+        },  
+        {
+          text: '👉基于ftp协议的文件传输模块',
+          link: '/column/CPlusPlus/C++Linux编程/14_基于ftp协议的文件传输模块.md'
+        },
+        {
+          text: '👉基于tcp协议的文件传输模块',
+          link: '/column/CPlusPlus/C++Linux编程/15_基于tcp协议的文件传输模块.md'
+        },
       ]
     },
 
