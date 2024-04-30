@@ -226,8 +226,58 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: '👉C++ Qt开发：TableWidget表格组件',
           link: '/column/CPlusPlus/深入浅出QT程序设计/22-C++ Qt开发：TableWidget表格组件.md'
         },
-
-
+        {
+          text: '👉C++ Qt开发：QItemDelegate自定义代理组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/23-C++ Qt开发：QItemDelegate自定义代理组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：TabWidget实现多窗体功能',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/24-C++ Qt开发：TabWidget实现多窗体功能.md'
+        },
+        {
+          text: '👉C++ Qt开发：StatusBar底部状态栏组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/25-C++ Qt开发：StatusBar底部状态栏组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：StringListModel字符串列表映射组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/26-C++ Qt开发：StringListModel字符串列表映射组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：StandardItemModel数据模型组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/27-C++ Qt开发：StandardItemModel数据模型组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：Charts绘图组件概述',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/28-C++ Qt开发：Charts绘图组件概述.md'
+        },
+        {
+          text: '👉C++ Qt开发：运用QJSON模块解析数据.md',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/29-C++ Qt开发：运用QJSON模块解析数据.md'
+        },
+        {
+          text: '👉C++ Qt开发：运用QThread多线程组件.md',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/30-C++ Qt开发：运用QThread多线程组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：QFileSystemModel文件管理组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/31-C++ Qt开发：QFileSystemModel文件管理组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：QFileSystemWatcher文件监视组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/32-C++ Qt开发：QFileSystemWatcher文件监视组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：QHostInfo主机地址查询组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/33-C++ Qt开发：QHostInfo主机地址查询组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：QNetworkInterface网络接口组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/34-C++ Qt开发：QNetworkInterface网络接口组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：QNetworkAccessManager网络接口组件',
+          link: '/column/CPlusPlus/深入浅出QT程序设计/35-C++ Qt开发：QNetworkAccessManager网络接口组件.md'
+        },
       ]
 
     }
@@ -590,7 +640,62 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: '案例-本地生活',
           link: '/column/JavaScript/本地生活微信小程序/20-案例-本地生活.md'
         }, 
-
+        {
+          text: '模板语法与配置的总结',
+          link: '/column/JavaScript/本地生活微信小程序/21-模板语法与配置的总结.md'
+        }, 
+        {
+          text: '页面导航 -声明式导航',
+          link: '/column/JavaScript/本地生活微信小程序/22-页面导航 -声明式导航.md'
+        }, 
+        {
+          text: '页面导航-编程式导航',
+          link: '/column/JavaScript/本地生活微信小程序/23-页面导航-编程式导航.md'
+        }, 
+        {
+          text: '页面导航-导航传参',
+          link: '/column/JavaScript/本地生活微信小程序/24-页面导航-导航传参.md'
+        }, 
+        {
+          text: '页面事件-下拉刷新',
+          link: '/column/JavaScript/本地生活微信小程序/25-页面事件-下拉刷新.md'
+        },
+        {
+          text: '页面事件-上拉触底',
+          link: '/column/JavaScript/本地生活微信小程序/26-页面事件-上拉触底.md'
+        },
+        {
+          text: '页面事件-上拉触底-案例',
+          link: '/column/JavaScript/本地生活微信小程序/27-页面事件-上拉触底-案例.md'
+        },
+        {
+          text: '生命周期',
+          link: '/column/JavaScript/本地生活微信小程序/28-生命周期.md'
+        },
+        {
+          text: 'WXS 脚本',
+          link: '/column/JavaScript/本地生活微信小程序/29-WXS 脚本.md'
+        },
+        {
+          text: '案例-本地生活-列表页面',
+          link: '/column/JavaScript/本地生活微信小程序/30-案例-本地生活-列表页面.md'
+        },
+        {
+          text: '页面处理总结',
+          link: '/column/JavaScript/本地生活微信小程序/31-页面处理总结.md'
+        },
+        {
+          text: '自定义组件-创建与引用&样式',
+          link: '/column/JavaScript/本地生活微信小程序/32-自定义组件-创建与引用&样式.md'
+        },
+        {
+          text: '自定义组件-数据、方法和属性',
+          link: '/column/JavaScript/本地生活微信小程序/33-自定义组件-数据、方法和属性.md'
+        },
+        {
+          text: '自定义组件-数据监听器',
+          link: '/column/JavaScript/本地生活微信小程序/34-自定义组件-数据监听器.md'
+        },
       ]
     }   
   ]
