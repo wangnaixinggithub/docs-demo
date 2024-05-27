@@ -12,8 +12,6 @@ https://github.com/nlohmann/json
 
 
 
-![image-20231125091133114](E:\javascript-projects\docs-demo\docs\column\CPlusPlus\第三方库整合笔记\03_C++整合nlohmannjson.assets\image-20231125091133114-17008746943721-17167171014661.png)
-
 # HelloWorld
 
 以下是一个简单的示例，演示如何使用 `nlohmann/json` 将对象序列化为 JSON 字符串并保存到文件，以及如何从 JSON 字符串中反序列化出对象。
