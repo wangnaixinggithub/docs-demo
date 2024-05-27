@@ -547,6 +547,14 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: '支付页开发',
           link: '/column/JavaScript/小兔鲜电商项目实战/10_支付页开发.md'
         },
+        {
+          text: '会员中心页开发',
+          link: '/column/JavaScript/小兔鲜电商项目实战/11_会员中心页开发.md'
+        },
+        {
+          text: '拓展部分',
+          link: '/column/JavaScript/小兔鲜电商项目实战/12_拓展部分.md'
+        },
       ]
     },
   ],
@@ -698,7 +706,97 @@ export const sidebar: DefaultTheme.Sidebar = {
         },
       ]
     }   
-  ]
+  ],
+  '/column/JavaScript/HarmonyOs应用开发/':
+  [
+    {
+      text: '🚩HarmonyOs应用开发🚩',
+      items:
+      [
+        {
+          text: '运行Hello World',
+          link: '/column/JavaScript/HarmonyOs应用开发/01_运行Hello World.md'
+        },
+        {
+          text: 'TypeScript快速入门',
+          link: '/column/JavaScript/HarmonyOs应用开发/02_TypeScript快速入门.md'
+        },
+        {
+          text: '浅析ArkTS的起源和演进',
+          link: '/column/JavaScript/HarmonyOs应用开发/03_浅析ArkTS的起源和演进.md'
+        },
+        {
+          text: '案例：ArkTS基础知识',
+          link: '/column/JavaScript/HarmonyOs应用开发/04_案例：ArkTS基础知识.md'
+        },
+        {
+          text: '应用程序入口—UIAbility的使用',
+          link: '/column/JavaScript/HarmonyOs应用开发/05_应用程序入口—UIAbility的使用.md'
+        },
+        {
+          text: '案例：UIAbility内页面间的跳转',
+          link: '/column/JavaScript/HarmonyOs应用开发/05_案例：UIAbility内页面间的跳转.md'
+        },
+        {
+          text: '基础组件的使用',
+          link: '/column/JavaScript/HarmonyOs应用开发/06_基础组件的使用.md'
+        },
+        {
+          text: 'Column&Row组件的使用',
+          link: '/column/JavaScript/HarmonyOs应用开发/07_Column&Row组件的使用.md'
+        },
+        {
+          text: 'List组件和Grid组件的使用',
+          link: '/column/JavaScript/HarmonyOs应用开发/08_List组件和Grid组件的使用.md'
+        },
+        {
+          text: 'Tabs组件的使用',
+          link: '/column/JavaScript/HarmonyOs应用开发/09_Tabs组件的使用.md'
+        },
+        {
+          text: '案例：常用组件与布局',
+          link: '/column/JavaScript/HarmonyOs应用开发/09_案例：常用组件与布局.md'
+        },
+        {
+          text: '管理组件状态',
+          link: '/column/JavaScript/HarmonyOs应用开发/10_管理组件状态.md'
+        },
+        {
+          text: '案例：目标管理',
+          link: '/column/JavaScript/HarmonyOs应用开发/10_案例：目标管理.md'
+        },
+        {
+          text: 'Video组件的使用',
+          link: '/column/JavaScript/HarmonyOs应用开发/11_Video组件的使用.md'
+        },
+        {
+          text: '案例：简易视频播放器',
+          link: '/column/JavaScript/HarmonyOs应用开发/11_案例：简易视频播放器.md'
+        },
+        {
+          text: '关系型数据库（ArkTS）',
+          link: '/column/JavaScript/HarmonyOs应用开发/12_关系型数据库（ArkTS）.md'
+        },
+        {
+          text: '二级联动（ArkTS）',
+          link: '/column/JavaScript/HarmonyOs应用开发/13_二级联动（ArkTS）.md'
+        },
+        {
+          text: '构建多种样式弹窗',
+          link: '/column/JavaScript/HarmonyOs应用开发/14_构建多种样式弹窗.md'
+        },
+        {
+          text: 'Swiper的使用',
+          link: '/column/JavaScript/HarmonyOs应用开发/15_Swiper的使用.md'
+        },
+        {
+          text: 'switch、chart组件的使用',
+          link: '/column/JavaScript/HarmonyOs应用开发/16_switch、chart组件的使用.md'
+        },
+      ]
+    },
+  ],
+
 
 
 };

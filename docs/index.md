@@ -1,21 +1,20 @@
 ---
 # 提供三种布局，doc、page和home https://vitepress.dev/reference/default-theme-layout
-layout: home
+layout: home 
 home: true
 
 # https://vitepress.dev/reference/default-theme-home-page
-title: JacksonWang的博客
+title: wnx
 titleTemplate: Hi，终于等到你
 editLink: true
 lastUpdated: true
-
 hero:
-    name: JacksonWang
-    text: Stay foolish, Stay hungry.
+    name: JacksonBlog
+    text: Stay foolish & Stay hungry.
     tagline: /斜杠青年/人间清醒/工具控/
     image:
         src: /avatar.png
-        alt: avatar
+        alt: wnx
     actions:
     - theme: brand
       text: 进入主页
@@ -25,21 +24,21 @@ hero:
       link: /column/Growing/
 features:
   - icon: 🤹‍♀️
-    title: 后端开发
-    details: 某厂程序猿，国内某厂搬砖。
+    title: 热爱开发
+    details: 某厂程序猿，国内某砖头厂搬砖...
     link: /column/views/guide
   - icon: 👩‍🎨‍
     title: 喜欢美学
-    details: 热爱一切美学，喜欢用各种设计工具造图。
+    details: 热爱一切美学，喜欢用各种设计工具造图...
+    link: /column/views/guide
   - icon: 🧩
     title: 斜杆青年
-    details: 是个平平无奇但是又很热爱学习的斜杆青年。
+    details: 是个平平无奇但是又很热爱学习的斜杆青年...
+    link: /column/views/guide
 ---
 
 
-<!-- 自定义组件 -->
+
 <script setup>
-import home from './components/home.vue';
 </script>
 
-<home />

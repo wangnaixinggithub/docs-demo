@@ -3,7 +3,7 @@ import { DefaultTheme } from 'vitepress';
 export const nav: DefaultTheme.NavItem[] = [
 
   {
-    text: '首页',
+    text: 'Index',
     link: '/'
   },
   //===================CPlusPlus======================
@@ -37,11 +37,11 @@ export const nav: DefaultTheme.NavItem[] = [
         items:[
           {
             text:'✍️深入浅出QT程序设计✍️',
-            link:'column/CPlusPlus/深入浅出QT程序设计/'
+            link:'/column/CPlusPlus/深入浅出QT程序设计/'
           },
           {
             text:'✍️C++Windows编程✍️',
-            link:'column/CPlusPlus/C++Windows编程/'
+            link:'/column/CPlusPlus/C++Windows编程/'
           },
         ]
       },
@@ -88,16 +88,16 @@ export const nav: DefaultTheme.NavItem[] = [
       items: [
         {
           text: '✍️小兔鲜电商VUE3项目实战✍️',
-          link: 'column/JavaScript/小兔鲜电商项目实战/'
+          link: '/column/JavaScript/小兔鲜电商项目实战/'
         },
         {
           text: '✍️本地生活微信小程序项目实战✍️',
-          link: 'column/JavaScript/本地生活微信小程序/'
+          link: '/column/JavaScript/本地生活微信小程序/'
         },
-        // {
-        //   text: '吃螃蟹咯HarmonyOs真香',
-        //   link: 'column/JavaScript/吃螃蟹咯HarmonyOs真香/'
-        // },
+        {
+          text: '✍️HarmonyOs应用开发✍️',
+          link: '/column/JavaScript/HarmonyOs应用开发/'
+        },
         // {
         //   text: '开源项目学习',
         //   link: 'column/JavaScript/开源项目学习/'
@@ -121,7 +121,7 @@ export const nav: DefaultTheme.NavItem[] = [
       // },
       {
         text: '✍️SpringBoot整合第三方库✍️',
-        link: 'column/Java/SpringBoot整合第三方库/'
+        link: '/column/Java/SpringBoot整合第三方库/'
       },
     ]
    },
@@ -156,7 +156,7 @@ export const nav: DefaultTheme.NavItem[] = [
 
   //===================Link======================
    {
-    text: '关于我',
+    text: 'About Me',
     items: [
       { text: 'Github', link: 'https://github.com/Jacqueline712' },
       {
