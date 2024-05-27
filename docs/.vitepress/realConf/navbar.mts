@@ -14,54 +14,46 @@ export const nav: DefaultTheme.NavItem[] = [
         text: '❤️C++内功心法❤️',
         items:[
           {
-            text: '✍️C++基础不牢地动山摇✍️',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/'
+            text: '✍️基础不牢地动山摇✍️',
+            link: '/column/CPlusPlus/基础不牢地动山摇/'
           },
-          // {
-          //   text:'✍️第三方库整合笔记✍️',
-          //   link:'column/CPlusPlus/第三方库整合笔记'
-          // },
+           {
+             text:'✍️整合三方库✍️',
+             link:'/column/CPlusPlus/整合三方库/'
+           },
         ]
       },
       {
-        text:'❤️Linux 操作系统应用开发❤️',
+        text:'❤️服务器开发❤️',
         items:[
           {
-            text: '✍️C++Linux编程✍️',
-            link: '/column/CPlusPlus/C++Linux编程/'
+            text: '✍️Linux系统编程✍️',
+            link: '/column/CPlusPlus/Linux系统编程/'
           },
         ]
       },
       {
-        text:'❤️Windows 操作系统应用开发❤️',
+        text:'❤️窗体应用开发❤️',
         items:[
           {
-            text:'✍️深入浅出QT程序设计✍️',
-            link:'/column/CPlusPlus/深入浅出QT程序设计/'
+            text:'✍️QT✍️',
+            link:'/column/CPlusPlus/QT程序设计/'
           },
           {
-            text:'✍️C++Windows编程✍️',
-            link:'/column/CPlusPlus/C++Windows编程/'
+            text:'✍️Windows系统编程✍️',
+            link:'/column/CPlusPlus/Windows系统编程/'
           },
-        ]
-      },
-      // {
-      //   text:'❤️计算机图形视觉开发❤️',
-      //   items:[
-      //     {
-      //       text:'✍️嵌入式开发笔记✍️',
-      //       link:'column/CPlusPlus/嵌入式开发笔记'
-      //     },
-      //     {
-      //       text:'✍️深入浅出OpenGL✍️',
-      //       link:'column/CPlusPlus/深入浅出OpenGL'
-      //     },
-      //     {
+          {
+            text:'✍️OpenGL✍️',
+            link:'/column/CPlusPlus/深入浅出OpenGL/'
+          },
+       //     {
       //       text:'✍️OpenCV学习笔记✍️',
       //       link:'column/CPlusPlus/OpenCV学习笔记/'
       //     },
-      //   ]
-      // },
+          
+        ]
+      },
     ]
   },
   //===================CPlusPlus======================
@@ -148,10 +140,12 @@ export const nav: DefaultTheme.NavItem[] = [
   //   link: 'column/设计模式'
   
   // },
-  // {
-  //   text: '算法',
-  //   link: 'column/算法'
-  // },
+
+
+  {
+   text: 'Algorithm',
+   link: '/column/Algorithm'
+ },
 
 
   //===================Link======================

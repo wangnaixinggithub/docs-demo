@@ -1,295 +1,359 @@
 import { DefaultTheme } from 'vitepress';
 export const sidebar: DefaultTheme.Sidebar = {
-  '/column/CPlusPlus/C++基础不牢地动山摇':
+  '/column/CPlusPlus/基础不牢地动山摇':
   [
-    
+   
       {
-        text: '🚩Boost库大牛写的好框架🚩',
+        text: '🚩Boost库大牛写的好框架',
+        collapsed: true,
         items: [
           {
             text: '👉C++ Boost 文件目录操作库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/28-C++ Boost 文件目录操作库'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/28-C++ Boost 文件目录操作库'
           },
           {
             text: '👉C++ Boost 日期时间操作库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/29-C++ Boost 日期时间操作库'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/29-C++ Boost 日期时间操作库'
           },
           {
             text: '👉C++ Boost 应用JSON解析库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/30-C++ Boost 应用JSON解析库'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/30-C++ Boost 应用JSON解析库'
           },
           {
             text: '👉C++ Boost 字符串处理库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/31-C++ Boost 字符串处理库'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/31-C++ Boost 字符串处理库'
           },
           {
             text:'👉C++ Boost 内存池管理库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/32-C++ Boost 内存池管理库'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/32-C++ Boost 内存池管理库'
           },
           {
             text:'👉C++ Boost ThreadPool 线程池',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/33-C++ Boost ThreadPool 线程池'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/33-C++ Boost ThreadPool 线程池'
           },
           {
             text:'👉C++ Boost 多线程并发库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/34-C++ Boost 多线程并发库'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/34-C++ Boost 多线程并发库'
           },
           {
             text:'👉C++ Boost 数据集序列化库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/35-C++ Boost 数据集序列化库'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/35-C++ Boost 数据集序列化库'
           },
           {
             text:'👉C++ Boost 函数绑定回调库',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Boost/36-C++ Boost 函数绑定回调库'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/36-C++ Boost 函数绑定回调库'
           }
         ]
       },
-
       {
-        text: '🚩基础不牢地动山摇🚩',
+        text: '🚩基础不牢地动山摇',
+        collapsed: true,
         items: [
-          
           {
             text:'👉函数模板的基本概念',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/51-函数模板的基本概念.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/51-函数模板的基本概念.md'
           },
           {
             text:'👉函数模板的注意事项',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/52-函数模板的注意事项.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/52-函数模板的注意事项.md'
           },
           {
             text:'👉函数模板的具体化',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/53-函数模板的具体化.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/53-函数模板的具体化.md'
           },
           {
             text:'👉函数模板分文件编写',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/54-函数模板分文件编写.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/54-函数模板分文件编写.md'
           },
           {
             text:'👉函数模板高级',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/55-函数模板高级.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/55-函数模板高级.md'
           },  
           {
             text:'👉模板类的基本概念',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/44-模板类的基本概念.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/44-模板类的基本概念.md'
           },
           {
             text:'👉嵌套和递归使用模板类',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/45-嵌套和递归使用模板类.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/45-嵌套和递归使用模板类.md'
           },
           {
             text:'👉模板类具体化',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/56-模板类具体化.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/56-模板类具体化.md'
           },
           {
             text:'👉模板类与继承',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/46-模板类与继承.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/46-模板类与继承.md'
           },
           {
             text:'👉模板类与函数',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/47-模板类与函数.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/47-模板类与函数.md'
           },
           {
             text:'👉模板类与友元',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/48-模板类与友元.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/48-模板类与友元.md'
           },
           {
             text:'👉成员模板类',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/49-成员模板类.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/49-成员模板类.md'
           },
           {
             text:'👉将模板类用作参数',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/50-将模板类用作参数.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/50-将模板类用作参数.md'
           },
           {
             text:'👉C++11新标准',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/39-C++11新标准.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/39-C++11新标准.md'
           },
           {
             text:'👉委托构造和继承构造',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/40-委托构造和继承构造.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/40-委托构造和继承构造.md'
           },
           {
             text:'👉lambda函数',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/41-lambda函数.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/41-lambda函数.md'
           },
           {
             text:'👉右值引用',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/42-右值引用.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/42-右值引用.md'
           },
           {
             text:'👉移动语义',
-            link: '/column/CPlusPlus/C++基础不牢地动山摇/Base/43-移动语义.md'
+            link: '/column/CPlusPlus/基础不牢地动山摇/Base/43-移动语义.md'
           },
 
         ]
       },
 
       {
-        text: '🚩进军多线程🚩',
+        text: '🚩C Primer Plus',
+        collapsed: true,
+        items: [ 
+          {
+            text:'👉C预处理器和C库',
+            link: '/column/CPlusPlus/基础不牢地动山摇/C Primer Plus/16-C预处理器和C库.md'
+          },
+          {
+            text:'👉高级数据表示',
+            link: '/column/CPlusPlus/基础不牢地动山摇/C Primer Plus/17-高级数据表示.md'
+          },
+          
+
+        ]
+      },
+      
+      {
+        text: '🚩C++并发编程',
+        collapsed: true,
+        items: [
+          {
+            text:'👉你好，C++并发世界',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Thread/01_你好，C++并发世界.md'
+          },
+          {
+            text:'👉线程管理',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Thread/02_线程管理.md'
+          },
+          {
+            text:'👉共享数据',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Thread/03_共享数据.md'
+          },
+          {
+            text:'👉同步操作',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Thread/04_同步操作.md'
+          },
+          {
+            text:'👉内存模型和原子操作',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Thread/05_内存模型和原子操作.md'
+          },
+          {
+            text:'👉设计基于锁的并发数据结构.md',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Thread/06_设计基于锁的并发数据结构.md'
+          },
+
+        ]
+      },
+          
+      {
+        text: '🚩C++ Primer Plus',
+        collapsed: true,
         items: [
 
 
         ]
       },
-
-
-  
-
   ],
-  '/column/CPlusPlus/深入浅出QT程序设计':
+  '/column/CPlusPlus/QT程序设计':
   [
     {
-      text: '🚩深入浅出QT程序设计🚩',
+      text: '🚩QT程序设计',
+      collapsed: true,
       items: [
         {
           text: '👉C++ Qt开发：Qt的安装与配置',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/01_C++ Qt开发：Qt的安装与配置.md'
+          link: '/column/CPlusPlus/QT程序设计/01_C++ Qt开发：Qt的安装与配置.md'
         },
         {
           text: '👉C++ Qt开发：字符串QString容器',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/02_C++ Qt开发：字符串QString容器.md'
+          link: '/column/CPlusPlus/QT程序设计/02_C++ Qt开发：字符串QString容器.md'
         },
         {
           text: '👉C++ Qt开发：使用关联容器类',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/04_C++ Qt开发：使用关联容器类.md'
+          link: '/column/CPlusPlus/QT程序设计/04_C++ Qt开发：使用关联容器类.md'
         },
         {
           text: '👉C++ Qt开发：如何使用信号与槽.md',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/05_C++ Qt开发：如何使用信号与槽.md'
+          link: '/column/CPlusPlus/QT程序设计/05_C++ Qt开发：如何使用信号与槽.md'
         },
         {
           text: '👉C++ Qt开发：PushButton按钮组件.md',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/06_C++ Qt开发：PushButton按钮组件.md'
+          link: '/column/CPlusPlus/QT程序设计/06_C++ Qt开发：PushButton按钮组件.md'
         },
         {
           text: '👉C++ Qt开发：LineEdit单行输入组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/07_C++ Qt开发：LineEdit单行输入组件.md'
+          link: '/column/CPlusPlus/QT程序设计/07_C++ Qt开发：LineEdit单行输入组件.md'
         },
         {
           text: '👉C++ Qt开发：SpinBox数值微调框组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/08-C++ Qt开发：SpinBox数值微调框组件'
+          link: '/column/CPlusPlus/QT程序设计/08-C++ Qt开发：SpinBox数值微调框组件'
         },
         {
           text: '👉C++ Qt开发：RadioButton单选框分组组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/09-C++ Qt开发：RadioButton单选框分组组件.md'
+          link: '/column/CPlusPlus/QT程序设计/09-C++ Qt开发：RadioButton单选框分组组件.md'
         },
         {
           text: '👉C++ Qt开发：CheckBox多选框组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/10-C++ Qt开发：CheckBox多选框组件.md'
+          link: '/column/CPlusPlus/QT程序设计/10-C++ Qt开发：CheckBox多选框组件.md'
         },
         {
           text: '👉C++ Qt开发：Slider滑块条组件.md',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/11-C++ Qt开发：Slider滑块条组件.md'
+          link: '/column/CPlusPlus/QT程序设计/11-C++ Qt开发：Slider滑块条组件.md'
         },
         {
           text: '👉C++ Qt开发：ComboBox下拉组合框组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/12-C++ Qt开发：ComboBox下拉组合框组件.md'
+          link: '/column/CPlusPlus/QT程序设计/12-C++ Qt开发：ComboBox下拉组合框组件.md'
         },
         {
           text: '👉C++ Qt开发：ProgressBar进度条组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/13-C++ Qt开发：ProgressBar进度条组件.md'
+          link: '/column/CPlusPlus/QT程序设计/13-C++ Qt开发：ProgressBar进度条组件.md'
         },
         {
           text: '👉C++ Qt开发：DateTime日期时间组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/14-C++ Qt开发：DateTime日期时间组件.md'
+          link: '/column/CPlusPlus/QT程序设计/14-C++ Qt开发：DateTime日期时间组件.md'
         },
         {
           text: '👉C++ Qt开发：ToolBar与MenuBar菜单组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/15-C++ Qt开发：ToolBar与MenuBar菜单组件.md'
+          link: '/column/CPlusPlus/QT程序设计/15-C++ Qt开发：ToolBar与MenuBar菜单组件.md'
         },
         {
           text: '👉C++ Qt开发：Tab与Tree组件实现分页菜单',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/16-C++ Qt开发：Tab与Tree组件实现分页菜单.md'
+          link: '/column/CPlusPlus/QT程序设计/16-C++ Qt开发：Tab与Tree组件实现分页菜单.md'
         },
         {
           text: '👉C++ Qt开发：标准Dialog对话框组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/17-C++ Qt开发：标准Dialog对话框组件.md'
+          link: '/column/CPlusPlus/QT程序设计/17-C++ Qt开发：标准Dialog对话框组件.md'
         },
         {
           text: '👉C++ Qt开发：自定义Dialog对话框组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/18-C++ Qt开发：自定义Dialog对话框组件.md'
+          link: '/column/CPlusPlus/QT程序设计/18-C++ Qt开发：自定义Dialog对话框组件.md'
         },
         {
           text: '👉C++ Qt 开发：ListWidget列表框组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/19-C++ Qt 开发：ListWidget列表框组件.md'
+          link: '/column/CPlusPlus/QT程序设计/19-C++ Qt 开发：ListWidget列表框组件.md'
         },
         {
           text: '👉C++ Qt开发：TreeWidget 树形选择组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/20-C++ Qt开发：TreeWidget 树形选择组件.md'
+          link: '/column/CPlusPlus/QT程序设计/20-C++ Qt开发：TreeWidget 树形选择组件.md'
         },
         {
           text: '👉C++ Qt开发：MdiArea多窗体组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/21-C++ Qt开发：MdiArea多窗体组件.md'
+          link: '/column/CPlusPlus/QT程序设计/21-C++ Qt开发：MdiArea多窗体组件.md'
         },
         {
           text: '👉C++ Qt开发：TableWidget表格组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/22-C++ Qt开发：TableWidget表格组件.md'
+          link: '/column/CPlusPlus/QT程序设计/22-C++ Qt开发：TableWidget表格组件.md'
         },
         {
           text: '👉C++ Qt开发：QItemDelegate自定义代理组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/23-C++ Qt开发：QItemDelegate自定义代理组件.md'
+          link: '/column/CPlusPlus/QT程序设计/23-C++ Qt开发：QItemDelegate自定义代理组件.md'
         },
         {
           text: '👉C++ Qt开发：TabWidget实现多窗体功能',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/24-C++ Qt开发：TabWidget实现多窗体功能.md'
+          link: '/column/CPlusPlus/QT程序设计/24-C++ Qt开发：TabWidget实现多窗体功能.md'
         },
         {
           text: '👉C++ Qt开发：StatusBar底部状态栏组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/25-C++ Qt开发：StatusBar底部状态栏组件.md'
+          link: '/column/CPlusPlus/QT程序设计/25-C++ Qt开发：StatusBar底部状态栏组件.md'
         },
         {
           text: '👉C++ Qt开发：StringListModel字符串列表映射组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/26-C++ Qt开发：StringListModel字符串列表映射组件.md'
+          link: '/column/CPlusPlus/QT程序设计/26-C++ Qt开发：StringListModel字符串列表映射组件.md'
         },
         {
           text: '👉C++ Qt开发：StandardItemModel数据模型组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/27-C++ Qt开发：StandardItemModel数据模型组件.md'
+          link: '/column/CPlusPlus/QT程序设计/27-C++ Qt开发：StandardItemModel数据模型组件.md'
         },
         {
           text: '👉C++ Qt开发：Charts绘图组件概述',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/28-C++ Qt开发：Charts绘图组件概述.md'
+          link: '/column/CPlusPlus/QT程序设计/28-C++ Qt开发：Charts绘图组件概述.md'
         },
         {
           text: '👉C++ Qt开发：运用QJSON模块解析数据.md',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/29-C++ Qt开发：运用QJSON模块解析数据.md'
+          link: '/column/CPlusPlus/QT程序设计/29-C++ Qt开发：运用QJSON模块解析数据.md'
         },
         {
           text: '👉C++ Qt开发：运用QThread多线程组件.md',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/30-C++ Qt开发：运用QThread多线程组件.md'
+          link: '/column/CPlusPlus/QT程序设计/30-C++ Qt开发：运用QThread多线程组件.md'
         },
         {
           text: '👉C++ Qt开发：QFileSystemModel文件管理组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/31-C++ Qt开发：QFileSystemModel文件管理组件.md'
+          link: '/column/CPlusPlus/QT程序设计/31-C++ Qt开发：QFileSystemModel文件管理组件.md'
         },
         {
           text: '👉C++ Qt开发：QFileSystemWatcher文件监视组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/32-C++ Qt开发：QFileSystemWatcher文件监视组件.md'
+          link: '/column/CPlusPlus/QT程序设计/32-C++ Qt开发：QFileSystemWatcher文件监视组件.md'
         },
         {
           text: '👉C++ Qt开发：QHostInfo主机地址查询组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/33-C++ Qt开发：QHostInfo主机地址查询组件.md'
+          link: '/column/CPlusPlus/QT程序设计/33-C++ Qt开发：QHostInfo主机地址查询组件.md'
         },
         {
           text: '👉C++ Qt开发：QNetworkInterface网络接口组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/34-C++ Qt开发：QNetworkInterface网络接口组件.md'
+          link: '/column/CPlusPlus/QT程序设计/34-C++ Qt开发：QNetworkInterface网络接口组件.md'
         },
         {
           text: '👉C++ Qt开发：QNetworkAccessManager网络接口组件',
-          link: '/column/CPlusPlus/深入浅出QT程序设计/35-C++ Qt开发：QNetworkAccessManager网络接口组件.md'
+          link: '/column/CPlusPlus/QT程序设计/35-C++ Qt开发：QNetworkAccessManager网络接口组件.md'
         },
+        {
+          text: '👉C++ Qt开发：QTcpSocket网络通信组件',
+          link: '/column/CPlusPlus/QT程序设计/36-C++ Qt开发：QTcpSocket网络通信组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：QUdpSocket网络通信组件',
+          link: '/column/CPlusPlus/QT程序设计/37-C++ Qt开发：QUdpSocket网络通信组件.md'
+        },
+        {
+          text: '👉C++ Qt开发：QUdpSocket实现组播通信',
+          link: '/column/CPlusPlus/QT程序设计/38-C++ Qt开发：QUdpSocket实现组播通信.md'
+        },
+        {
+          text: '👉C++ Qt开发：QProcess进程管理模块.md',
+          link: '/column/CPlusPlus/QT程序设计/39-C++ Qt开发：QProcess进程管理模块'
+        }         
       ]
 
     }
   
 
   ],
-  '/column/CPlusPlus/C++Windows编程':
+  '/column/CPlusPlus/Windows系统编程':
   [
     {
-      text: '🚩WINDOWS API🚩',
+      text: '🚩WINDOWS API',
+      collapsed: true,
       items: [
-       
+
     {
       text:'👉CC++ 实现FTP文件上传下载',
       link: '/column/CPlusPlus/C++Windows编程/Windows/37-CC++ 实现FTP文件上传下载.md'
@@ -329,34 +393,8 @@ export const sidebar: DefaultTheme.Sidebar = {
       ]
     },
 
-    {
-      text: '🚩MFC🚩',
-      items: [
-        {
-          text: '👉Window程序内部运行机制',
-          link: '/column/CPlusPlus/C++Windows编程/MFC/01_Window程序内部运行机制.md'
-        },
-        {
-          text: '👉MFC框架程序剖析',
-          link: '/column/CPlusPlus/C++Windows编程/MFC/03_MFC框架程序剖析.md'
-        },
-        {
-          text: '👉菜单',
-          link: '/column/CPlusPlus/C++Windows编程/MFC/06_菜单.md'
-        },
-        {
-          text: '👉对话框',
-          link: '/column/CPlusPlus/C++Windows编程/MFC/07_对话框.md'
-        },
-        {
-          text: '👉文件和注册表的操作',
-          link: '/column/CPlusPlus/C++Windows编程/MFC/12_文件和注册表的操作.md'
-        },
-      ]
-    }
-
   ],
-  '/column/CPlusPlus/C++Linux编程':
+  '/column/CPlusPlus/Linux系统编程':
   [
     {
       text: '🚩C++中高级工程师，直通Offer🚩',
@@ -419,6 +457,25 @@ export const sidebar: DefaultTheme.Sidebar = {
         },
       ]
     },
+
+    {
+      text: '🚩指令和报错解决🚩',
+      items: [
+        {
+          text: '👉Linux操作系统命令',
+          link: '/column/CPlusPlus/指令和报错/01-Linux操作系统命令.md'
+        },
+        {
+          text: '👉Ubuntu 安装软件报错',
+          link: '/column/CPlusPlus/指令和报错/02-Ubuntu 安装软件报错.md'
+        },
+        {
+          text: '👉window下配置hosts文件，使虚拟机主机名与IP地址映射',
+          link: '/column/CPlusPlus/指令和报错/03-window下配置hosts文件，使虚拟机主机名与IP地址映射.md'
+        }
+      ]
+    },
+
 
     {
       text: '🚩C++Linux编程🚩',
@@ -793,10 +850,273 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: 'switch、chart组件的使用',
           link: '/column/JavaScript/HarmonyOs应用开发/16_switch、chart组件的使用.md'
         },
+        {
+          text: '窗口管理',
+          link: '/column/JavaScript/HarmonyOs应用开发/17_窗口管理.md'
+        },
+        {
+          text: 'List组件的使用之商品列表',
+          link: '/column/JavaScript/HarmonyOs应用开发/18_List组件的使用之商品列表'
+        },
+        {
+          text: '库的调用',
+          link: '/column/JavaScript/HarmonyOs应用开发/19_库的调用.md'
+        },
+        {
+          text: 'image、image-animator组件的使用',
+          link: '/column/JavaScript/HarmonyOs应用开发/20_image、image-animator组件的使用.md'
+        },
+        {
+          text: '新闻发布',
+          link: '/column/JavaScript/HarmonyOs应用开发/21_新闻发布.md'
+        },
       ]
     },
   ],
-
+  '/column/CPlusPlus/整合三方库/':
+  [
+    {
+      text: '🚩整合三方库🚩',
+      items:
+      [
+        {
+          text: 'C++整合Sqlite数据库',
+          link: '/column/CPlusPlus/整合三方库/01_C++整合Sqlite数据库.md'
+        },
+        {
+          text: 'C++整合curl',
+          link: '/column/CPlusPlus/整合三方库/02_C++整合curl.md'
+        },
+        {
+          text: '03_C++整合nlohmannjson',
+          link: '/column/CPlusPlus/整合三方库/03_C++整合nlohmannjson.md'
+        },
+        {
+          text: '04_C++整合Crypto++',
+          link: '/column/CPlusPlus/整合三方库/04_C++整合Crypto++.md'
+        },
+        {
+          text: 'C++整合OpenCv',
+          link: '/column/CPlusPlus/整合三方库/05_C++整合OpenCv.md'
+        },
+        {
+          text: '06_C++整合Boost',
+          link: '/column/CPlusPlus/整合三方库/06_C++整合Boost.md'
+        },
+        {
+          text: '07_C++整合MySQL数据库',
+          link: '/column/CPlusPlus/整合三方库/07_C++整合MySQL数据库.md'
+        },
+        {
+          text: 'C++整合LOG4CPlus',
+          link: '/column/CPlusPlus/整合三方库/09_C++整合LOG4CPlus.md'
+        },
+        {
+          text: 'C++整合OpenGL',
+          link: '/column/CPlusPlus/整合三方库/10_C++整合OpenGL.md'
+        },
+        {
+          text: 'C++整合GLEW',
+          link: '/column/CPlusPlus/整合三方库/11_C++整合GLEW.md'
+        },
+        {
+          text: 'C++整合freeglut',
+          link: '/column/CPlusPlus/整合三方库/12_C++整合freeglut.md'
+        },
+        {
+          text: 'C++整合GooleTest1.14.0',
+          link: '/column/CPlusPlus/整合三方库/13_C++整合GooleTest1.14.0.md'
+        },
+        
+      ]
+    },
+  ],
+  '/column/CPlusPlus/深入浅出OpenGL/':
+  [
+    {
+      text: '🚩深入浅出OpenGL🚩',
+      items:
+      [
+        {
+          text: 'LearnOpenGL 你好窗口',
+          link: '/column/CPlusPlus/深入浅出OpenGL/01_LearnOpenGL 你好窗口.md'
+        },
+        {
+          text: 'LearnOpenGL 你好，三角形',
+          link: '/column/CPlusPlus/深入浅出OpenGL/02_LearnOpenGL 你好，三角形.md'
+        },
+        {
+          text: 'LearnOpenGL 索引缓冲对象',
+          link: '/column/CPlusPlus/深入浅出OpenGL/03_LearnOpenGL 索引缓冲对象.md'
+        },
+        {
+          text: 'LearnOpenGL 着色器',
+          link: '/column/CPlusPlus/深入浅出OpenGL/04_LearnOpenGL 着色器.md'
+        },
+        {
+          text: 'LearnOpenGL 我们自己的着色器类',
+          link: '/column/CPlusPlus/深入浅出OpenGL/05_LearnOpenGL 我们自己的着色器类.md'
+        },
+        {
+          text: 'LearnOpenGL 纹理',
+          link: '/column/CPlusPlus/深入浅出OpenGL/06_LearnOpenGL 纹理.md'
+        },
+        {
+          text: 'LearnOpenGL 纹理单元',
+          link: '/column/CPlusPlus/深入浅出OpenGL/07_LearnOpenGL 纹理单元.md'
+        },
+        {
+          text: 'LearnOpenGL 十分简单的矩阵向量数学应用',
+          link: '/column/CPlusPlus/深入浅出OpenGL/08_LearnOpenGL 十分简单的矩阵向量数学应用.md'
+        },
+        {
+          text: 'LearnOpenGL 变换',
+          link: '/column/CPlusPlus/深入浅出OpenGL/09_LearnOpenGL 变换.md'
+        },
+        {
+          text: 'LearnOpenGL 坐标系统',
+          link: '/column/CPlusPlus/深入浅出OpenGL/10_LearnOpenGL 坐标系统.md'
+        },
+        {
+          text: 'LearnOpenGL 摄像机(Camera)',
+          link: '/column/CPlusPlus/深入浅出OpenGL/11_LearnOpenGL 摄像机(Camera).md'
+        },
+        {
+          text: 'LearnOpenGL 封装一个摄像机类',
+          link: '/column/CPlusPlus/深入浅出OpenGL/12_LearnOpenGL 封装一个摄像机类.md'
+        },
+        {
+          text: 'LearnOpenGL 光照',
+          link: '/column/CPlusPlus/深入浅出OpenGL/13_LearnOpenGL 光照.md'
+        },
+        {
+          text: 'LearnOpenGL 光照基础',
+          link: '/column/CPlusPlus/深入浅出OpenGL/14_LearnOpenGL 光照基础.md'
+        },
+        {
+          text: 'LearnOpenGL 光照材质',
+          link: '/column/CPlusPlus/深入浅出OpenGL/LearnOpenGL 光照材质'
+        },
+        {
+          text: 'LearnOpenGL 光照贴图',
+          link: '/column/CPlusPlus/深入浅出OpenGL/LearnOpenGL 光照贴图'
+        },
+        {
+          text: 'LearnOpenGL 投光物',
+          link: '/column/CPlusPlus/深入浅出OpenGL/17_LearnOpenGL 投光物.md'
+        },
+      ]
+    },
+  ],
+  '/column/Algorithm':
+  [
+    {
+      text: '🚩大话数据结构',
+      collapsed: true,
+      items:
+      [
+        {
+          text: '算法',
+          link: '/column/Algorithm/大话数据结构/02_算法.md'
+        },
+        {
+          text: '线性表',
+          link: '/column/Algorithm/大话数据结构/03_线性表.md'
+        },
+        {
+          text: '栈和队列',
+          link: '/column/Algorithm/大话数据结构/04_栈和队列.md'
+        },
+        {
+          text: '串',
+          link: '/column/Algorithm/大话数据结构/05_串.md'
+        },
+        {
+          text: '树',
+          link: '/column/Algorithm/大话数据结构/06_树.md'
+        },
+        {
+          text: '图',
+          link: '/column/Algorithm/大话数据结构/07_图.md'
+        },
+        {
+          text: '查找',
+          link: '/column/Algorithm/大话数据结构/08_查找.md'
+        },
+        {
+          text: '排序',
+          link: '/column/Algorithm/大话数据结构/09_排序.md'
+        },
+        {
+          text: '17个常用数据结构实现与原理分析',
+          link: '/column/Algorithm/大话数据结构/10_17个常用数据结构实现与原理分析.md'
+        },
+        
+      ]
+    },
+    {
+      text: '🚩蓝桥杯',
+      collapsed: true,
+      items:
+      [
+        {
+          text: '切面条',
+          link: '/column/Algorithm/蓝桥杯/01_切面条.md'
+        },
+        {
+          text: '大衍数列',
+          link: '/column/Algorithm/蓝桥杯/02_大衍数列.md'
+        },
+        {
+          text: '门牌制作',
+          link: '/column/Algorithm/蓝桥杯/03_门牌制作.md'
+        }, 
+      ]
+    },
+    {
+      text: '🚩蓝桥杯',
+      collapsed: true,
+      items:
+      [
+        {
+          text: '切面条',
+          link: '/column/Algorithm/蓝桥杯/01_切面条.md'
+        },
+        {
+          text: '大衍数列',
+          link: '/column/Algorithm/蓝桥杯/02_大衍数列.md'
+        },
+        {
+          text: '门牌制作',
+          link: '/column/Algorithm/蓝桥杯/03_门牌制作.md'
+        }, 
+      ]
+    },
+    {
+      text: '🚩LeetCode',
+      collapsed: true,
+      items:
+      [
+        {
+          text: '切面条',
+          link: '/column/Algorithm/LeetCode/2. 两数相加.md'
+        },
+        {
+          text: '大衍数列',
+          link: '/column/Algorithm/LeetCode/15. 三数之和.md'
+        },
+        {
+          text: '门牌制作',
+          link: '/column/Algorithm/LeetCode/18. 四数之和.md'
+        }, 
+        {
+          text: '合并两个有序链表',
+          link: '/column/Algorithm/LeetCode/21. 合并两个有序链表.md'
+        }, 
+      ]
+    }
+  ]
 
 
 };
+
