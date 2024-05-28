@@ -33,7 +33,7 @@ struct ToDoList {...}
 
 
 
-![image-20240128144910757](05_ArkTS开发实践.assets/image-20240128144910757-17064245518461.png)
+
 
 使用@Component装饰的自定义组件，如ToDoItem这个自定义组件则对应如下内容，作为页面的组成部分。
 
@@ -42,7 +42,7 @@ struct ToDoList {...}
 struct ToDoItem {...}
 ```
 
-![image-20240128144947587](05_ArkTS开发实践.assets/image-20240128144947587-17064245884442.png)
+
 
 在自定义组件内需要使用build方法来进行UI描述。
 
@@ -138,7 +138,7 @@ Text('Hello World')
 
 ArkUI中的布局容器有很多种，在不同的适用场合选择不同的布局容器实现，ArkTS使用容器组件采用花括号语法，内部放置UI描述。
 
-<img src="05_ArkTS开发实践.assets/image-20240128145337930.png" alt="image-20240128145337930" style="zoom:50%;" />
+
 
 这里我们将介绍最基础的两个布局——列布局和行布局。
 
@@ -148,7 +148,7 @@ ArkUI中的布局容器有很多种，在不同的适用场合选择不同的布
 
  **Row布局**
 
-![image-20240128145432618](05_ArkTS开发实践.assets/image-20240128145432618-17064248736994.png)
+
 
 ```c
 Row() {
@@ -164,7 +164,7 @@ Row() {
 
  **Column布局**
 
-<img src="05_ArkTS开发实践.assets/image-20240128145501084.png" alt="image-20240128145501084" style="zoom:67%;" />
+
 
 
 
@@ -185,7 +185,7 @@ Column() {
 
 **不同状态的视图**
 
-![image-20240128145545227](05_ArkTS开发实践.assets/image-20240128145545227.png)
+
 
 声明式UI的特点就是UI是随数据更改而自动刷新的，我们这里定义了一个类型为boolean的变量isComplete，其被@State装饰后，框架内建立了数据和视图之间的绑定，其值的改变影响UI的显示。
 
@@ -195,7 +195,6 @@ Column() {
 
 **@State装饰器的作用**
 
-![image-20240128145707480](05_ArkTS开发实践.assets/image-20240128145707480-17064250286146.png)
 
 用圆圈和对勾这样两个图片，分别来表示该项是否完成，这部分涉及到内容的切换，需要使用条件渲染if / else语法来进行组件的显示与消失，当判断条件为真时，组件为已完成的状态，反之则为未完成。
 
@@ -303,7 +302,7 @@ ForEach基本使用中，只需要了解要渲染的数据以及要生成的UI�
 
 
 
-![image-20240128150036030](05_ArkTS开发实践.assets/image-20240128150036030-17064252370437.png)
+
 
 
 
@@ -338,6 +337,6 @@ struct ToDoList {
 
 **ToDoList页面**
 
-![image-20240128150127843](05_ArkTS开发实践.assets/image-20240128150127843-17064252892048.png)
+
 
 如果读者的实现有困难，可以参考笔者的实现[ToDoListArkTs · 晴城丶/HarmonyOsProjects - 码云 - 开源中国 (gitee.com)](https://gitee.com/wangnaixing/harmony-os-projects/tree/master/ToDoListArkTs)
