@@ -1,4 +1,4 @@
-# Linux操作系统命令
+Linux操作系统命令
 
 
 
@@ -222,9 +222,7 @@ rpm -qa | grep firefox
 yum list |grep firefox
 ```
 
-![image-20230605224559951](01-Linux操作系统命令.assets/image-20230605224559951-16859763633072.png)
 
-![](01-Linux操作系统命令.assets/image-20230605224837120.png)
 
 - `yum remove xxx` 删除软件包
 
@@ -239,8 +237,6 @@ yum remove firefox
 y
 #3、系统执行卸载firefox 浏览器，执行完毕告知你，完成！
 ```
-
-![](01-Linux操作系统命令.assets/image-20230605225212901-16859767342383.png)
 
 - `yum deplist xxx` 查软件包的依赖关系
 
