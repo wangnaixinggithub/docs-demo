@@ -958,10 +958,6 @@ export const sidebar: DefaultTheme.Sidebar = {
           link: '/column/CPlusPlus/深入浅出OpenGL/05_LearnOpenGL 我们自己的着色器类.md'
         },
         {
-          text: 'LearnOpenGL 纹理',
-          link: '/column/CPlusPlus/深入浅出OpenGL/06_LearnOpenGL 纹理.md'
-        },
-        {
           text: 'LearnOpenGL 纹理单元',
           link: '/column/CPlusPlus/深入浅出OpenGL/07_LearnOpenGL 纹理单元.md'
         },
