@@ -490,7 +490,7 @@ multiton启动模式的开发使用，在module.json5配置文件中的launchTyp
 
 specified启动模式为指定实例模式，针对一些特殊场景使用（例如文档应用中每次新建文档希望都能新建一个文档实例，重复打开一个已保存的文档希望打开的都是同一个文档实例）。
 
-![](E:\javascript-projects\docs-demo\docs\column\JavaScript\HarmonyOs应用开发\05_应用程序入口—UIAbility的使用.assets\specified.gif)
+
 
 例如有两个UIAbility：EntryAbility和SpecifiedAbility，SpecifiedAbility配置为指定实例模式启动，需要从EntryAbility的页面中启动SpecifiedAbility。
 
