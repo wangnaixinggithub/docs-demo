@@ -41,7 +41,7 @@ export const nav: DefaultTheme.NavItem[] = [
           },
           {
             text:'✍️Windows系统编程✍️',
-            link:'/column/CPlusPlus/Windows系统编程/'
+            link:'/column/CPlusPlus/Windows编程/'
           },
           {
             text:'✍️OpenGL✍️',

@@ -130,6 +130,10 @@ export const sidebar: DefaultTheme.Sidebar = {
         collapsed: true,
         items: [ 
           {
+            text:'👉结构和其他数据形式',
+            link: '/column/CPlusPlus/基础不牢地动山摇/C Primer Plus/14-结构和其他数据形式.md'
+          },
+          {
             text:'👉C预处理器和C库',
             link: '/column/CPlusPlus/基础不牢地动山摇/C Primer Plus/16-C预处理器和C库.md'
           },
@@ -137,6 +141,7 @@ export const sidebar: DefaultTheme.Sidebar = {
             text:'👉高级数据表示',
             link: '/column/CPlusPlus/基础不牢地动山摇/C Primer Plus/17-高级数据表示.md'
           },
+          
           
 
         ]
@@ -347,7 +352,7 @@ export const sidebar: DefaultTheme.Sidebar = {
   
 
   ],
-  '/column/CPlusPlus/Windows系统编程':
+  '/column/CPlusPlus/Windows编程':
   [
     {
       text: '🚩WINDOWS API',
@@ -356,40 +361,53 @@ export const sidebar: DefaultTheme.Sidebar = {
 
     {
       text:'👉CC++ 实现FTP文件上传下载',
-      link: '/column/CPlusPlus/C++Windows编程/Windows/37-CC++ 实现FTP文件上传下载.md'
+      link: '/column/CPlusPlus/Windows编程/Windows/37-CC++ 实现FTP文件上传下载.md'
     },
     {
       text:'👉CC++ 通过HTTP实现文件上传下载',
-      link: '/column/CPlusPlus/C++Windows编程/Windows/38-CC++ 通过HTTP实现文件上传下载.md'
+      link: '/column/CPlusPlus/Windows编程/Windows/38-CC++ 通过HTTP实现文件上传下载.md'
     },
     {
       text:'👉C++ 实现的Ping类的封装',
-      link: '/column/CPlusPlus/C++Windows编程/Windows/39-C++ 实现的Ping类的封装.md'
+      link: '/column/CPlusPlus/Windows编程/Windows/39-C++ 实现的Ping类的封装.md'
     },
     {
       text:'👉CC++ 通过SQLiteSDK增删改查',
-      link: '/column/CPlusPlus/C++Windows编程/Windows/40-CC++ 通过SQLiteSDK增删改查.md'
+      link: '/column/CPlusPlus/Windows编程/Windows/40-CC++ 通过SQLiteSDK增删改查.md'
     },
     {
       text:'👉CC++ 运用WMI接口查询系统信息',
-      link: '/column/CPlusPlus/C++Windows编程/Windows/41-CC++ 运用WMI接口查询系统信息.md'
+      link: '/column/CPlusPlus/Windows编程/Windows/41-CC++ 运用WMI接口查询系统信息.md'
     },
     {
       text:'👉CC++ 进程线程操作技术',
-      link: '/column/CPlusPlus/C++Windows编程/Windows/42-CC++ 进程线程操作技术.md'
+      link: '/column/CPlusPlus/Windows编程/Windows/42-CC++ 进程线程操作技术.md'
     },
     {
       text:'👉CC++ 开发SCM服务管理组件',
-      link: '/column/CPlusPlus/C++Windows编程/Windows/43-CC++ 开发SCM服务管理组件.md'
+      link: '/column/CPlusPlus/Windows编程/Windows/43-CC++ 开发SCM服务管理组件.md'
     },
     {
       text:'👉CC++ 判断进程是否存在',
-      link: '/column/CPlusPlus/C++Windows编程/Windows/44-CC++ 判断进程是否存在.md'
+      link: '/column/CPlusPlus/Windows编程/Windows/44-CC++ 判断进程是否存在.md'
     },
     {
       text:'👉CC++ 应用层遍历驱动列表',
-      link: '/column/CPlusPlus/C++Windows编程/Windows/45-CC++ 应用层遍历驱动列表.md'
+      link: '/column/CPlusPlus/Windows编程/Windows/45-CC++ 应用层遍历驱动列表.md'
     },
+      ]
+    },
+
+    {
+      text: '🚩NX 二次开发',
+      collapsed: true,
+      items: [
+
+    {
+      text:'👉CAM加工模块',
+      link: '/column/CPlusPlus/Windows编程/NX/01-CAM.md'
+    },
+   
       ]
     },
 
