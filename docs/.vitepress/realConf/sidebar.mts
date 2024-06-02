@@ -358,7 +358,22 @@ export const sidebar: DefaultTheme.Sidebar = {
       text: '🚩WINDOWS API',
       collapsed: true,
       items: [
-
+        {
+          text:'👉HelloWorld程序',
+          link: '/column/CPlusPlus/Windows编程/Windows/01_HelloWorld程序.md'
+        },
+        {
+          text:'👉分析HelloWorld程序',
+          link: '/column/CPlusPlus/Windows编程/Windows/02_分析HelloWorld程序.md'
+        },
+        {
+          text:'👉项目编译失败处理方案',
+          link: '/column/CPlusPlus/Windows编程/Windows/03_项目编译失败处理方案.md'
+        },
+        {
+          text:'👉字符串处理编码方案',
+          link: '/column/CPlusPlus/Windows编程/Windows/04_字符串处理编码方案.md'
+        },
     {
       text:'👉CC++ 实现FTP文件上传下载',
       link: '/column/CPlusPlus/Windows编程/Windows/37-CC++ 实现FTP文件上传下载.md'
