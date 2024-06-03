@@ -289,10 +289,6 @@ extern "C" DllExport void  ufusr(char *param, int *retcod, int param_len)
 
 
 
-
-
-
-
 :::details `UF_NCGROUP_accept_member往程序组里添加成员`
 
 ```c
@@ -417,7 +413,8 @@ extern "C" DllExport void  ufusr(char *param, int *retcod, int param_len)
 
     UF_OBJ_set_name(new_object, "WNX");
 
-    //通过名称获得指定组(NCGroup)的TAG
+    //通过名称获得指定组(NCGroup)的TAG 
+    //基于这种方法，我们可以来在创建程序组之前，判断是否已经创建了相同的组
     tag_t programTAG = NULL_TAG;
     CAM::NCGroup* ncGroupObj = nullptr;
     try
@@ -946,7 +943,7 @@ extern "C" DllExport void  ufusr(char *param, int *retcod, int param_len)
 
 
 
-:::details  `UF_CAMGEOM_append_items附加几何实体列表到对象`
+:::details  `UF_CAMGEOM_append_items附加几何实体列表(设置部件、设置毛胚)到对象`
 
 ```c
 static int select_filter_proc_fn(tag_t object, int type[3], void* user_data, UF_UI_selection_p_t select)
@@ -1050,7 +1047,7 @@ extern "C" DllExport void  ufusr(char *param, int *retcod, int param_len)
 
 
 
-:::details `cavityMillingBuilder1->PartGeometry(BlankGeometry)附加几何实体列表到对象 `
+:::details `cavityMillingBuilder1->PartGeometry(BlankGeometry)附加几何实体列表(设置部件、设置毛胚)到对象 `
 
 ```c
 extern "C" DllExport void  ufusr(char *param, int *retcod, int param_len)
@@ -2064,28 +2061,37 @@ UF_terminate();
 ```c
 extern "C" DllExport void  ufusr(char* param, int* retcod, int param_len)
 {
-UF_initialize();
 
-//获取加工设置
-tag_t setup_tag = NULL_TAG;
-UF_SETUP_ask_setup(&setup_tag);
-if (setup_tag == NULL_TAG)
-{
-    uc1601("提示:请先初始化加工环境", 1);
-    return;
-}
 
-//获得加工方法视图的根节点
-tag_t mthd_group = NULL_TAG;
-UF_SETUP_ask_mthd_root(setup_tag, &mthd_group);
+	UF_initialize();
+	
+	UF_initialize();
 
-//打印
-char msg[256];
-sprintf_s(msg, "%d", mthd_group);
-uc1601(msg, 1);
+	//获取加工设置
+	tag_t setup_tag = NULL_TAG;
+	UF_SETUP_ask_setup(&setup_tag);
+	if (setup_tag == NULL_TAG)
+	{
+		uc1601("提示:请先初始化加工环境", 1);
+		return;
+	}
 
-UF_terminate();
-}
+	//方法1:获得加工方法视图的根节点
+	tag_t mthd_group = NULL_TAG;
+	UF_SETUP_ask_mthd_root(setup_tag, &mthd_group);
+
+	//方法2:
+	CAM::NCGroup* mthdObj =  Session::GetSession()->Parts()->Work()->CAMSetup()->GetRoot(CAM::CAMSetup::View::ViewMachineMethod);
+
+	//方法3:
+	CAM::NCGroup* mthdObj2 = Session::GetSession()->Parts()->Work()->CAMSetup()->CAMGroupCollection()->FindObject("METHOD");
+
+	//打印
+	char msg[256];
+	sprintf_s(msg, "%d %d %d", mthd_group, mthdObj->Tag(), mthdObj2->Tag());
+	uc1601(msg, 1);
+
+	UF_terminate();
 ```
 
 :::
@@ -2095,38 +2101,47 @@ UF_terminate();
 :::details `UF_SETUP_ask_mct_root获得机床(刀具)视图的根节点`
 
 ```c
+
 extern "C" DllExport void  ufusr(char* param, int* retcod, int param_len)
 {
 
-UF_initialize();
+	UF_initialize();
 
-//获取加工设置
-tag_t setup_tag = NULL_TAG;
-UF_SETUP_ask_setup(&setup_tag);
-if (setup_tag == NULL_TAG)
-{
-    uc1601("提示:请先初始化加工环境", 1);
-    return;
-}
+	//获取加工设置
+	tag_t setup_tag = NULL_TAG;
+	UF_SETUP_ask_setup(&setup_tag);
+	if (setup_tag == NULL_TAG)
+	{
+		uc1601("提示:请先初始化加工环境", 1);
+		return;
+	}
 
-//获得机床(刀具)视图的根节点
-tag_t mct_group = NULL_TAG;
-UF_SETUP_ask_mct_root(setup_tag, &mct_group);
+	//获得机床(刀具)视图的根节点
 
-//打印
-char msg[256];
-sprintf_s(msg, "%d", mct_group);
-uc1601(msg, 1);
+	//方法1:
+	tag_t mct_group = NULL_TAG;
+	UF_SETUP_ask_mct_root(setup_tag, &mct_group);
 
-UF_terminate();
+
+	//方法2:
+	CAM::NCGroup* mthdObj = Session::GetSession()->Parts()->Work()->CAMSetup()->GetRoot(CAM::CAMSetup::View::ViewMachineTool);
+
+	//方法3:
+	CAM::NCGroup* mthdObj2 = Session::GetSession()->Parts()->Work()->CAMSetup()->CAMGroupCollection()->FindObject("GENERIC_MACHINE");
+
+	//打印
+	char msg[256];
+	sprintf_s(msg, "%d %d %d", mct_group, mthdObj->Tag(), mthdObj2->Tag());
+	uc1601(msg, 1);
+
+
+	UF_terminate();
 }
 ```
 
 :::
 
-![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/%E6%9C%BA%E5%BA%8A%E5%8A%A0%E5%B7%A5%E8%A7%86%E5%9B%BE%E6%A0%B9%E8%8A%82%E7%82%B9.gif)
-
-
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240603232641377.png)
 
 :::details `UF_SETUP_ask_program_root获得程序组视图的根节点`
 
@@ -2160,9 +2175,9 @@ UF_terminate();
 
 :::
 
-![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/%E8%8E%B7%E5%8F%96%E7%A8%8B%E5%BA%8F%E7%BB%84%E5%8A%A0%E5%B7%A5%E8%A7%86%E5%9B%BE%E7%9A%84%E6%A0%B9%E8%8A%82%E7%82%B9.gif)
 
 
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240603232857966.png)
 
 :::details `UF_SETUP_delete_setup删除加工设置`
 
@@ -2215,9 +2230,9 @@ UF_terminate();
 
 
 
-:::details `UF_SETUP_create创建加工设置`
+:::details `UF_SETUP_create()创建加工设置`
 
-```cython
+```c
 
 extern "C" DllExport void  ufusr(char* param, int* retcod, int param_len)
 {
@@ -2229,6 +2244,19 @@ UF_SETUP_create(UF_ASSEM_ask_work_part(), "mill_planar");
 UF_terminate();
 }
 
+```
+
+:::
+
+:::details `workPart.CreateCamSetup theSession.CreateCamSession 创建加工设置 `
+
+```c
+	Session* theSession = Session::GetSession();
+	Part* workPart(theSession->Parts()->Work());
+	Part* displayPart(theSession->Parts()->Display());
+	CAM::CAMSetup* cAMSetup1;
+	theSession->CreateCamSession();
+	cAMSetup1 = workPart->CreateCamSetup("mill_planar");
 ```
 
 :::
