@@ -412,6 +412,16 @@ export const sidebar: DefaultTheme.Sidebar = {
     },
       ]
     },
+    {
+      text: '🚩WINDOWS API 通用封装',
+      collapsed: true,
+      items: [
+        {
+          text:'👉字符串操作功能封装',
+          link: '/column/CPlusPlus/Windows编程/WinEasyUse/01-字符串操作功能封装.md'
+        },
+      ],
+    },
 
     {
       text: '🚩NX 二次开发',
