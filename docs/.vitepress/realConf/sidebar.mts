@@ -374,42 +374,47 @@ export const sidebar: DefaultTheme.Sidebar = {
           text:'👉字符串处理编码方案',
           link: '/column/CPlusPlus/Windows编程/Windows/04_字符串处理编码方案.md'
         },
-    {
-      text:'👉CC++ 实现FTP文件上传下载',
-      link: '/column/CPlusPlus/Windows编程/Windows/37-CC++ 实现FTP文件上传下载.md'
-    },
-    {
-      text:'👉CC++ 通过HTTP实现文件上传下载',
-      link: '/column/CPlusPlus/Windows编程/Windows/38-CC++ 通过HTTP实现文件上传下载.md'
-    },
-    {
-      text:'👉C++ 实现的Ping类的封装',
-      link: '/column/CPlusPlus/Windows编程/Windows/39-C++ 实现的Ping类的封装.md'
-    },
-    {
-      text:'👉CC++ 通过SQLiteSDK增删改查',
-      link: '/column/CPlusPlus/Windows编程/Windows/40-CC++ 通过SQLiteSDK增删改查.md'
-    },
-    {
-      text:'👉CC++ 运用WMI接口查询系统信息',
-      link: '/column/CPlusPlus/Windows编程/Windows/41-CC++ 运用WMI接口查询系统信息.md'
-    },
-    {
-      text:'👉CC++ 进程线程操作技术',
-      link: '/column/CPlusPlus/Windows编程/Windows/42-CC++ 进程线程操作技术.md'
-    },
-    {
-      text:'👉CC++ 开发SCM服务管理组件',
-      link: '/column/CPlusPlus/Windows编程/Windows/43-CC++ 开发SCM服务管理组件.md'
-    },
-    {
-      text:'👉CC++ 判断进程是否存在',
-      link: '/column/CPlusPlus/Windows编程/Windows/44-CC++ 判断进程是否存在.md'
-    },
-    {
-      text:'👉CC++ 应用层遍历驱动列表',
-      link: '/column/CPlusPlus/Windows编程/Windows/45-CC++ 应用层遍历驱动列表.md'
-    },
+        {
+          text:'👉GDI绘图',
+          link: '/column/CPlusPlus/Windows编程/Windows/05_GDI绘图.md'
+        },
+
+        {
+          text:'👉CC++ 实现FTP文件上传下载',
+          link: '/column/CPlusPlus/Windows编程/Windows/37-CC++ 实现FTP文件上传下载.md'
+        },
+        {
+          text:'👉CC++ 通过HTTP实现文件上传下载',
+          link: '/column/CPlusPlus/Windows编程/Windows/38-CC++ 通过HTTP实现文件上传下载.md'
+        },
+        {
+          text:'👉C++ 实现的Ping类的封装',
+          link: '/column/CPlusPlus/Windows编程/Windows/39-C++ 实现的Ping类的封装.md'
+        },
+        {
+          text:'👉CC++ 通过SQLiteSDK增删改查',
+          link: '/column/CPlusPlus/Windows编程/Windows/40-CC++ 通过SQLiteSDK增删改查.md'
+        },
+        {
+          text:'👉CC++ 运用WMI接口查询系统信息',
+          link: '/column/CPlusPlus/Windows编程/Windows/41-CC++ 运用WMI接口查询系统信息.md'
+        },
+        {
+          text:'👉CC++ 进程线程操作技术',
+          link: '/column/CPlusPlus/Windows编程/Windows/42-CC++ 进程线程操作技术.md'
+        },
+        {
+          text:'👉CC++ 开发SCM服务管理组件',
+          link: '/column/CPlusPlus/Windows编程/Windows/43-CC++ 开发SCM服务管理组件.md'
+        },
+        {
+          text:'👉CC++ 判断进程是否存在',
+          link: '/column/CPlusPlus/Windows编程/Windows/44-CC++ 判断进程是否存在.md'
+        },
+        {
+          text:'👉CC++ 应用层遍历驱动列表',
+          link: '/column/CPlusPlus/Windows编程/Windows/45-CC++ 应用层遍历驱动列表.md'
+        },
       ]
     },
     {
