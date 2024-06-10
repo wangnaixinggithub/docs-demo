@@ -2159,25 +2159,3766 @@ cxCaps = (tm.tmPitchAndFamily & 1 ? 3: 2) cxChar / 2;
 
 
 
-:::details `DrawText和DrawTextEx函数说明`
+:::details `DrawText 函数说明`
 
 ```c
-int DrawText(
-_In_ HDC hdc, //设备环境句柄
-_Inout_ LPCTSTR lpchText, //字符串指针
-_In_ int cchText, //字符串长度，以字符为单位
-_In_out_LPRECT lpRect, //所绘制的文本限定在这个矩形范围内
-_In_ UINT uFormat //绘制格式选项
-);
+/// <summary>
+/// 绘制文本
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="lpchText">指向字符串内容的指针</param>
+/// <param name="cchText">字符串长度，以字符为单位</param>
+/// <param name="lpRect">所绘制的文本限定在这个矩形范围内</param>
+/// <param name="uFormat">绘制格式选项</param>
+/// <returns></returns>
+int DrawText(HDC hdc, LPCTSTR lpchText,int cchText, LPRECT lpRect, UINT uFormat);
+```
 
-int DrawTextEx(
-_In_ HDC hdc,//设备环境句柄
-_Inout_ LPTSTR lpchText,//字符串指针
-_ln_ int cchText, //字符串长度，以字符为单位
-_In_out_ LPRECT lpRect,//所绘制的文本限定在这个矩形范围内
-_In_ UINT uFormat, //绘制格式选项
-_In_opt_ LPDRAWTEXTPARAMS lpDTParams //指定扩展格式选项的DRAWTEXTPARAMS结构，可以为NULL
-);
+- 参数cchText指定字符串的长度。如果`lpchText`参数指定的字符串是**以零结尾的**，那么`cchText`参数可以设置为-1，**函数会自动计算字符个数**;否则需要指定字符个数。
+- 参数uFormat指定格式化文本的方法，常用的值及含义如下表所示。
+
+|     宏常量      |                             含义                             |
+| :-------------: | :----------------------------------------------------------: |
+|    `DT_TOP`     |                    将文本对齐到矩形的顶部                    |
+|   `DT_BUTTON`   | 将文本对齐到矩形的底部，该标志仅与`DT_SINGLELINE`单行文本一起使用 |
+|  `DT_VCENTER`   | 文本在矩形内垂直居中，该标志仅与`DT_SINGLELINE`单行文本一起使用 |
+|    `DT_LEFT`    |                      文本在矩形内左对齐                      |
+|   `DT_RIGHT`    |                      文本在矩形内右对齐                      |
+|   `DT_CENTER`   |                     文本在矩形内水平居中                     |
+| `DT_SINGLELINE` |          在单行上显示文本，回车和换行符也不能打断行          |
+| `DT_WORDBREAK`  |        如果一个单词超过矩形的边界，则自动断开到下一行        |
+| `DT_EXPANDTABS` |          展开制表符`\t`，每个制表符的默认字符数是8           |
+
+:::
+
+
+
+:::details `DrawTextEx 函数说明`
+
+```c
+
+/// <summary>
+/// 绘制文本
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="lpchText">字符串指针</param>
+/// <param name="cchText">字符串长度，以字符为单位</param>
+/// <param name="lpRect">所绘制的文本限定在这个矩形范围内</param>
+/// <param name="uFormat">绘制格式选项</param>
+/// <param name="lpDTParams">指定扩展格式选项的DRAWTEXTPARAMS结构，可以为NULL</param>
+/// <returns></returns>
+int DrawTextEx(HDC hdc,LPTSTR lpchText,int cchText, LPRECT lpRect,UINT uFormat, LPDRAWTEXTPARAMS lpDTParams);
+```
+
+`DrawTextEx`函数的`lpDTParams`参数是用于指定扩展格式选项的`DRAWTEXTPARAMS`结构，可为NULL。
+
+```c
+typedef struct tagDRAWTEXTPARAMS
+{
+	UINT	cbSize; //该结构的大小
+	int iTabLength; //每个制表符的大小，单位等于平均字符宽度
+	int	iLeftMargin; //左边距，逻辑单位
+	int iRightMargin; //右边距，逻辑单位
+	UINT	uiLengthDrawn; //返回函数处理的字符个数，包括空格字符，不包括字符串结束标志
+}
+DRAWTEXTPARAMS,FAR*LPDRAWTEXTPARAMS;
+```
+
+如果函数执行成功，则返回值是以逻辑单位表示的文本高度，如果指定了DT_VCENTER 或DT_BOTTOM，则返回值是从`lpRect->top`到所绘制文本底部的偏移量;如果函数执行失败，则返回值为0。
+
+
+
+:::
+
+
+
+下面使用`DrawTextEx`函数输出一个字符串看一下效果。
+
+:::details `DrawTextEx 演示`
+
+```c
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("GetSystemMetrics");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    ::RegisterClassEx(&wndclass);
+    hwnd = ::CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
+    ::ShowWindow(hwnd, nCmdShow);
+    ::UpdateWindow(hwnd);
+    while (::GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        ::TranslateMessage(&msg);
+        ::DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+
+
+    TCHAR szText[] =
+        TEXT("For displayed text, if the end of a string does not fit in the rectangle,"
+            "it is truncated and ellipses are added.lf a word that is not at the end of"
+            "the string goes beyond the limits of the rectangle, it is truncated without ellipses.");
+    
+    DRAWTEXTPARAMS dtp = { sizeof(DRAWTEXTPARAMS) };
+    dtp.iLeftMargin = 10;
+    dtp.iRightMargin = 10;
+    RECT rect = {0};
+    if (uMsg == WM_PAINT)
+    {
+        hdc = ::BeginPaint(hwnd, &ps);
+        ::SetBkMode(hdc, TRANSPARENT);
+        ::SetTextColor(hdc, RGB(0,0,255));
+        ::GetClientRect(hwnd,&rect);
+        //DT_WORDBREAK 如果一个单词超过矩形的边界，则自动断开到下一行
+        ::DrawTextEx(hdc,szText,-1,&rect, DT_WORDBREAK,&dtp);
+        ::EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        ::PostQuitMessage(0);
+        return 0;
+    }
+    return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240610105011075.png)
+
+说明一下 `GetClientRect`函数用于获取客户区的矩形坐标
+
+```c
+/// <summary>
+/// 获取客户区的矩形坐标
+/// </summary>
+/// <param name="hWnd">窗口句柄</param>
+/// <param name="lpRect">在这个RECT中返回客户区的坐标，以像素为单位</param>
+/// <returns></returns>
+BOOL GetClientRect(HWND hWnd,LPRECT lpRect);
+```
+
+参数`lpRect`指向的RECT结构返回客户区的左上角和右下角坐标。因为客户区坐标是相对于窗口客户区左上角的，所以获取到的左上角的坐标是(0,0)，即`lpRect->right`等于客户区宽度，`lpRect->bottom`等于客户区高度。
+
+:::
+
+
+
+:::details `TabbedTextOut 函数说明`
+
+`TabbedTextOut`函数在指定位置绘制字符串，并将制表符扩展到制表符位置数组中指定的位置。
+
+```c
+/// <summary>
+/// 绘制文本
+/// </summary>
+/// <param name="hDC">设备坏境句柄</param>
+/// <param name="X">字符串起点的X坐标，逻辑单位</param>
+/// <param name="Y">字符串起点的Y坐标，逻辑单位</param>
+/// <param name="lpString">字符串指针，不要求以零结尾，参数nCount可以指定字符串长度</param>
+/// <param name="nCount">字符串长度，可以使用_tcslen</param>
+/// <param name="nTabPositions">lpnTabStopPositions数组中数组元素的个数</param>
+/// <param name="lpnTabStopPositions">指向包含制表符位置的数组，逻辑单位</param>
+/// <param name="nTabOrigin">制表符开始位置的X坐标，逻辑单位，制表符的位置等于nTabOrigin + lpnTabStopPositions[x]</param>
+/// <returns></returns>
+LONG TabbedTextOut(HDC hDC, int X,int Y,LPCTSTR lpString,int nCount,int nTabPositions, const LPINT lpnTabStopPositions, int nTabOrigin);
+```
+
+- 如果将`nTabPositions`参数设置为0，并将`lpnTabStopPositions`参数设置为NULL，制表符将会按平均字符宽度的8倍来扩展。
+- 如果将`nTabPositions`参数设置为1，则所有制表符按l`pnTabStopPositions`指向的数组中的第一个数组元素指定的距离来分隔。
+
+最终， 如果函数执行成功，则返回值是字符串的宽度和高度（逻辑单位)，高度值在高位字中，宽度值在低位字中﹔如果函数执行失败，则返回值为0。
+
+:::
+
+
+
+:::details `TabbedTextOut() 示例:`
+
+```c
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("GetSystemMetrics");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    ::RegisterClassEx(&wndclass);
+    hwnd = ::CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
+    ::ShowWindow(hwnd, nCmdShow);
+    ::UpdateWindow(hwnd);
+    while (::GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        ::TranslateMessage(&msg);
+        ::DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+
+
+    if (uMsg == WM_PAINT)
+    {
+        TCHAR szText[] = TEXT("姓名\t工作地点\t年龄");
+        TCHAR szText2[] = TEXT("小王\t山东省济南市\t18");
+        TCHAR szText3[] = TEXT("弗拉基米尔·弗拉基米罗维奇·科夫\t俄罗斯莫斯科\t68");
+        LONG iRet = 0;
+        INT nTabStopPosition[] = { 260,370 };
+        hdc = ::BeginPaint(hwnd, &ps);
+        ::SetBkMode(hdc, TRANSPARENT);
+        ::SetTextColor(hdc, RGB(0, 0, 255));
+        iRet = ::TabbedTextOut(hdc, 0, 0, szText, _tcslen(szText), 2, nTabStopPosition, 0);
+        iRet = ::TabbedTextOut(hdc, 0, HIWORD(iRet), szText2, _tcslen(szText2), 2, nTabStopPosition, 0);
+        iRet = ::TabbedTextOut(hdc, 0, HIWORD(iRet) * 2, szText3, _tcslen(szText3), 2, nTabStopPosition, 0);
+        ::EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        ::PostQuitMessage(0);
+        return 0;
+    }
+    return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240201204646769.png)
+
+:::
+
+
+
+:::details `ExtTextOut() 函数说明`
+
+`ExtTextOut`函数和`TextOut`一样可以输出文本，区别在于该函数可以指定一个矩形用于裁剪或作为背景。
+
+```c
+/// <summary>
+///  输出文本
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="x">字符串的开始位置X坐标，相对于客户区左上角，逻辑单位</param>
+/// <param name="y">字符串的开始位置Y坐标，相对于客户区左上角，逻辑单位</param>
+/// <param name="fuOptions">指定如何使用lprc参数指定的矩形，可以设置为0</param>
+/// <param name="prc">指向可选RECT结构的指针，用于裁剪或作为背景，可为NULL</param>
+/// <param name="lpString">要绘制的字符串,因为有cbCount参数指定长度，所以不要求以零结尾</param>
+/// <param name="cbCount">lpString指向的字符串长度，可以使用_tcslen，不得超过8192</param>
+/// <param name="lpDx">指向可选整型数组的指针，该数组指定相邻字符之间的间距</param>
+/// <returns></returns>
+BOOL ExtTextOut(HDC hdc,int x,int y,UINT fuOptions,const RECT* prc,LPCTSTR lpString,UINT cbCount,const INT* lpDx); 
+```
+
+- 参数`fuOptions`指定如何使用`lprc`参数定义的矩形，常用的值如下表所示。
+
+|    宏常量     |                            含义                            |
+| :-----------: | :--------------------------------------------------------: |
+| `ETO_CLIPPED` | 文本将被裁剪到矩形范围内，就是说矩形范围以外的文本不会显示 |
+| `ETO_OPAQUE`  |                  使用当前背景色来填充矩形                  |
+
+- 参数`lpDx`是指向可选数组的指针，该数组指定相邻字符之间的间距。如果设置为NULL，表示使用默认字符间距。
+
+:::
+
+
+
+:::details `ExtTextOut() 函数实例:`
+
+```c
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("GetSystemMetrics");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    ::RegisterClassEx(&wndclass);
+    hwnd = ::CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
+    ::ShowWindow(hwnd, nCmdShow);
+    ::UpdateWindow(hwnd);
+    while (::GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        ::TranslateMessage(&msg);
+        ::DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    if (uMsg == WM_PAINT)
+    {
+        TCHAR szText[] = TEXT("这是一个晴朗的早晨,鸽哨中伴着起床号音~~~");
+        LONG iRet = 0;
+        INT nTabStopPosition[] = { 260,370 };
+        hdc = ::BeginPaint(hwnd, &ps);
+        RECT rect = { 0 };
+        SIZE size = { 0 };
+        ::GetClientRect(hwnd, &rect);
+        ::GetTextExtentPoint32(hdc, szText, _tcslen(szText), &size);
+        ::ExtTextOut(hdc, rect.right/2 - size.cx/2, rect.bottom/2 - size.cy/2, ETO_OPAQUE, &rect, szText, _tcslen(szText), 0);
+        ::EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        ::PostQuitMessage(0);
+        return 0;
+    }
+    return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240610112726821.png)
+
+:::
+
+## 加入标准滚动条
+
+
+
+在窗口中加入一个标准滚动条比较简单，只需要在`CreateWindow`Ex函数的`dwStyle`参数中指定`WS_HSCROLL/WS_VSCROLL`样式即可。
+
+- WS_HSCROLL表示加入一个水平滚动条.
+- WS_VSCROLL表示加入一个垂直滚动条。
+
+:::tip
+
+之所以叫标准滚动条，是因为与之对应的还有一个滚动条控件。滚动条控件是子窗口，可以出现在父窗口客户区的任何位置，后面会讲滚动条控件。
+
+:::
+
+
+
+每个滚动条都有相应的"范围"和"位置"。
+
+- 滚动条的范围是一对整数，分别代表滚动条的最小值和最大值。
+- 位置是指滑块在范围中所处的值。当滑块在滚动条的最顶端（或最左)时，滑块的位置是范围的最小值,当滑块在滚动条的最底部（(或最右)时，滑块的位置是范围的最大值。
+
+标准滚动条的默认范围是`[0,100]`，滚动条控件的默认范围为空(最小值和最大值均为0)。
+
+
+
+通过调用`SetScrollRange`函数，可以把范围改成对程序更有意义的值。
+
+
+
+:::details `SetScrollRange 函数说明`
+
+```c
+/// <summary>
+///  设置滚动条的范围
+/// </summary>
+/// <param name="hWnd">滚动条所在窗口的窗口句柄</param>
+/// <param name="nBar">指定要设置的滚动条</param>
+/// <param name="nMinPos">最小滚动位置</param>
+/// <param name="nMaxPos">最大滚动位置</param>
+/// <param name="bRedraw">是否应该重新绘制滚动条以反映更改</param>
+/// <returns></returns>
+BOOL SetScrollRange(HWND hWnd,int nBar,int nMinPos,int nMaxPos,BOOL bRedraw);
+```
+
+- 参数`nBar`指定要设置的滚动条，该参数如下表所示。
+
+|  宏常量   |                             含义                             |
+| :-------: | :----------------------------------------------------------: |
+| `SR_HORZ` |                   设置标准水平滚动条的范围                   |
+| `SR_VERT` |                   设置标准垂直滚动条的范围                   |
+| `SR_CTL`  | 设置滚动条控件的范围，这种情况下`hWnd`参数必须设置为滚动条控件的句柄 |
+
+`nMinPos`和 `nMaxPos`参数指定的值之间的差异不得大于MAXLONG(OX7FFFFFFF)。
+
+:::
+
+
+
+:::details `SetScrollPos() 函数说明`
+
+
+
+`SetScrollPos`函数用于设置滑块在滚动条中的位置
+
+```c
+/// <summary>
+/// 设置滑块滚动条中的位置
+/// </summary>
+/// <param name="hWnd">滚动条所属窗口的窗口句柄</param>
+/// <param name="nBar">指定要设置的滚动条，含义同SetScrollRange函数的nBar参数</param>
+/// <param name="nPos">滑块的新位置</param>
+/// <param name="bRedraw">是否重新绘制滚动条以反映新的滑块位置</param>
+/// <returns></returns>
+int SetScrollPos(HWND hWnd,int nBar,int nPos,BOOL bRedraw);
+```
+
+如果函数执行成功，则返回值是滑块的前一个位置。如果函数执行失败，则返回值为0。
+
+:::
+
+
+
+## WM_SIZE消息
+
+在`WinMain`调用`ShowWindow`函数时、在窗口大小更改后、在窗口最小化到任务栏或从任务栏恢复时， Windows都会发送WM_SIZE消息到窗口过程。
+
+
+
+- `WM_SIZE`消息的`wParam`参数表示请求的大小调整类型，常用的值如下表所示。
+
+|      宏常量      |                            含义                            |
+| :--------------: | :--------------------------------------------------------: |
+| `SIZE_RESTORED`  | 窗口的大小已发生变化，包括从最小化或最大化恢复到原来的状态 |
+| `SIZE_MINIMIZED` |                        窗口已最大化                        |
+| `SIZE MAXIMIZED` |                        窗口已最大化                        |
+
+- `WM_SIZE`消息的`IParam`参数表示窗口客户区的新尺寸，`lParam`的低位字指定客户区的新宽度，`IParam`的高位字指定客户区的新高度。通常这样使用`IParam`参数∶
+
+```c
+cxClient = LoWORD(IParam);//客户区的新宽度
+cyClient = HIWORD(IParam);//客户区的新高度
+```
+
+随着窗口大小的改变，子窗口或子窗口控件通常也需要随之改变位置和大小，以适应新的客户区大小。
+
+
+
+例如，记事本程序客户区中用于编辑文本的部件就是一个编辑控件，如果窗口大小改变，程序就需要响应`WM_SIZE`消息，重新计算客户区大小，对编辑控件的大小作出改变。
+
+
+
+窗口过程处理完`WM_SIZE`消息以后，应返回0。
+
+
+
+如果不是在`WM_SIZE`消息中，可以通过调用`GetClientRect`函数获取客户区尺寸。
+
+## `WM_HSCROLL消息`
+
+
+
+当窗口的标准水平滚动条中发生滚动事件时，窗口过程会收到`WM_HSCROLL`消息。
+
+
+
+WM_HSCROLL消息的`wParam`	参数表示滑块的当前位置和用户的滚动请求。`wParam`的低位字表示用户的滚动请求，值如下表所示。
+
+|       宏常量       |                             含义                             |
+| :----------------: | :----------------------------------------------------------: |
+|   `SB_LINELEFT`    |                       向左滚动一个单位                       |
+|   `SB_LINERIGHT`   |                       向右滚动一个单位                       |
+|   `SB_PAGELEFT`    |                 向左滚动一页(一个客户区宽度)                 |
+|   `SB_PAGERIGHT`   |                 向右滚动一页(一个客户区宽度)                 |
+| `SB_THUMBPOSITION` | 用户拖动滑块并已释放鼠标，wParam的高位字指示拖动操作结束时滑块的新位置 |
+|  `SB_THUMBTRACK`   | 用户正在拖动滑块，该消息会不断发送，直到用户释放鼠标，wParam的高位字实时指示滑块被拖动到的新位置 |
+|     `SB_LEFT`      |                 滚动到最左侧，这个暂时用不到                 |
+|     `SB_RIGHT`     |                 滚动到最右侧，这个暂时用不到                 |
+|   `SB_ENDSCROLL`   |                    滚动已结束，通常不使用                    |
+
+- 如果`wParam`参数的低位字是`SB_THUMBPOSITION`或`SB_THUMBTRACK`，则`wParam`参数的高位字表示滑块的当前位置，在其他情况下无意义。
+
+- 如果消息是由滚动条控件发送的，则`lParam`参数是滚动条控件的句柄如果消息是由标准滚动条发送的，则`lParam`参数为NULL.
+- 窗口过程处理完`WM_HSCROLL`消息以后，应返回0.
+
+
+
+## `WM_VSCROLL消息`
+
+当窗口的标准垂直滚动条中发生滚动事件时，窗口过程会收到`WM_VSCROLL`消息。
+
+
+
+`WM_VSCROLL`消息的`wParam`参数表示滑块的当前位置和用户的滚动请求。`wParam`的低位字表示用户的滚动请求，值如下表所示。
+
+
+
+|       宏常量       |                             含义                             |
+| :----------------: | :----------------------------------------------------------: |
+|   `SB_LINEDOWN`    |                       向下滚动一个单位                       |
+|    `SB_LINEUP`     |                       向上滚动一个单位                       |
+|   `SB_PAGEDOWN`    |                向下滚动一页（一个客户区高度)                 |
+|    `SB_PAGEUP`     |                向上滚动一页（一个客户区高度)                 |
+| `SB_THUMBPOSITION` | 用户拖动滑块并已释放鼠标，wParam的高位字指示拖动操作结束时滑块的新位置 |
+|  `SB_THUMBTRACK`   | 用户正在拖动滑块，该消息会不断发送，直到用户释放鼠标，wParam的高位字实时指示滑块被拖动到的新位置 |
+|      `SB_TOP`      |                 滚动到最上部，这个暂时用不到                 |
+|    `SB_BOTTOM`     |                 滚动到最底部，这个暂时用不到                 |
+|   `SB_ENDSCROLL`   |              SB_ENDSCROLL滚动已结束，通常不使用              |
+
+- 如果`wParam`参数的低位字是`SB_THUMBPOSITION`或`SB_THUMBTRACK`，则`wParam`参数的高位字表示滑块的当前位置，在其他情况下无意义。
+
+- 如果消息是由滚动条控件发送的，则`IParam`参数是滚动条控件的句柄;如果消息是由标准滚动条发送的，则`IParam`参数为NULL
+
+- 窗口过程处理完`WM_VSCROLL`消息以后，应返回0。
+
+
+
+
+
+当用户按住水平或垂直滑块进行滑动时，程序通常处理的是`SB_THUMBTRACK`请求，而不是`SB_THUMBPOSITION`请求，以便用户拖动过程中，客户区的内容可以实时发生改变。
+
+
+
+
+
+用户单击或拖动滚动条的不同位置时的滚动请求如下图所示。
+
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240201211255213-17067931764363.png)
+
+
+
+:::details `是时候给下面的SystemMetrics2程序添加标准滚动条了，先添加一个垂直滚动条`
+
+```c{150-151,157-158,185}
+#include <Windows.h>
+#include <tchar.h>
+struct
+{
+    int     m_nIndex;
+    PCTSTR   m_pLabel;
+    PCTSTR   m_pDesc;
+}METRICS[] = {
+    SM_CXSCREEN,                    TEXT("SM_CXSCREEN"),                    TEXT("屏幕的宽度"),
+    SM_CYSCREEN,                    TEXT("SM_CYSCREEN"),                    TEXT("屏幕的高度"),
+    SM_CXFULLSCREEN,                TEXT("SM_CXFULLSCREEN"),                TEXT("全屏窗口的客户区宽度"),
+    SM_CYFULLSCREEN,                TEXT("SM_CYFULLSCREEN"),                TEXT("全屏窗口的客户区高度"),
+    SM_ARRANGE,                     TEXT("SM_ARRANGE"),                     TEXT("如何排列最小化窗口"),
+    SM_CLEANBOOT,                   TEXT("SM_CLEANBOOT"),                   TEXT("系统启动方式"),
+    SM_CMONITORS,                   TEXT("SM_CMONITORS"),                   TEXT("监视器的数量"),
+    SM_CMOUSEBUTTONS,               TEXT("SM_CMOUSEBUTTONS"),               TEXT("鼠标上的按钮数"),
+    SM_CXBORDER,                    TEXT("SM_CXBORDER"),                    TEXT("窗口边框的宽度"),
+    SM_CYBORDER,                    TEXT("SM_CYBORDER"),                    TEXT("窗口边框的高度"),
+    SM_CXCURSOR,                    TEXT("SM_CXCURSOR"),                    TEXT("光标的宽度"),
+    SM_CYCURSOR,                    TEXT("SM_CYCURSOR"),                    TEXT("光标的高度"),
+    SM_CXDLGFRAME,                  TEXT("SM_CXDLGFRAME"),                  TEXT("同SM_CXFIXEDFRAME，有标题但不可调整大小的窗口边框的宽度"),
+    SM_CYDLGFRAME,                  TEXT("SM_CYDLGFRAME"),                  TEXT("同SM_CYFIXEDFRAME，有标题但不可调整大小的窗口边框的高度"),
+    SM_CXDOUBLECLK,                 TEXT("SM_CXDOUBLECLK"),                 TEXT("鼠标双击事件两次点击的X坐标不可以超过这个值"),
+    SM_CYDOUBLECLK,                 TEXT("SM_CYDOUBLECLK"),                 TEXT("鼠标双击事件两次点击的Y坐标不可以超过这个值"),
+    SM_CXDRAG,                      TEXT("SM_CXDRAG"),                      TEXT("拖动操作开始之前，鼠标指针可以移动的鼠标下方点的任意一侧的像素数"),
+    SM_CYDRAG,                      TEXT("SM_CYDRAG"),                      TEXT("拖动操作开始之前，鼠标指针可以移动的鼠标下移点上方和下方的像素数"),
+    SM_CXEDGE,                      TEXT("SM_CXEDGE"),                      TEXT("三维边框的宽度"),
+    SM_CYEDGE,                      TEXT("SM_CYEDGE"),                      TEXT("三维边框的高度"),
+    SM_CXFIXEDFRAME,                TEXT("SM_CXFIXEDFRAME"),                TEXT("同SM_CXDLGFRAME，有标题但不可调整大小的窗口边框的宽度"),
+    SM_CYFIXEDFRAME,                TEXT("SM_CYFIXEDFRAME"),                TEXT("同SM_CYDLGFRAME，有标题但不可调整大小的窗口边框的高度"),
+    SM_CXFOCUSBORDER,               TEXT("SM_CXFOCUSBORDER"),               TEXT("DrawFocusRect绘制的焦点矩形的左边缘和右边缘的宽度"),
+    SM_CYFOCUSBORDER,               TEXT("SM_CYFOCUSBORDER"),               TEXT("DrawFocusRect绘制的焦点矩形的上边缘和下边缘的高度"),
+    SM_CXFRAME,                     TEXT("SM_CXFRAME"),                     TEXT("同SM_CXSIZEFRAME，可调大小窗口边框的宽度"),
+    SM_CYFRAME,                     TEXT("SM_CYFRAME"),                     TEXT("同SM_CYSIZEFRAME，可调大小窗口边框的高度"),
+    SM_CXHSCROLL,                   TEXT("SM_CXHSCROLL"),                   TEXT("水平滚动条中箭头位图的宽度"),
+    SM_CYHSCROLL,                   TEXT("SM_CYHSCROLL"),                   TEXT("水平滚动条中箭头位图的高度"),
+    SM_CXVSCROLL,                   TEXT("SM_CXVSCROLL"),                   TEXT("垂直滚动条中箭头位图的宽度"),
+    SM_CYVSCROLL,                   TEXT("SM_CYVSCROLL"),                   TEXT("垂直滚动条中箭头位图的高度"),
+    SM_CXHTHUMB,                    TEXT("SM_CXHTHUMB"),                    TEXT("水平滚动条中滚动框(滑块)的高度"),
+    SM_CYVTHUMB,                    TEXT("SM_CYVTHUMB"),                    TEXT("垂直滚动条中滚动框(滑块)的宽度"),
+    SM_CXICON,                      TEXT("SM_CXICON"),                      TEXT("图标的默认宽度"),
+    SM_CYICON,                      TEXT("SM_CYICON"),                      TEXT("图标的默认高度"),
+    SM_CXICONSPACING,               TEXT("SM_CXICONSPACING"),               TEXT("大图标视图中项目的网格单元格宽度"),
+    SM_CYICONSPACING,               TEXT("SM_CYICONSPACING"),               TEXT("大图标视图中项目的网格单元格高度"),
+    SM_CXMAXIMIZED,                 TEXT("SM_CXMAXIMIZED"),                 TEXT("最大化顶层窗口的默认宽度"),
+    SM_CYMAXIMIZED,                 TEXT("SM_CYMAXIMIZED"),                 TEXT("最大化顶层窗口的默认高度"),
+    SM_CXMAXTRACK,                  TEXT("SM_CXMAXTRACK"),                  TEXT("具有标题和大小调整边框的窗口可以拖动的最大宽度"),
+    SM_CYMAXTRACK,                  TEXT("SM_CYMAXTRACK"),                  TEXT("具有标题和大小调整边框的窗口可以拖动的最大高度"),
+    SM_CXMENUCHECK,                 TEXT("SM_CXMENUCHECK"),                 TEXT("菜单项前面复选框位图的宽度"),
+    SM_CYMENUCHECK,                 TEXT("SM_CYMENUCHECK"),                 TEXT("菜单项前面复选框位图的高度"),
+    SM_CXMENUSIZE,                  TEXT("SM_CXMENUSIZE"),                  TEXT("菜单栏按钮的宽度"),
+    SM_CYMENUSIZE,                  TEXT("SM_CYMENUSIZE"),                  TEXT("菜单栏按钮的高度"),
+    SM_CXMIN,                       TEXT("SM_CXMIN"),                       TEXT("窗口的最小宽度"),
+    SM_CYMIN,                       TEXT("SM_CYMIN"),                       TEXT("窗口的最小高度"),
+    SM_CXMINIMIZED,                 TEXT("SM_CXMINIMIZED"),                 TEXT("最小化窗口的宽度"),
+    SM_CYMINIMIZED,                 TEXT("SM_CYMINIMIZED"),                 TEXT("最小化窗口的高度"),
+    SM_CXMINSPACING,                TEXT("SM_CXMINSPACING"),                TEXT("最小化窗口的网格单元宽度"),
+    SM_CYMINSPACING,                TEXT("SM_CYMINSPACING"),                TEXT("最小化窗口的网格单元高度"),
+    SM_CXMINTRACK,                  TEXT("SM_CXMINTRACK"),                  TEXT("窗口的最小拖动宽度，用户无法将窗口拖动到小于这些尺寸"),
+    SM_CYMINTRACK,                  TEXT("SM_CYMINTRACK"),                  TEXT("窗口的最小拖动高度，用户无法将窗口拖动到小于这些尺寸"),
+    SM_CXPADDEDBORDER,              TEXT("SM_CXPADDEDBORDER"),              TEXT("标题窗口的边框填充量"),
+    SM_CXSIZE,                      TEXT("SM_CXSIZE"),                      TEXT("窗口标题或标题栏中按钮的宽度"),
+    SM_CYSIZE,                      TEXT("SM_CYSIZE"),                      TEXT("窗口标题或标题栏中按钮的高度"),
+    SM_CXSIZEFRAME,                 TEXT("SM_CXSIZEFRAME"),                 TEXT("同SM_CXFRAME，可调大小窗口边框的宽度"),
+    SM_CYSIZEFRAME,                 TEXT("SM_CYSIZEFRAME"),                 TEXT("同SM_CYFRAME，可调大小窗口边框的厚度"),
+    SM_CXSMICON,                    TEXT("SM_CXSMICON"),                    TEXT("小图标的建议宽度"),
+    SM_CYSMICON,                    TEXT("SM_CYSMICON"),                    TEXT("小图标的建议高度"),
+    SM_CXSMSIZE,                    TEXT("SM_CXSMSIZE"),                    TEXT("小标题按钮的宽度"),
+    SM_CYSMSIZE,                    TEXT("SM_CYSMSIZE"),                    TEXT("小标题按钮的高度"),
+    SM_CXVIRTUALSCREEN,             TEXT("SM_CXVIRTUALSCREEN"),             TEXT("虚拟屏幕的宽度"),
+    SM_CYVIRTUALSCREEN,             TEXT("SM_CYVIRTUALSCREEN"),             TEXT("虚拟屏幕的高度"),
+    SM_CYCAPTION,                   TEXT("SM_CYCAPTION"),                   TEXT("标题区域的高度"),
+    SM_CYKANJIWINDOW,               TEXT("SM_CYKANJIWINDOW"),               TEXT("屏幕底部的日文汉字窗口的高度"),
+    SM_CYMENU,                      TEXT("SM_CYMENU"),                      TEXT("单行菜单栏的高度"),
+    SM_CYSMCAPTION,                 TEXT("SM_CYSMCAPTION"),                 TEXT("小标题的高度"),
+    SM_DBCSENABLED,                 TEXT("SM_DBCSENABLED"),                 TEXT("User32.dll是否支持DBCS"),
+    SM_DEBUG,                       TEXT("SM_DEBUG"),                       TEXT("是否安装了User.exe的调试版本"),
+    SM_DIGITIZER,                   TEXT("SM_DIGITIZER"),                   TEXT("设备支持的数字转换器输入类型"),
+    SM_IMMENABLED,                  TEXT("SM_IMMENABLED"),                  TEXT("是否启用了输入法管理器／输入法编辑器功能"),
+    SM_MAXIMUMTOUCHES,              TEXT("SM_MAXIMUMTOUCHES"),              TEXT("系统中是否有数字化仪"),
+    SM_MEDIACENTER,                 TEXT("SM_MEDIACENTER"),                 TEXT("当前操作系统是不是Windows XP Media Center"),
+    SM_MENUDROPALIGNMENT,           TEXT("SM_MENUDROPALIGNMENT"),           TEXT("下拉菜单是否与相应的菜单栏项右对齐"),
+    SM_MIDEASTENABLED,              TEXT("SM_MIDEASTENABLED"),              TEXT("系统是否启用希伯来语和阿拉伯语"),
+    SM_MOUSEHORIZONTALWHEELPRESENT, TEXT("SM_MOUSEHORIZONTALWHEELPRESENT"), TEXT("是否安装了带有水平滚轮的鼠标"),
+    SM_MOUSEPRESENT,                TEXT("SM_MOUSEPRESENT"),                TEXT("是否安装了鼠标"),
+    SM_MOUSEWHEELPRESENT,           TEXT("SM_MOUSEWHEELPRESENT"),           TEXT("是否安装了带有垂直滚轮的鼠标"),
+    SM_NETWORK,                     TEXT("SM_NETWORK"),                     TEXT("是否存在网络"),
+    SM_PENWINDOWS,                  TEXT("SM_PENWINDOWS"),                  TEXT("是否安装了Microsoft Windows for Pen Computing扩展"),
+    SM_REMOTECONTROL,               TEXT("SM_REMOTECONTROL"),               TEXT("当前终端服务器会话是否被远程控制"),
+    SM_REMOTESESSION,               TEXT("SM_REMOTESESSION"),               TEXT("调用进程是否与终端服务客户机会话关联"),
+    SM_SAMEDISPLAYFORMAT,           TEXT("SM_SAMEDISPLAYFORMAT"),           TEXT("所有显示器的颜色格式是否相同"),
+    SM_SECURE,                      TEXT("SM_SECURE"),                      TEXT("始终返回0"),
+    SM_SERVERR2,                    TEXT("SM_SERVERR2"),                    TEXT("系统是否是Windows Server 2003 R2"),
+    SM_SHOWSOUNDS,                  TEXT("SM_SHOWSOUNDS"),                  TEXT("用户是否要求应用程序在其他情况下以可视方式呈现信息"),
+    SM_SHUTTINGDOWN,                TEXT("SM_SHUTTINGDOWN"),                TEXT("当前会话是否正在关闭"),
+    SM_SLOWMACHINE,                 TEXT("SM_SLOWMACHINE"),                 TEXT("计算机是否具有低端(慢速)处理器"),
+    SM_STARTER,                     TEXT("SM_STARTER"),                     TEXT("当前操作系统版本"),
+    SM_SWAPBUTTON,                  TEXT("SM_SWAPBUTTON"),                  TEXT("鼠标左键和右键的功能是否互换了"),
+    SM_TABLETPC,                    TEXT("SM_TABLETPC"),                    TEXT("是否启动了Tablet PC输入服务"),
+    SM_XVIRTUALSCREEN,              TEXT("SM_XVIRTUALSCREEN"),              TEXT("虚拟屏幕左侧的坐标"),
+    SM_YVIRTUALSCREEN,              TEXT("SM_YVIRTUALSCREEN"),              TEXT("虚拟屏幕顶部的坐标")
+};
+const int NUMLINES = sizeof(METRICS) / sizeof(METRICS[0]);
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;                          
+    TCHAR szClassName[] = TEXT("MyWindow");         
+    TCHAR szAppName[] = TEXT("GetSystemMetrics");   
+    HWND hwnd;                                      
+    MSG msg;                                       
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW | WS_VSCROLL,
+        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc = NULL;
+    PAINTSTRUCT ps = {0};
+    HFONT hFont, hFontOld = NULL;
+    static BOOL bIsCalcStrHW = TRUE;           // 只在第一次WM_PAINT消息中计算s_iCol1、s_iCol2、s_iHeight
+    static int s_iCol1, s_iCol2, s_iHeight = 0; // 第一列、第二列字符串的最大宽度，字符串高度
+    static int s_cxClient, s_cyClient = 0;      // 客户区宽度、高度
+    static int s_iVscrollPos = 0;               // 垂直滚动条当前位置
+    TCHAR szBuf[10];
+    int y;
+    if (WM_CREATE == uMsg)
+    {
+        // 设置垂直滚动条的范围和初始位置
+        ::SetScrollRange(hwnd, SB_VERT, 0, NUMLINES - 1, FALSE);
+        ::SetScrollPos(hwnd, SB_VERT, s_iVscrollPos, TRUE);
+        return 0;
+    }
+    else if (WM_SIZE == uMsg)
+    {
+        //查窗口尺寸变化后，新的客户区宽高
+        s_cxClient = LOWORD(lParam);
+        s_cyClient = HIWORD(lParam);
+    }
+    else if (WM_VSCROLL == uMsg)
+    {
+        switch (LOWORD(wParam))
+        {
+        case SB_LINEUP:
+            s_iVscrollPos -= 1;
+            break;
+        case SB_LINEDOWN:
+            s_iVscrollPos += 1;
+            break;
+        case SB_PAGEUP:
+            s_iVscrollPos -= s_cyClient / s_iHeight;
+            break;
+        case SB_PAGEDOWN:
+            s_iVscrollPos += s_cyClient / s_iHeight;
+            break;
+        case SB_THUMBTRACK:
+            s_iVscrollPos = HIWORD(wParam);
+            break;
+        }
+        s_iVscrollPos = min(s_iVscrollPos, NUMLINES - 1);
+        s_iVscrollPos = max(0, s_iVscrollPos);
+        //查一下，如果当前位置不是开始，则更新滑块位置，并重绘客户区
+        if (s_iVscrollPos != GetScrollPos(hwnd, SB_VERT))
+        {
+            SetScrollPos(hwnd, SB_VERT, s_iVscrollPos, TRUE);
+
+            //产生一个无效区域，创建产生出来WM_PAINT消息，
+            InvalidateRect(hwnd, NULL, TRUE);
+            //直接把这个消息给到窗口过程
+            UpdateWindow(hwnd);
+        }
+        return 0;
+    }
+    else if (WM_PAINT == uMsg)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        ::SetBkMode(hdc, TRANSPARENT);
+        hFont = ::CreateFont(12, 0, 0, 0, 0, 0, 0, 0, GB2312_CHARSET, 0, 0, 0, 0, TEXT("宋体"));
+        hFontOld = (HFONT)SelectObject(hdc, hFont);
+        if (bIsCalcStrHW)
+        {
+            SIZE size = { 0 };
+            //查每一行，对应列的最大cx,以便算出来文本最佳宽度
+            for (int i = 0; i < NUMLINES; i++)
+            {
+                ::GetTextExtentPoint32(hdc, METRICS[i].m_pLabel, _tcslen(METRICS[i].m_pLabel), &size);
+                if (size.cx > s_iCol1)
+                    s_iCol1 = size.cx;
+                ::GetTextExtentPoint32(hdc, METRICS[i].m_pDesc, _tcslen(METRICS[i].m_pDesc), &size);
+                if (size.cx > s_iCol2)
+                    s_iCol2 = size.cx;
+            }
+            // 留一点行间距（高度）
+            s_iHeight = size.cy + 2;   
+            bIsCalcStrHW = FALSE;
+        }
+        //针对每一次拖动之后，重新绘制整个客户区文本
+        for (int i = 0; i < NUMLINES; i++)
+        {
+            y = s_iHeight * (i - s_iVscrollPos);
+            TextOut(hdc, 0, y, METRICS[i].m_pLabel, _tcslen(METRICS[i].m_pLabel));
+            TextOut(hdc, s_iCol1, y, METRICS[i].m_pDesc, _tcslen(METRICS[i].m_pDesc));
+            TextOut(hdc, s_iCol1 + s_iCol2, y, szBuf, wsprintf(szBuf, TEXT("%d"), ::GetSystemMetrics(METRICS[i].m_nIndex)));
+        }
+        SelectObject(hdc, hFontOld);
+        DeleteObject(hFont);
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (WM_DESTROY == uMsg)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+程序中有几个变量被定义为静态变量。静态变量保存在全局数据区，而不是保存在堆栈中，不会因为`WindowProc`函数的退出而被销毁，下一次消息处理的时候还可以继续使用上次保存的值。也可以定义为全局变量，但是原则上还是少使用全局变量。
+
+
+
+程序需要初始化滚动条的范围和位置。处理滚动请求并更新滑块的位置，否则滑块会在用户松开鼠标以后回到原来的位置。并根据滚动条的变化更新客户区的内容。
+
+
+
+在`WM_CREATE`消息中我们设置垂直滚动条的范围和初始位置，把垂直滚动条的范围设置为`[0,NUMLINES -1]`，也就是总行数。然后把滑块初始位置设置为0，`s_iVscrollPos`是静态变量，系统会自动设置未初始化的静态变量初始值为0。
+
+
+
+- 如果滚动条的位置是0，则第一行文字显示在客户区的顶部
+
+- 如果位置是其他值，则其他行会显示在顶部。
+- 如果位置是NUMLINES -1则最后一行显示在客户区的顶部。
+
+
+
+看一下对`WM_PAINT`消息的处理。如果是第一次执行`WM_PAINT`，则需要分别计算出第一列和第二列中最宽的字符串，这个宽度用于`TextOut`函数的X坐标，对于每一行Y坐标的计算如下：
+
+```c
+y = s_iHeight * (i - s_iVscrollPos)
+```
+
+令`i = 0`(也就是输出第一行) 时，假设垂直滚动条向下滚动了2行也就是`s_iVscrollPos`的值等于2。因为客户区左上角的坐标是`(0，0)`,所以第一行和第二行实际上是跑到了客户区上部，只不过在客户区以外的内容是不可见的。
+
+
+
+
+
+再看一下对`WM _VSCROLL`消息的处理，我们分别处理了向上滚动一行`SB_LINEUP`、向下滚动一行`SB_LINEDOWN`、向上滚动一页`SB_PAGEUP`、向下滚动一页`SB_PAGEDOWN`和按住滑块拖动。
+
+
+
+`SB_THUMBTRACK`的情况。然后需要对滑块新位置`s_iVscrollPos`进行合理范围的判断，否则`s iVscrollPos值会出现小于0或大于NUMLINES -1`的情况。
+
+
+
+
+
+虽然滑块新位置`s_iVscrollPos`值已经计算好了，但是滑块真正的位置还没有变化，我们应该判断一下`s_iVscrollPos`和滑块的当前位置这两个值是否相等，如果不相等，再调用`SetScrollPos`函数设置滑块位置。
+
+
+
+:::
+
+
+
+
+
+去掉对`InvalidateRect`函数的调用，看一下会是什么现象，是不是存在滚动条可以正常工作，但是客户区内容没有随之滚动的情况?
+
+
+
+如果最小化程序窗口，再将窗口恢复到原先的尺寸，导致客户区无效重绘，那么是不是客户区内容就更新过来了呢?
+
+
+
+:::details `InvalidateRect函数向指定窗口的更新区域添加一个无效矩形`
+
+```c
+/// <summary>
+/// 向指定窗口的更新区域添加一个无效矩形
+/// </summary>
+/// <param name="hWnd">窗口句柄</param>
+/// <param name="pRect">无效矩形，如果设置为NULL，表示整个客户区是无效矩形</param>
+/// <param name="bErase">是否擦除更新区域的背景</param>
+/// <returns></returns>
+BOOL InvalidateRect(HWND hWnd,const RECT pRect,BOOL bErase);
+```
+
+`InvalidateRect`函数会导致客户区出现一个无效区域。如果客户区存在无效区域，Windows会发送`WM_PAINT`消息到窗口过程。
+
+
+
+这个时候，我们在通过调用`UpdateWindow`函数，主动触发让`Windows`操作系统去检查客户区是否存在无效区域。如果存在，就把`WM_PAINT`消息直接发送到指定窗口的窗口过程，绕过应用程序的消息队列.
+
+
+
+即`UpdateWindow`函数导致窗口过程`WindowProc`立即执行`case WM_PAINT`的逻辑，所以可以在`InvalidateRect`函数调用以后紧接着调用`UpdateWindow`函数 达到立即刷新客户区的目的。
+
+:::
+
+
+
+
+
+:::details `与InvalidateRect函数对应的，还有一个ValidateRect函数，该函数可以从指定窗口的更新区域中删除一个矩形区域:`
+
+
+
+```c
+/// <summary>
+/// 从指定窗口的更新区域中删除一个矩形区域
+/// </summary>
+/// <param name="hWnd">窗口句柄</param>
+/// <param name="pRect">使之有效的矩形，如果设置为NULL，表示整个客户区变为有效</param>
+/// <returns></returns>
+BOOL ValidateRect(HWND hWnd,const RECT* pRect);
 ```
 
 :::
+
+
+
+曾经提及，如果可能，我们最好是在`WM_PAINT`消息中处理绘制工作。SystemMetrics2程序就是这
+样，绕了个弯，没有在WM VSCROLL消息中进行重绘，而是通过调
+用`InvalidateRect`函数生成一个无效区域进而生成`WM_PAINT`消息 在`WM_PAINT`消息中统一进行重绘。这不是舍近求远，而是一举两得。
+
+
+
+在学习Windows以前，我以为滚动条是自动的，但实际上需要我们自己处理各种滚动请求并作出更新、重绘，可以理解，Windows程序设计本来就是比较底层的东西。
+
+
+
+
+
+## `SetScrolllnfo和GetScrolllnfo函数`
+
+SystemMetrics2程序工作正常，但是滑块的大小不能反映一页内容占据总内容的比例。假设总内容总共是3页，那么滑块大小应该是滚动条长度的1/3才可以。实际上,`SetScrollRange`和`SetScrollPos`函数是Windows向后兼容Win16的产物，微软建议我们使用新函数`SetScrolllnfo`。之所以介绍一些老函数，一方面是因为这些函数简单易用，很多资深的程序员还在使用。另一方面，我的目标是既能做开发，又能做逆向，所以有些过时的东西我们还需要去了解。
+
+
+
+:::details `SetScrolllnfo 函数说明`
+
+```c
+/// <summary>
+/// 设置滚动条信息
+/// </summary>
+/// <param name="hwnd">滚动条所属窗口的句柄，如果fnBar 指定为SB_CTL、则是滚动条控件句柄</param>
+/// <param name="fnBar">指定要设置的滚动条，含义同SetScrollRange函数的nBar参数</param>
+/// <param name="lpsi">在这个SCROLLINFO结构中指定滚动条的参数</param>
+/// <param name="fRedraw">是否重新绘制滚动条以反映对滚动条的更改</param>
+/// <returns></returns>
+int SetScrolllnfo(HWND hwnd,int fnBar,LPCSCROLLINFO lpsi,BOOL fRedraw);
+```
+
+lpsi参数是一个指向SCROLLINFO结构的指针，在这个结构中指定滚动条的参数。
+
+```c
+typedef struct tagSCROLLINFO
+{
+	UINT cbSize; // 该结构的大小，sizeof( SCROLLINFO)
+	UINT fMask; //要设置或获取哪些滚动条参数
+	int nMin; //最小滚动位置
+	int nMax; //最大滚动位置
+	UINT nPage; // 页面大小(客户区高度或宽度)，滚动条使用这个字段确定滑块的适当大小
+	int nPos;	// 滑块的位置
+	int nTrackPos; // 用户正在拖动滑块时的即时位置，可以在处理SB_THUMBTRACK请求时使用该字段
+} SCROLLINFO，FAR *LPSCROLLINFO:
+```
+
+- fMask字段指定要设置 (SetScrolllnfo) 或获取 (GetScrolllnfo) 哪些滚动条参数，值如下表所示。
+
+|        常量宏         |                             含义                             |
+| :-------------------: | :----------------------------------------------------------: |
+|      `SIF_PAGE`       |           **nPage** 成员包含比例滚动条的页面大小。           |
+|       `SIF_POS`       | **nPos** 成员包含滚动框位置，当用户拖动滚动框时不会更新该位置。 |
+|      `SIF_RANGE`      |   **nMin** 和 **nMax** 成员包含滚动范围的最小值和最大值。    |
+|       `SIF_ALL`       |      SIF_PAGE、SIF_POS、SIF_RANGE和SIF_TRACKPOS的组合。      |
+| `SIF_DISABLENOSCROLL` | 此值仅在设置滚动条的参数时使用。 如果滚动条的新参数使滚动条变得不必要，请禁用滚动条，而不是将其删除。 |
+|    `SIF_TRACKPOS`     |       `nTrackPos`成员包含用户拖动滚动框时的当前位置。        |
+
+调用`SetScrolllnfo`函数设置滚动条参数的时候,把`fMask`字段设置为需要设置的标志，并在相应的字段中指定新的参数值，函数返回值是滑块的当前位置。
+
+
+
+`SetScrolllnfo`函数会对`SCROLLINFO`结构的`nPage`和`nPos`字段指定的值进行范围检查。
+
+- `nPage`字段必须指定为`[0,nMax-nMin + 1]`的值;
+
+- `nPos`字段必须指定为介于`[nMin,nMax-nPage+1]`的值。
+
+假设一共有95行,我们把范围设置为`[0,94]`，设置`nPage` 字段为一页可以显示35行。计算`nPos` 字段最大值为94 - 35 + 1 = 60。 如果`nPos = 60`,客户区显示`61~95`行，那么最后一行在最底部，而不是最顶部。如果上述字段的值超出范围，则函数会将其设置为刚好在范围内的值。
+
+:::
+
+
+
+
+
+:::details `GetScrolllnfo 函数说明`
+
+```c
+
+/// <summary>
+/// 获取滚动条信息
+/// </summary>
+/// <param name="hwnd">滚动条所属窗口的句柄，如果fnBar 指定为SB_CTL、则是滚动条控件句柄</param>
+/// <param name="fnBar">指定要设置的滚动条，含义同SetScrollRange函数的nBar参数</param>
+/// <param name="Ipsi">SCROLLINFO结构中获取滚动条的参数</param>
+/// <returns></returns>
+BOOL GetScrolllnfo(HWND hwnd,int fnBar,LPSCROLLINFO Ipsi);
+```
+
+调用`GetScrolllnfo`函数获取滚动条参数时，`SCROLLINFO.fMask`字段只能使用`SIF_PAGE` `SIF_POS` `SIF_RANGE`和`SIF_TRACKPOS`这几个标志。为了简洁，通常直接指定为`SIF_ALL`标志。函数执行成功，会将指定的滚动条参数复制到SCROLLINFO结构的相关字段中。
+
+
+
+在处理`WM_HSCROLL/WM_VSCROLL`消息时，对于`SB_THUMBPOSITIONI`  `SB_THUMBTRACK`滚动请求使用`HIWORD(wParam)`获取到的是16位位置数据，即说最大值为65535。而使用`SetScrolllnfo /GetScrolllnfo`可以设置/获取的范围是32位数据，因为SCROLLINFO结构的范围和位置参数都是int类型.
+
+:::
+
+
+
+:::details 接下来，我们使用`SetScrolllnfo`和`GetScrolllnfo`函数改写SystemMetrics2项目。
+
+
+
+```c
+#include <Windows.h>
+#include <tchar.h>
+struct
+{
+    int     m_nIndex;
+    PCTSTR   m_pLabel;
+    PCTSTR   m_pDesc;
+}METRICS[] = {
+    SM_CXSCREEN,                    TEXT("SM_CXSCREEN"),                    TEXT("屏幕的宽度"),
+    SM_CYSCREEN,                    TEXT("SM_CYSCREEN"),                    TEXT("屏幕的高度"),
+    SM_CXFULLSCREEN,                TEXT("SM_CXFULLSCREEN"),                TEXT("全屏窗口的客户区宽度"),
+    SM_CYFULLSCREEN,                TEXT("SM_CYFULLSCREEN"),                TEXT("全屏窗口的客户区高度"),
+    SM_ARRANGE,                     TEXT("SM_ARRANGE"),                     TEXT("如何排列最小化窗口"),
+    SM_CLEANBOOT,                   TEXT("SM_CLEANBOOT"),                   TEXT("系统启动方式"),
+    SM_CMONITORS,                   TEXT("SM_CMONITORS"),                   TEXT("监视器的数量"),
+    SM_CMOUSEBUTTONS,               TEXT("SM_CMOUSEBUTTONS"),               TEXT("鼠标上的按钮数"),
+    SM_CXBORDER,                    TEXT("SM_CXBORDER"),                    TEXT("窗口边框的宽度"),
+    SM_CYBORDER,                    TEXT("SM_CYBORDER"),                    TEXT("窗口边框的高度"),
+    SM_CXCURSOR,                    TEXT("SM_CXCURSOR"),                    TEXT("光标的宽度"),
+    SM_CYCURSOR,                    TEXT("SM_CYCURSOR"),                    TEXT("光标的高度"),
+    SM_CXDLGFRAME,                  TEXT("SM_CXDLGFRAME"),                  TEXT("同SM_CXFIXEDFRAME，有标题但不可调整大小的窗口边框的宽度"),
+    SM_CYDLGFRAME,                  TEXT("SM_CYDLGFRAME"),                  TEXT("同SM_CYFIXEDFRAME，有标题但不可调整大小的窗口边框的高度"),
+    SM_CXDOUBLECLK,                 TEXT("SM_CXDOUBLECLK"),                 TEXT("鼠标双击事件两次点击的X坐标不可以超过这个值"),
+    SM_CYDOUBLECLK,                 TEXT("SM_CYDOUBLECLK"),                 TEXT("鼠标双击事件两次点击的Y坐标不可以超过这个值"),
+    SM_CXDRAG,                      TEXT("SM_CXDRAG"),                      TEXT("拖动操作开始之前，鼠标指针可以移动的鼠标下方点的任意一侧的像素数"),
+    SM_CYDRAG,                      TEXT("SM_CYDRAG"),                      TEXT("拖动操作开始之前，鼠标指针可以移动的鼠标下移点上方和下方的像素数"),
+    SM_CXEDGE,                      TEXT("SM_CXEDGE"),                      TEXT("三维边框的宽度"),
+    SM_CYEDGE,                      TEXT("SM_CYEDGE"),                      TEXT("三维边框的高度"),
+    SM_CXFIXEDFRAME,                TEXT("SM_CXFIXEDFRAME"),                TEXT("同SM_CXDLGFRAME，有标题但不可调整大小的窗口边框的宽度"),
+    SM_CYFIXEDFRAME,                TEXT("SM_CYFIXEDFRAME"),                TEXT("同SM_CYDLGFRAME，有标题但不可调整大小的窗口边框的高度"),
+    SM_CXFOCUSBORDER,               TEXT("SM_CXFOCUSBORDER"),               TEXT("DrawFocusRect绘制的焦点矩形的左边缘和右边缘的宽度"),
+    SM_CYFOCUSBORDER,               TEXT("SM_CYFOCUSBORDER"),               TEXT("DrawFocusRect绘制的焦点矩形的上边缘和下边缘的高度"),
+    SM_CXFRAME,                     TEXT("SM_CXFRAME"),                     TEXT("同SM_CXSIZEFRAME，可调大小窗口边框的宽度"),
+    SM_CYFRAME,                     TEXT("SM_CYFRAME"),                     TEXT("同SM_CYSIZEFRAME，可调大小窗口边框的高度"),
+    SM_CXHSCROLL,                   TEXT("SM_CXHSCROLL"),                   TEXT("水平滚动条中箭头位图的宽度"),
+    SM_CYHSCROLL,                   TEXT("SM_CYHSCROLL"),                   TEXT("水平滚动条中箭头位图的高度"),
+    SM_CXVSCROLL,                   TEXT("SM_CXVSCROLL"),                   TEXT("垂直滚动条中箭头位图的宽度"),
+    SM_CYVSCROLL,                   TEXT("SM_CYVSCROLL"),                   TEXT("垂直滚动条中箭头位图的高度"),
+    SM_CXHTHUMB,                    TEXT("SM_CXHTHUMB"),                    TEXT("水平滚动条中滚动框(滑块)的高度"),
+    SM_CYVTHUMB,                    TEXT("SM_CYVTHUMB"),                    TEXT("垂直滚动条中滚动框(滑块)的宽度"),
+    SM_CXICON,                      TEXT("SM_CXICON"),                      TEXT("图标的默认宽度"),
+    SM_CYICON,                      TEXT("SM_CYICON"),                      TEXT("图标的默认高度"),
+    SM_CXICONSPACING,               TEXT("SM_CXICONSPACING"),               TEXT("大图标视图中项目的网格单元格宽度"),
+    SM_CYICONSPACING,               TEXT("SM_CYICONSPACING"),               TEXT("大图标视图中项目的网格单元格高度"),
+    SM_CXMAXIMIZED,                 TEXT("SM_CXMAXIMIZED"),                 TEXT("最大化顶层窗口的默认宽度"),
+    SM_CYMAXIMIZED,                 TEXT("SM_CYMAXIMIZED"),                 TEXT("最大化顶层窗口的默认高度"),
+    SM_CXMAXTRACK,                  TEXT("SM_CXMAXTRACK"),                  TEXT("具有标题和大小调整边框的窗口可以拖动的最大宽度"),
+    SM_CYMAXTRACK,                  TEXT("SM_CYMAXTRACK"),                  TEXT("具有标题和大小调整边框的窗口可以拖动的最大高度"),
+    SM_CXMENUCHECK,                 TEXT("SM_CXMENUCHECK"),                 TEXT("菜单项前面复选框位图的宽度"),
+    SM_CYMENUCHECK,                 TEXT("SM_CYMENUCHECK"),                 TEXT("菜单项前面复选框位图的高度"),
+    SM_CXMENUSIZE,                  TEXT("SM_CXMENUSIZE"),                  TEXT("菜单栏按钮的宽度"),
+    SM_CYMENUSIZE,                  TEXT("SM_CYMENUSIZE"),                  TEXT("菜单栏按钮的高度"),
+    SM_CXMIN,                       TEXT("SM_CXMIN"),                       TEXT("窗口的最小宽度"),
+    SM_CYMIN,                       TEXT("SM_CYMIN"),                       TEXT("窗口的最小高度"),
+    SM_CXMINIMIZED,                 TEXT("SM_CXMINIMIZED"),                 TEXT("最小化窗口的宽度"),
+    SM_CYMINIMIZED,                 TEXT("SM_CYMINIMIZED"),                 TEXT("最小化窗口的高度"),
+    SM_CXMINSPACING,                TEXT("SM_CXMINSPACING"),                TEXT("最小化窗口的网格单元宽度"),
+    SM_CYMINSPACING,                TEXT("SM_CYMINSPACING"),                TEXT("最小化窗口的网格单元高度"),
+    SM_CXMINTRACK,                  TEXT("SM_CXMINTRACK"),                  TEXT("窗口的最小拖动宽度，用户无法将窗口拖动到小于这些尺寸"),
+    SM_CYMINTRACK,                  TEXT("SM_CYMINTRACK"),                  TEXT("窗口的最小拖动高度，用户无法将窗口拖动到小于这些尺寸"),
+    SM_CXPADDEDBORDER,              TEXT("SM_CXPADDEDBORDER"),              TEXT("标题窗口的边框填充量"),
+    SM_CXSIZE,                      TEXT("SM_CXSIZE"),                      TEXT("窗口标题或标题栏中按钮的宽度"),
+    SM_CYSIZE,                      TEXT("SM_CYSIZE"),                      TEXT("窗口标题或标题栏中按钮的高度"),
+    SM_CXSIZEFRAME,                 TEXT("SM_CXSIZEFRAME"),                 TEXT("同SM_CXFRAME，可调大小窗口边框的宽度"),
+    SM_CYSIZEFRAME,                 TEXT("SM_CYSIZEFRAME"),                 TEXT("同SM_CYFRAME，可调大小窗口边框的厚度"),
+    SM_CXSMICON,                    TEXT("SM_CXSMICON"),                    TEXT("小图标的建议宽度"),
+    SM_CYSMICON,                    TEXT("SM_CYSMICON"),                    TEXT("小图标的建议高度"),
+    SM_CXSMSIZE,                    TEXT("SM_CXSMSIZE"),                    TEXT("小标题按钮的宽度"),
+    SM_CYSMSIZE,                    TEXT("SM_CYSMSIZE"),                    TEXT("小标题按钮的高度"),
+    SM_CXVIRTUALSCREEN,             TEXT("SM_CXVIRTUALSCREEN"),             TEXT("虚拟屏幕的宽度"),
+    SM_CYVIRTUALSCREEN,             TEXT("SM_CYVIRTUALSCREEN"),             TEXT("虚拟屏幕的高度"),
+    SM_CYCAPTION,                   TEXT("SM_CYCAPTION"),                   TEXT("标题区域的高度"),
+    SM_CYKANJIWINDOW,               TEXT("SM_CYKANJIWINDOW"),               TEXT("屏幕底部的日文汉字窗口的高度"),
+    SM_CYMENU,                      TEXT("SM_CYMENU"),                      TEXT("单行菜单栏的高度"),
+    SM_CYSMCAPTION,                 TEXT("SM_CYSMCAPTION"),                 TEXT("小标题的高度"),
+    SM_DBCSENABLED,                 TEXT("SM_DBCSENABLED"),                 TEXT("User32.dll是否支持DBCS"),
+    SM_DEBUG,                       TEXT("SM_DEBUG"),                       TEXT("是否安装了User.exe的调试版本"),
+    SM_DIGITIZER,                   TEXT("SM_DIGITIZER"),                   TEXT("设备支持的数字转换器输入类型"),
+    SM_IMMENABLED,                  TEXT("SM_IMMENABLED"),                  TEXT("是否启用了输入法管理器／输入法编辑器功能"),
+    SM_MAXIMUMTOUCHES,              TEXT("SM_MAXIMUMTOUCHES"),              TEXT("系统中是否有数字化仪"),
+    SM_MEDIACENTER,                 TEXT("SM_MEDIACENTER"),                 TEXT("当前操作系统是不是Windows XP Media Center"),
+    SM_MENUDROPALIGNMENT,           TEXT("SM_MENUDROPALIGNMENT"),           TEXT("下拉菜单是否与相应的菜单栏项右对齐"),
+    SM_MIDEASTENABLED,              TEXT("SM_MIDEASTENABLED"),              TEXT("系统是否启用希伯来语和阿拉伯语"),
+    SM_MOUSEHORIZONTALWHEELPRESENT, TEXT("SM_MOUSEHORIZONTALWHEELPRESENT"), TEXT("是否安装了带有水平滚轮的鼠标"),
+    SM_MOUSEPRESENT,                TEXT("SM_MOUSEPRESENT"),                TEXT("是否安装了鼠标"),
+    SM_MOUSEWHEELPRESENT,           TEXT("SM_MOUSEWHEELPRESENT"),           TEXT("是否安装了带有垂直滚轮的鼠标"),
+    SM_NETWORK,                     TEXT("SM_NETWORK"),                     TEXT("是否存在网络"),
+    SM_PENWINDOWS,                  TEXT("SM_PENWINDOWS"),                  TEXT("是否安装了Microsoft Windows for Pen Computing扩展"),
+    SM_REMOTECONTROL,               TEXT("SM_REMOTECONTROL"),               TEXT("当前终端服务器会话是否被远程控制"),
+    SM_REMOTESESSION,               TEXT("SM_REMOTESESSION"),               TEXT("调用进程是否与终端服务客户机会话关联"),
+    SM_SAMEDISPLAYFORMAT,           TEXT("SM_SAMEDISPLAYFORMAT"),           TEXT("所有显示器的颜色格式是否相同"),
+    SM_SECURE,                      TEXT("SM_SECURE"),                      TEXT("始终返回0"),
+    SM_SERVERR2,                    TEXT("SM_SERVERR2"),                    TEXT("系统是否是Windows Server 2003 R2"),
+    SM_SHOWSOUNDS,                  TEXT("SM_SHOWSOUNDS"),                  TEXT("用户是否要求应用程序在其他情况下以可视方式呈现信息"),
+    SM_SHUTTINGDOWN,                TEXT("SM_SHUTTINGDOWN"),                TEXT("当前会话是否正在关闭"),
+    SM_SLOWMACHINE,                 TEXT("SM_SLOWMACHINE"),                 TEXT("计算机是否具有低端(慢速)处理器"),
+    SM_STARTER,                     TEXT("SM_STARTER"),                     TEXT("当前操作系统版本"),
+    SM_SWAPBUTTON,                  TEXT("SM_SWAPBUTTON"),                  TEXT("鼠标左键和右键的功能是否互换了"),
+    SM_TABLETPC,                    TEXT("SM_TABLETPC"),                    TEXT("是否启动了Tablet PC输入服务"),
+    SM_XVIRTUALSCREEN,              TEXT("SM_XVIRTUALSCREEN"),              TEXT("虚拟屏幕左侧的坐标"),
+    SM_YVIRTUALSCREEN,              TEXT("SM_YVIRTUALSCREEN"),              TEXT("虚拟屏幕顶部的坐标")
+};
+const int NUMLINES = sizeof(METRICS) / sizeof(METRICS[0]);
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;                          
+    TCHAR szClassName[] = TEXT("MyWindow");         
+    TCHAR szAppName[] = TEXT("GetSystemMetrics");   
+    HWND hwnd;                                      
+    MSG msg;                                       
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass); //采用水平滚动条、垂直滚动条
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW | WS_VSCROLL| WS_HSCROLL,
+        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    TEXTMETRIC tm;
+    SCROLLINFO si;
+    HFONT hFont, hFontOld;
+    static int s_iCol1, s_iCol2, s_iCol3, s_iHeight;
+    static int s_cxClient, s_cyClient;           
+    static int s_cxChar;                          
+    int iVertPos, iHorzPos;                        
+    SIZE size = { 0 };
+    int x, y;
+    TCHAR szBuf[10];
+
+    if (uMsg == WM_CREATE)
+    {
+        hdc = GetDC(hwnd);
+        hFont = CreateFont(12, 0, 0, 0, 0, 0, 0, 0, GB2312_CHARSET, 0, 0, 0, 0, TEXT("宋体"));
+        hFontOld = (HFONT)SelectObject(hdc, hFont);
+        for (int i = 0; i < NUMLINES; i++)
+        {
+            GetTextExtentPoint32(hdc, METRICS[i].m_pLabel, _tcslen(METRICS[i].m_pLabel), &size);
+            if (size.cx > s_iCol1)
+                s_iCol1 = size.cx;
+            GetTextExtentPoint32(hdc, METRICS[i].m_pDesc, _tcslen(METRICS[i].m_pDesc), &size);
+            if (size.cx > s_iCol2)
+                s_iCol2 = size.cx;
+            GetTextExtentPoint32(hdc, szBuf,wsprintf(szBuf, TEXT("%d"), GetSystemMetrics(METRICS[i].m_nIndex)), &size);
+            if (size.cx > s_iCol3)
+                s_iCol3 = size.cx;
+        }
+        //高度，加2px，搞多一点点行间距 
+        s_iHeight = size.cy + 2;
+
+        //查文本的水平宽度
+        GetTextMetrics(hdc, &tm);
+        s_cxChar = tm.tmAveCharWidth;
+        SelectObject(hdc, hFontOld);
+        DeleteObject(hFont);
+        ReleaseDC(hwnd, hdc);
+        return 0;
+    }
+    else if (uMsg == WM_SIZE)
+    {
+        // 查客户区宽度、高度
+        s_cxClient = LOWORD(lParam);
+        s_cyClient = HIWORD(lParam);
+
+        // 设置垂直滚动条的范围和页面大小
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_RANGE | SIF_PAGE;
+        si.nMin = 0;
+        si.nMax = NUMLINES - 1;
+        si.nPage = s_cyClient / s_iHeight;
+        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+
+        // 设置水平滚动条的范围和页面大小
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_RANGE | SIF_PAGE;
+        si.nMin = 0;
+        si.nMax = (s_iCol1 + s_iCol2 + s_iCol3) / s_cxChar - 1;
+        si.nPage = s_cxClient / s_cxChar;
+        SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
+        return 0;
+    }
+    else if (uMsg == WM_VSCROLL)
+    {
+        //查垂直滚动条的当前位置
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_ALL;
+        GetScrollInfo(hwnd, SB_VERT, &si);
+        iVertPos = si.nPos;
+        //根据用户行为先更新一波垂直滚动条的当前位置
+        switch (LOWORD(wParam))
+        {
+        case SB_LINEUP:
+            si.nPos -= 1;
+            break;
+        case SB_LINEDOWN:
+            si.nPos += 1;
+            break;
+        case SB_PAGEUP:
+            si.nPos -= si.nPage;
+            break;
+        case SB_PAGEDOWN:
+            si.nPos += si.nPage;
+            break;
+        case SB_THUMBTRACK:
+            si.nPos = si.nTrackPos;
+            break;
+        }
+        // 设置位置，然后获取位置，如果si.nPos越界，Windows不会设置
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+        //再查位置 如果Windows更新了滚动条位置，我们更新客户区
+        GetScrollInfo(hwnd, SB_VERT, &si);
+        if (iVertPos != si.nPos)
+        {
+            InvalidateRect(hwnd, NULL, TRUE);
+            UpdateWindow(hwnd);
+        }
+    
+        return 0;
+    }
+    else if (uMsg == WM_HSCROLL)
+    {
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_ALL;
+        GetScrollInfo(hwnd, SB_HORZ, &si);
+        iHorzPos = si.nPos;
+        switch (LOWORD(wParam))
+        {
+        case SB_LINELEFT:
+            si.nPos -= 1;
+            break;
+        case SB_LINERIGHT:
+            si.nPos += 1;
+            break;
+        case SB_PAGELEFT:
+            si.nPos -= si.nPage;
+            break;
+        case SB_PAGERIGHT:
+            si.nPos += si.nPage;
+            break;
+        case SB_THUMBTRACK:
+            si.nPos = si.nTrackPos;
+            break;
+        }
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
+        GetScrollInfo(hwnd, SB_HORZ, &si);
+        if (iHorzPos != si.nPos)
+        {
+            InvalidateRect(hwnd, NULL, TRUE);
+            UpdateWindow(hwnd);
+        }
+        return 0;
+    }
+    else if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+
+        // 获取垂直滚动条、水平滚动条位置
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        GetScrollInfo(hwnd, SB_VERT, &si);
+        iVertPos = si.nPos;
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        GetScrollInfo(hwnd, SB_HORZ, &si);
+        iHorzPos = si.nPos;
+
+        //DC模式设置
+        SetBkMode(hdc, TRANSPARENT);
+        hFont = CreateFont(12, 0, 0, 0, 0, 0, 0, 0, GB2312_CHARSET, 0, 0, 0, 0, TEXT("宋体"));
+        hFontOld = (HFONT)SelectObject(hdc, hFont);
+
+        for (int i = 0; i < NUMLINES; i++)
+        {
+            x = s_cxChar * (-iHorzPos);
+            y = s_iHeight * (i - iVertPos);
+            TextOut(hdc, x, y, METRICS[i].m_pLabel, _tcslen(METRICS[i].m_pLabel));
+            TextOut(hdc, x + s_iCol1, y, METRICS[i].m_pDesc, _tcslen(METRICS[i].m_pDesc));
+            TextOut(hdc, x + s_iCol1 + s_iCol2, y, szBuf, wsprintf(szBuf, TEXT("%d"), GetSystemMetrics(METRICS[i].m_nIndex)));
+        }
+        SelectObject(hdc, hFontOld);
+        DeleteObject(hFont);
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+
+```
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/%E4%BC%98%E5%8C%96%E5%90%8E%E7%9A%84%E6%BB%9A%E5%8A%A8%E6%9D%A1.gif)
+
+
+
+编译运行，可以发现，因为`WM_SIZE`消息中`SetScrolllnfo`函数的`SCROLLINFO`结构的`fMask`字段没有指定`SIF_DISABLENOSCROLL`标志，所以在不需要水平滚动条的时候，水平滚动条是不显示的。
+
+
+
+
+
+SystemMetrics3程序最先执行的是`WM_CREATE`消息，然后是`WM_SIZE`和`WM_PAINT`。因为在`WM_SIZE`消息中需要使用`s_iCol1` `s_iCol2s`  `s_iCol3`  `s_iHeight`  `s_cxChar`这些变量，所以我们需要在`WM_CREATE`消息中提前获取这些值。
+
+
+
+
+
+看一下`WM_VSCROLL`消息的处理，首先调用`GetScrolllnfo`函数获取滚动以前的位置。然后根据滚动请求更新`si.nPos`的值，调用`SetScrolllnfo`函数更新滚动条位置，再次调用`GetScrolllnfo`函数看一下滚动条位置是否真的变化了，如果变化了，就调用`InvalidateRect`函数使整个客户区无效。
+
+
+
+为什么绕这么大一个弯呢?前面说过，`SetScrolllnfo`函数会对`SCROLLINFO`结构的`nPage`和`nPos`字段指定的值进行范围检查。
+
+
+
+
+
+`nPage`字段必须指定为介于`[0,nMax - nMin + 1]`的值 `nPos`字段必须指定为介于`[nMin,nMax - max(nPage -1,0)]`的值。如果任一值超出其范围，则函数将其设置为刚好在范围内的值。
+
+
+
+
+
+举例：现在垂直滚动条滑块在位置0处则向上滚动一个单位，执行`SB_LINEUP`请求，`si.nPos`的值变为`-1`  `SetScrolllnfo`函数是不会向上滚动一个单位的，就是说滑块位置不会变化。
+
+:::
+
+
+
+## 只刷新无效区域
+
+前面的SystemMetrics2和SystemMetrics3程序，不管客户区是滚动了一行还是一页，都统统宣布整个客户区无效。如果刷新客户区的代码很麻烦且耗时的话，就会造成程序界面卡顿。前面曾多次提及无效区域的概念，发生滚动条滚动请求以后，我们可以仅让新出现的那些行无效，WM PAINT只需要刷新这些行所占的区域即可，这样的逻辑无疑会更高效。当然了，对于代码逻辑很简单的情况，在当今强大的CPU面前，我们应该更注重代码简洁与易于理解。下面我们就只刷新无效区域，仅列出`WindowProc`中代码发生变化的几个消息 。
+
+
+
+:::details `ScrollWindow 函数说明`
+
+```c
+/// <summary>
+/// 滚动指定窗口的客户区
+/// </summary>
+/// <param name="hWnd">窗口句柄</param>
+/// <param name="XAmount">水平滚动的量</param>
+/// <param name="YAmount">垂直滚动的量</param>
+/// <param name="pRect">将要滚动的客户区部分的RECT结构设置为NULL，则滚动整个客户区</param>
+/// <param name="">裁剪矩形RECT结构，矩形外部的区域不会被绘制</param>
+/// <returns></returns>
+BOOL ScrollWindow(HWND hWnd,int XAmount,int YAmount,const RECT* pRect,const RECT pClipRect);
+```
+
+`lpRect`和`lpClipRect`这两个参数挺有意思的，读者可以试着设置一下这两个参数看一看效果。
+Windows会自动将新滚动出现的区域无效化，从而产生一条`WM_PAINT`消息，因此不需要调用`InvalidateRect`函数。
+
+:::
+
+
+
+
+
+:::details `ScrollWindow 只刷新无效区域`
+
+```c{286-297,228,263}
+#include <Windows.h>
+#include <tchar.h>
+struct
+{
+    int     m_nIndex;
+    PCTSTR   m_pLabel;
+    PCTSTR   m_pDesc;
+}METRICS[] = {
+    SM_CXSCREEN,                    TEXT("SM_CXSCREEN"),                    TEXT("屏幕的宽度"),
+    SM_CYSCREEN,                    TEXT("SM_CYSCREEN"),                    TEXT("屏幕的高度"),
+    SM_CXFULLSCREEN,                TEXT("SM_CXFULLSCREEN"),                TEXT("全屏窗口的客户区宽度"),
+    SM_CYFULLSCREEN,                TEXT("SM_CYFULLSCREEN"),                TEXT("全屏窗口的客户区高度"),
+    SM_ARRANGE,                     TEXT("SM_ARRANGE"),                     TEXT("如何排列最小化窗口"),
+    SM_CLEANBOOT,                   TEXT("SM_CLEANBOOT"),                   TEXT("系统启动方式"),
+    SM_CMONITORS,                   TEXT("SM_CMONITORS"),                   TEXT("监视器的数量"),
+    SM_CMOUSEBUTTONS,               TEXT("SM_CMOUSEBUTTONS"),               TEXT("鼠标上的按钮数"),
+    SM_CXBORDER,                    TEXT("SM_CXBORDER"),                    TEXT("窗口边框的宽度"),
+    SM_CYBORDER,                    TEXT("SM_CYBORDER"),                    TEXT("窗口边框的高度"),
+    SM_CXCURSOR,                    TEXT("SM_CXCURSOR"),                    TEXT("光标的宽度"),
+    SM_CYCURSOR,                    TEXT("SM_CYCURSOR"),                    TEXT("光标的高度"),
+    SM_CXDLGFRAME,                  TEXT("SM_CXDLGFRAME"),                  TEXT("同SM_CXFIXEDFRAME，有标题但不可调整大小的窗口边框的宽度"),
+    SM_CYDLGFRAME,                  TEXT("SM_CYDLGFRAME"),                  TEXT("同SM_CYFIXEDFRAME，有标题但不可调整大小的窗口边框的高度"),
+    SM_CXDOUBLECLK,                 TEXT("SM_CXDOUBLECLK"),                 TEXT("鼠标双击事件两次点击的X坐标不可以超过这个值"),
+    SM_CYDOUBLECLK,                 TEXT("SM_CYDOUBLECLK"),                 TEXT("鼠标双击事件两次点击的Y坐标不可以超过这个值"),
+    SM_CXDRAG,                      TEXT("SM_CXDRAG"),                      TEXT("拖动操作开始之前，鼠标指针可以移动的鼠标下方点的任意一侧的像素数"),
+    SM_CYDRAG,                      TEXT("SM_CYDRAG"),                      TEXT("拖动操作开始之前，鼠标指针可以移动的鼠标下移点上方和下方的像素数"),
+    SM_CXEDGE,                      TEXT("SM_CXEDGE"),                      TEXT("三维边框的宽度"),
+    SM_CYEDGE,                      TEXT("SM_CYEDGE"),                      TEXT("三维边框的高度"),
+    SM_CXFIXEDFRAME,                TEXT("SM_CXFIXEDFRAME"),                TEXT("同SM_CXDLGFRAME，有标题但不可调整大小的窗口边框的宽度"),
+    SM_CYFIXEDFRAME,                TEXT("SM_CYFIXEDFRAME"),                TEXT("同SM_CYDLGFRAME，有标题但不可调整大小的窗口边框的高度"),
+    SM_CXFOCUSBORDER,               TEXT("SM_CXFOCUSBORDER"),               TEXT("DrawFocusRect绘制的焦点矩形的左边缘和右边缘的宽度"),
+    SM_CYFOCUSBORDER,               TEXT("SM_CYFOCUSBORDER"),               TEXT("DrawFocusRect绘制的焦点矩形的上边缘和下边缘的高度"),
+    SM_CXFRAME,                     TEXT("SM_CXFRAME"),                     TEXT("同SM_CXSIZEFRAME，可调大小窗口边框的宽度"),
+    SM_CYFRAME,                     TEXT("SM_CYFRAME"),                     TEXT("同SM_CYSIZEFRAME，可调大小窗口边框的高度"),
+    SM_CXHSCROLL,                   TEXT("SM_CXHSCROLL"),                   TEXT("水平滚动条中箭头位图的宽度"),
+    SM_CYHSCROLL,                   TEXT("SM_CYHSCROLL"),                   TEXT("水平滚动条中箭头位图的高度"),
+    SM_CXVSCROLL,                   TEXT("SM_CXVSCROLL"),                   TEXT("垂直滚动条中箭头位图的宽度"),
+    SM_CYVSCROLL,                   TEXT("SM_CYVSCROLL"),                   TEXT("垂直滚动条中箭头位图的高度"),
+    SM_CXHTHUMB,                    TEXT("SM_CXHTHUMB"),                    TEXT("水平滚动条中滚动框(滑块)的高度"),
+    SM_CYVTHUMB,                    TEXT("SM_CYVTHUMB"),                    TEXT("垂直滚动条中滚动框(滑块)的宽度"),
+    SM_CXICON,                      TEXT("SM_CXICON"),                      TEXT("图标的默认宽度"),
+    SM_CYICON,                      TEXT("SM_CYICON"),                      TEXT("图标的默认高度"),
+    SM_CXICONSPACING,               TEXT("SM_CXICONSPACING"),               TEXT("大图标视图中项目的网格单元格宽度"),
+    SM_CYICONSPACING,               TEXT("SM_CYICONSPACING"),               TEXT("大图标视图中项目的网格单元格高度"),
+    SM_CXMAXIMIZED,                 TEXT("SM_CXMAXIMIZED"),                 TEXT("最大化顶层窗口的默认宽度"),
+    SM_CYMAXIMIZED,                 TEXT("SM_CYMAXIMIZED"),                 TEXT("最大化顶层窗口的默认高度"),
+    SM_CXMAXTRACK,                  TEXT("SM_CXMAXTRACK"),                  TEXT("具有标题和大小调整边框的窗口可以拖动的最大宽度"),
+    SM_CYMAXTRACK,                  TEXT("SM_CYMAXTRACK"),                  TEXT("具有标题和大小调整边框的窗口可以拖动的最大高度"),
+    SM_CXMENUCHECK,                 TEXT("SM_CXMENUCHECK"),                 TEXT("菜单项前面复选框位图的宽度"),
+    SM_CYMENUCHECK,                 TEXT("SM_CYMENUCHECK"),                 TEXT("菜单项前面复选框位图的高度"),
+    SM_CXMENUSIZE,                  TEXT("SM_CXMENUSIZE"),                  TEXT("菜单栏按钮的宽度"),
+    SM_CYMENUSIZE,                  TEXT("SM_CYMENUSIZE"),                  TEXT("菜单栏按钮的高度"),
+    SM_CXMIN,                       TEXT("SM_CXMIN"),                       TEXT("窗口的最小宽度"),
+    SM_CYMIN,                       TEXT("SM_CYMIN"),                       TEXT("窗口的最小高度"),
+    SM_CXMINIMIZED,                 TEXT("SM_CXMINIMIZED"),                 TEXT("最小化窗口的宽度"),
+    SM_CYMINIMIZED,                 TEXT("SM_CYMINIMIZED"),                 TEXT("最小化窗口的高度"),
+    SM_CXMINSPACING,                TEXT("SM_CXMINSPACING"),                TEXT("最小化窗口的网格单元宽度"),
+    SM_CYMINSPACING,                TEXT("SM_CYMINSPACING"),                TEXT("最小化窗口的网格单元高度"),
+    SM_CXMINTRACK,                  TEXT("SM_CXMINTRACK"),                  TEXT("窗口的最小拖动宽度，用户无法将窗口拖动到小于这些尺寸"),
+    SM_CYMINTRACK,                  TEXT("SM_CYMINTRACK"),                  TEXT("窗口的最小拖动高度，用户无法将窗口拖动到小于这些尺寸"),
+    SM_CXPADDEDBORDER,              TEXT("SM_CXPADDEDBORDER"),              TEXT("标题窗口的边框填充量"),
+    SM_CXSIZE,                      TEXT("SM_CXSIZE"),                      TEXT("窗口标题或标题栏中按钮的宽度"),
+    SM_CYSIZE,                      TEXT("SM_CYSIZE"),                      TEXT("窗口标题或标题栏中按钮的高度"),
+    SM_CXSIZEFRAME,                 TEXT("SM_CXSIZEFRAME"),                 TEXT("同SM_CXFRAME，可调大小窗口边框的宽度"),
+    SM_CYSIZEFRAME,                 TEXT("SM_CYSIZEFRAME"),                 TEXT("同SM_CYFRAME，可调大小窗口边框的厚度"),
+    SM_CXSMICON,                    TEXT("SM_CXSMICON"),                    TEXT("小图标的建议宽度"),
+    SM_CYSMICON,                    TEXT("SM_CYSMICON"),                    TEXT("小图标的建议高度"),
+    SM_CXSMSIZE,                    TEXT("SM_CXSMSIZE"),                    TEXT("小标题按钮的宽度"),
+    SM_CYSMSIZE,                    TEXT("SM_CYSMSIZE"),                    TEXT("小标题按钮的高度"),
+    SM_CXVIRTUALSCREEN,             TEXT("SM_CXVIRTUALSCREEN"),             TEXT("虚拟屏幕的宽度"),
+    SM_CYVIRTUALSCREEN,             TEXT("SM_CYVIRTUALSCREEN"),             TEXT("虚拟屏幕的高度"),
+    SM_CYCAPTION,                   TEXT("SM_CYCAPTION"),                   TEXT("标题区域的高度"),
+    SM_CYKANJIWINDOW,               TEXT("SM_CYKANJIWINDOW"),               TEXT("屏幕底部的日文汉字窗口的高度"),
+    SM_CYMENU,                      TEXT("SM_CYMENU"),                      TEXT("单行菜单栏的高度"),
+    SM_CYSMCAPTION,                 TEXT("SM_CYSMCAPTION"),                 TEXT("小标题的高度"),
+    SM_DBCSENABLED,                 TEXT("SM_DBCSENABLED"),                 TEXT("User32.dll是否支持DBCS"),
+    SM_DEBUG,                       TEXT("SM_DEBUG"),                       TEXT("是否安装了User.exe的调试版本"),
+    SM_DIGITIZER,                   TEXT("SM_DIGITIZER"),                   TEXT("设备支持的数字转换器输入类型"),
+    SM_IMMENABLED,                  TEXT("SM_IMMENABLED"),                  TEXT("是否启用了输入法管理器／输入法编辑器功能"),
+    SM_MAXIMUMTOUCHES,              TEXT("SM_MAXIMUMTOUCHES"),              TEXT("系统中是否有数字化仪"),
+    SM_MEDIACENTER,                 TEXT("SM_MEDIACENTER"),                 TEXT("当前操作系统是不是Windows XP Media Center"),
+    SM_MENUDROPALIGNMENT,           TEXT("SM_MENUDROPALIGNMENT"),           TEXT("下拉菜单是否与相应的菜单栏项右对齐"),
+    SM_MIDEASTENABLED,              TEXT("SM_MIDEASTENABLED"),              TEXT("系统是否启用希伯来语和阿拉伯语"),
+    SM_MOUSEHORIZONTALWHEELPRESENT, TEXT("SM_MOUSEHORIZONTALWHEELPRESENT"), TEXT("是否安装了带有水平滚轮的鼠标"),
+    SM_MOUSEPRESENT,                TEXT("SM_MOUSEPRESENT"),                TEXT("是否安装了鼠标"),
+    SM_MOUSEWHEELPRESENT,           TEXT("SM_MOUSEWHEELPRESENT"),           TEXT("是否安装了带有垂直滚轮的鼠标"),
+    SM_NETWORK,                     TEXT("SM_NETWORK"),                     TEXT("是否存在网络"),
+    SM_PENWINDOWS,                  TEXT("SM_PENWINDOWS"),                  TEXT("是否安装了Microsoft Windows for Pen Computing扩展"),
+    SM_REMOTECONTROL,               TEXT("SM_REMOTECONTROL"),               TEXT("当前终端服务器会话是否被远程控制"),
+    SM_REMOTESESSION,               TEXT("SM_REMOTESESSION"),               TEXT("调用进程是否与终端服务客户机会话关联"),
+    SM_SAMEDISPLAYFORMAT,           TEXT("SM_SAMEDISPLAYFORMAT"),           TEXT("所有显示器的颜色格式是否相同"),
+    SM_SECURE,                      TEXT("SM_SECURE"),                      TEXT("始终返回0"),
+    SM_SERVERR2,                    TEXT("SM_SERVERR2"),                    TEXT("系统是否是Windows Server 2003 R2"),
+    SM_SHOWSOUNDS,                  TEXT("SM_SHOWSOUNDS"),                  TEXT("用户是否要求应用程序在其他情况下以可视方式呈现信息"),
+    SM_SHUTTINGDOWN,                TEXT("SM_SHUTTINGDOWN"),                TEXT("当前会话是否正在关闭"),
+    SM_SLOWMACHINE,                 TEXT("SM_SLOWMACHINE"),                 TEXT("计算机是否具有低端(慢速)处理器"),
+    SM_STARTER,                     TEXT("SM_STARTER"),                     TEXT("当前操作系统版本"),
+    SM_SWAPBUTTON,                  TEXT("SM_SWAPBUTTON"),                  TEXT("鼠标左键和右键的功能是否互换了"),
+    SM_TABLETPC,                    TEXT("SM_TABLETPC"),                    TEXT("是否启动了Tablet PC输入服务"),
+    SM_XVIRTUALSCREEN,              TEXT("SM_XVIRTUALSCREEN"),              TEXT("虚拟屏幕左侧的坐标"),
+    SM_YVIRTUALSCREEN,              TEXT("SM_YVIRTUALSCREEN"),              TEXT("虚拟屏幕顶部的坐标")
+};
+const int NUMLINES = sizeof(METRICS) / sizeof(METRICS[0]);
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;                          
+    TCHAR szClassName[] = TEXT("MyWindow");         
+    TCHAR szAppName[] = TEXT("GetSystemMetrics");   
+    HWND hwnd;                                      
+    MSG msg;                                       
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass); //采用水平滚动条、垂直滚动条
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW | WS_VSCROLL| WS_HSCROLL,
+        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    TEXTMETRIC tm;
+    SCROLLINFO si;
+    HFONT hFont, hFontOld;
+    static int s_iCol1, s_iCol2, s_iCol3, s_iHeight;
+    static int s_cxClient, s_cyClient;              // 客户区宽度、高度
+    static int s_cxChar;                            // 平均字符宽度，用于水平滚动条滚动单位
+    int iVertPos, iHorzPos;                         // 垂直、水平滚动条的当前位置
+    SIZE size = { 0 };
+    int x, y;
+    TCHAR szBuf[10];
+
+    if (uMsg == WM_CREATE)
+    {
+        hdc = GetDC(hwnd);
+        hFont = CreateFont(12, 0, 0, 0, 0, 0, 0, 0, GB2312_CHARSET, 0, 0, 0, 0, TEXT("宋体"));
+        hFontOld = (HFONT)SelectObject(hdc, hFont);    
+        for (int i = 0; i < NUMLINES; i++)
+        {
+            GetTextExtentPoint32(hdc, METRICS[i].m_pLabel, _tcslen(METRICS[i].m_pLabel), &size);
+            if (size.cx > s_iCol1)
+                s_iCol1 = size.cx;
+            GetTextExtentPoint32(hdc, METRICS[i].m_pDesc, _tcslen(METRICS[i].m_pDesc), &size);
+            if (size.cx > s_iCol2)
+                s_iCol2 = size.cx;
+            GetTextExtentPoint32(hdc, szBuf,wsprintf(szBuf, TEXT("%d"), GetSystemMetrics(METRICS[i].m_nIndex)), &size);
+            if (size.cx > s_iCol3)
+                s_iCol3 = size.cx;
+        }
+        s_iHeight = size.cy + 2;             
+        GetTextMetrics(hdc, &tm);
+        s_cxChar = tm.tmAveCharWidth;     
+        SelectObject(hdc, hFontOld);
+        DeleteObject(hFont);
+        ReleaseDC(hwnd, hdc);
+        return 0;
+    }
+    else if (uMsg == WM_SIZE)
+    {
+
+        s_cxClient = LOWORD(lParam);
+        s_cyClient = HIWORD(lParam); 
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_RANGE | SIF_PAGE;
+        si.nMin = 0;
+        si.nMax = NUMLINES - 1;
+        si.nPage = s_cyClient / s_iHeight;
+        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);        
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_RANGE | SIF_PAGE;
+        si.nMin = 0;
+        si.nMax = (s_iCol1 + s_iCol2 + s_iCol3) / s_cxChar - 1;
+        si.nPage = s_cxClient / s_cxChar;
+        SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);         
+        return 0;
+    }
+    else if (uMsg == WM_VSCROLL)
+    {
+
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_ALL;
+
+        GetScrollInfo(hwnd, SB_VERT, &si);
+        iVertPos = si.nPos;
+        switch (LOWORD(wParam))
+        {
+        case SB_LINEUP:
+            si.nPos -= 1;
+            break;
+        case SB_LINEDOWN:
+            si.nPos += 1;
+            break;
+        case SB_PAGEUP:
+            si.nPos -= si.nPage;
+            break;
+        case SB_PAGEDOWN:
+            si.nPos += si.nPage;
+            break;
+        case SB_THUMBTRACK:
+            si.nPos = si.nTrackPos;
+            break;
+        }
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+        GetScrollInfo(hwnd, SB_VERT, &si);
+        // 如果Windows更新了滚动条位置，我们更新客户区
+        if (iVertPos != si.nPos)
+        {
+            ::ScrollWindow(hwnd, 0, s_iHeight * (iVertPos - si.nPos), NULL, NULL);
+            ::UpdateWindow(hwnd);
+        }
+        return 0;
+    }
+    else if (uMsg == WM_HSCROLL)
+    {
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_ALL;
+        GetScrollInfo(hwnd, SB_HORZ, &si);
+        iHorzPos = si.nPos;
+        switch (LOWORD(wParam))
+        {
+        case SB_LINELEFT:
+            si.nPos -= 1;
+            break;
+        case SB_LINERIGHT:
+            si.nPos += 1;
+            break;
+        case SB_PAGELEFT:
+            si.nPos -= si.nPage;
+            break;
+        case SB_PAGERIGHT:
+            si.nPos += si.nPage;
+            break;
+        case SB_THUMBTRACK:
+            si.nPos = si.nTrackPos;
+            break;
+        }
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS | SIF_DISABLENOSCROLL;
+        SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
+        GetScrollInfo(hwnd, SB_HORZ, &si);
+        if (iHorzPos != si.nPos)
+        {
+            ::ScrollWindow(hwnd, s_cxChar * (iHorzPos - si.nPos), 0, NULL, NULL);
+            ::UpdateWindow(hwnd);
+        }
+        return 0;
+    }
+    else if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+
+        // 获取垂直滚动条、水平滚动条位置
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        GetScrollInfo(hwnd, SB_VERT, &si);
+        iVertPos = si.nPos;
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        GetScrollInfo(hwnd, SB_HORZ, &si);
+        iHorzPos = si.nPos;
+
+        SetBkMode(hdc, TRANSPARENT);
+        hFont = CreateFont(12, 0, 0, 0, 0, 0, 0, 0, GB2312_CHARSET, 0, 0, 0, 0, TEXT("宋体"));
+        hFontOld = (HFONT)SelectObject(hdc, hFont);
+
+        //获取无效区域
+        int  nPaintBeg = max(0, iVertPos + ps.rcPaint.top / s_iHeight);
+        int nPaintEnd = min(NUMLINES - 1, iVertPos + ps.rcPaint.bottom / s_iHeight);
+        //只对无效区域做重绘。
+        for (int i = nPaintBeg; i <= nPaintEnd; i++)
+        {
+            x = s_cxChar * (-iHorzPos);
+            y = s_iHeight * (i - iVertPos);
+            TextOut(hdc, x, y, METRICS[i].m_pLabel, _tcslen(METRICS[i].m_pLabel));
+            TextOut(hdc, x + s_iCol1, y, METRICS[i].m_pDesc, _tcslen(METRICS[i].m_pDesc));
+            TextOut(hdc, x + s_iCol1 + s_iCol2, y, szBuf, wsprintf(szBuf, TEXT("%d"), GetSystemMetrics(METRICS[i].m_nIndex)));
+        }
+        SelectObject(hdc, hFontOld);
+        DeleteObject(hFont);
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+:::
+
+
+
+## 根据客户区内容调整程序窗口大小
+
+在我的1920 1080分辨率的笔记本上，`CreateWindowEx`函数的宽度和高度参数指定为`CW_USEDEFAULT`，SystemMetrics3程序运行效果如图3下图所示。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240202225627306-17068857886004.png)
+
+
+
+可以看到客户区右边还有一大块空白，不是很美观。我们希望窗口宽度正好容纳3列文本，即根据3列文本的宽度之和计算窗口宽度。窗口宽度包括客户区宽度、滚动条宽度和边框宽度等，计算起来不是很方便。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240202225654571-17068858159155.png)
+
+
+
+为了让显示内容铺满整个客户区，我先要先介绍一下`GetWindowLongPtr`  `AdjustWindowRectEx`
+和`SetWindowPos`这3个函数。
+
+
+
+
+
+:::details `G/SetWindowLongPtr 函数定义`
+
+
+
+`SetWindowLongPtr`函数设置窗口类中与每个窗口关联的额外内存的数据(`wndclass.cbWndExtra`),  或设置指定窗口的属性（重点）
+
+```c
+
+/// <summary>
+/// 设置指定窗口的属性
+/// </summary>
+/// <param name="hWnd">窗口句柄</param>
+/// <param name="nIndex">要设置哪一项</param>
+/// <param name="dwNewLong">新值</param>
+/// <returns></returns>
+LONG_PTR  SetWindowLongPtr(HWND hWnd,int nIndex,LONG_PTR dwNewLong);
+```
+
+- 参数`nIndex`指定要设置哪一项。如果要设置窗口的一些属性，值如下表所示。
+
+|      常用宏      |           含义           |
+| :--------------: | :----------------------: |
+|  `GWL_EXSTYLE`   |     设置扩展窗口样式     |
+|   `GWL_STYLE`    |       设置窗口样式       |
+| `GWLP_HINSTANCE` |  设置应用程序的实例句柄  |
+|    `GWLP_ID`     | 设置窗口的ID，用于子窗口 |
+| `GWLP_USERDATA`  | 设置与窗口关联的用户数据 |
+|  `GWLP_WNDPROC`  |  设置指向窗口过程的指针  |
+
+如果函数执行成功，则返回值是指定偏移量处或窗口属性的先前值,如果函数执行失败，则返回值为0。
+
+
+
+`GetWindowLong`和`GetWindowLongPtr`函数可以获取指定窗口的自定义数据或窗口的一些属性:
+
+```c
+/// <summary>
+/// 获取指定窗口的自定义数据或窗口的属性
+/// </summary>
+/// <param name="hWnd">窗口句柄</param>
+/// <param name="nlndex">要获取哪一项</param>
+/// <returns></returns>
+LONG_PTR GetWindowLongPtr(HWND hWnd,int nlndex);
+```
+
+如果函数执行成功，则返回所请求的值。如果函数执行失败，则返回值为0。
+
+
+
+
+
+:::tip
+
+SetWindowLongPtr是SetWindowLong函数的升级版本，指针和句柄在32位Windows上为32位，在64位Windows上为64位。使用SetWindowLong函数设置指针或句柄只能设置32位的，要编写32位和64位版本兼容的代码，应该使用
+SetWindowLongPtr函数。如果编译为32位程序，则对SetWindowLongPtr函数的调用实际上还是调用SetWindowLong。
+
+:::
+
+:::
+
+
+
+:::details `AdjustWindowRectEx 函数说明`
+
+```c
+/// <summary>
+/// 根据客户区的大小计算所需的窗口大小
+/// </summary>
+/// <param name="lpRect">out,提供客户区坐标的RECT结构，函数在这个结构中返回所需的窗口坐标</param>
+/// <param name="dwStyle">窗口的窗口样式</param>
+/// <param name="bMenu">窗口是否有菜单</param>
+/// <param name="dwExStyle">窗口的扩展窗口样式</param>
+/// <returns></returns>
+BOOL AdjustWindowRectEx(LPRECT lpRect,DWORD dwStyle,BOOL bMenu,DWORD dwExStyle);
+```
+
+:::
+
+
+
+:::details `SetWindowPos 函数说明`
+
+```c
+
+/// <summary>
+/// 更改一个子窗口、顶级窗口的大小、位置和Z顺序
+/// </summary>
+/// <param name="hWnd">要调整大小、位置或顺序的窗口的窗口句柄</param>
+/// <param name="hWndInsertAfter">指定一个窗口句柄或一些预定义值</param>
+/// <param name="X">窗口新位置的X坐标，以像素为单位</param>
+/// <param name="Y">窗口新位置的Y坐标，以像素为单位</param>
+/// <param name="cx">窗口的新宽度，以像素为单位</param>
+/// <param name="cy">窗口的新高度，以像素为单位</param>
+/// <param name="uFlags">窗口的大小和定位标志</param>
+/// <returns></returns>
+BOOL WINAPI SetWindowPos(HWND hWnd,HWND hWndInsertAfter,int X,int Y,int cx,int cy, UINT uFlags);
+```
+
+- 参数`hWndInsertAfter`指定一个窗口句柄，`hWnd`窗口将位于这个窗口之前，即`hWndlnsertAfter`窗口作为定位窗口，可以设置为NULL。参数`hWndlnsertAfter`也可以指定为下表所示的值。
+
+|      宏常量      |                       含义                       |
+| :--------------: | :----------------------------------------------: |
+|    `HWND_TOP`    |             把窗口放置在Z顺序的顶部              |
+|  `HWND_BOTTOM`   |             把窗口放置在Z顺序的底部              |
+|  `HWND_TOPMOST`  | 窗口始终保持为最顶部的窗口，即使该窗口没有被激活 |
+| `HWND_NOTOPMOST` |            取消始终保持为最顶部的窗口            |
+
+- 参数X和Y指定窗口新位置的X和Y坐标。如果`hWnd`参数指定的窗口是顶级窗口，则相对于屏幕左上角;如果是子窗口，则相对于父窗口客户区的左上角。
+- 参数`uFlags`指定窗口的大小和定位标志，常用的值如下表所示
+
+|      宏定义      |                  含义                  |
+| :--------------: | :------------------------------------: |
+|  `SWP_NOZORDER`  | 维持当前Z序 (忽略hWndInsertAfter参数） |
+|   `SWP_NOMOVE`   |       维持当前位置(忽略X和Y参数)       |
+|   `SWP_NOSIZE`   |      维持当前尺寸(忽略cx和cy参数)      |
+| `SWP_HIDEWINDOW` |                隐藏窗口                |
+| `SWP_SHOWWINDOW` |                显示窗口                |
+
+例如下面的示例使用`SWP_NOZORDERISWP_NOMOVE`标志，表示忽略`hWndInsertAfter` X和Y参数，保持Z顺序和窗口位置不变，仅改变窗口大小。
+
+
+
+
+
+有时候我们希望把一个窗口设置为始终保持为最顶部,可以这样使用:
+
+```c
+SetWindowPos(hwnd, HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
+```
+
+:::
+
+
+
+
+
+:::details `MoveWindow 函数说明`
+
+
+
+```c
+/// <summary>
+/// 更改一个子窗口、顶级窗口的位置和尺寸 通常用于子窗口
+/// </summary>
+/// <param name="hWnd">要调整大小、位置的窗口的窗口句柄</param>
+/// <param name="X"> 窗口新位置的X坐标，以像素为单位</param>
+/// <param name="Y">窗口新位置的Y坐标，以像素为单位</param>
+/// <param name="nWidth">窗口的新宽度，以像素为单位</param>
+/// <param name="nHeight">窗口的新高度，以像素为单位</param>
+/// <param name="bRepaint">是否要重新绘制窗口，通常指定为TRUE</param>
+/// <returns></returns>
+BOOL WINAPI MoveWindow(HWND hWnd,int X, int Y, int nWidth, int nHeight,BOOL bRepaint);
+```
+
+:::
+
+
+
+:::details `实现依据客户区内容调整程序窗口大小 `
+
+```c{173-177}
+#include <Windows.h>
+#include <tchar.h>
+struct
+{
+    int     m_nIndex;
+    PCTSTR   m_pLabel;
+    PCTSTR   m_pDesc;
+}METRICS[] = {
+    SM_CXSCREEN,                    TEXT("SM_CXSCREEN"),                    TEXT("屏幕的宽度"),
+    SM_CYSCREEN,                    TEXT("SM_CYSCREEN"),                    TEXT("屏幕的高度"),
+    SM_CXFULLSCREEN,                TEXT("SM_CXFULLSCREEN"),                TEXT("全屏窗口的客户区宽度"),
+    SM_CYFULLSCREEN,                TEXT("SM_CYFULLSCREEN"),                TEXT("全屏窗口的客户区高度"),
+    SM_ARRANGE,                     TEXT("SM_ARRANGE"),                     TEXT("如何排列最小化窗口"),
+    SM_CLEANBOOT,                   TEXT("SM_CLEANBOOT"),                   TEXT("系统启动方式"),
+    SM_CMONITORS,                   TEXT("SM_CMONITORS"),                   TEXT("监视器的数量"),
+    SM_CMOUSEBUTTONS,               TEXT("SM_CMOUSEBUTTONS"),               TEXT("鼠标上的按钮数"),
+    SM_CXBORDER,                    TEXT("SM_CXBORDER"),                    TEXT("窗口边框的宽度"),
+    SM_CYBORDER,                    TEXT("SM_CYBORDER"),                    TEXT("窗口边框的高度"),
+    SM_CXCURSOR,                    TEXT("SM_CXCURSOR"),                    TEXT("光标的宽度"),
+    SM_CYCURSOR,                    TEXT("SM_CYCURSOR"),                    TEXT("光标的高度"),
+    SM_CXDLGFRAME,                  TEXT("SM_CXDLGFRAME"),                  TEXT("同SM_CXFIXEDFRAME，有标题但不可调整大小的窗口边框的宽度"),
+    SM_CYDLGFRAME,                  TEXT("SM_CYDLGFRAME"),                  TEXT("同SM_CYFIXEDFRAME，有标题但不可调整大小的窗口边框的高度"),
+    SM_CXDOUBLECLK,                 TEXT("SM_CXDOUBLECLK"),                 TEXT("鼠标双击事件两次点击的X坐标不可以超过这个值"),
+    SM_CYDOUBLECLK,                 TEXT("SM_CYDOUBLECLK"),                 TEXT("鼠标双击事件两次点击的Y坐标不可以超过这个值"),
+    SM_CXDRAG,                      TEXT("SM_CXDRAG"),                      TEXT("拖动操作开始之前，鼠标指针可以移动的鼠标下方点的任意一侧的像素数"),
+    SM_CYDRAG,                      TEXT("SM_CYDRAG"),                      TEXT("拖动操作开始之前，鼠标指针可以移动的鼠标下移点上方和下方的像素数"),
+    SM_CXEDGE,                      TEXT("SM_CXEDGE"),                      TEXT("三维边框的宽度"),
+    SM_CYEDGE,                      TEXT("SM_CYEDGE"),                      TEXT("三维边框的高度"),
+    SM_CXFIXEDFRAME,                TEXT("SM_CXFIXEDFRAME"),                TEXT("同SM_CXDLGFRAME，有标题但不可调整大小的窗口边框的宽度"),
+    SM_CYFIXEDFRAME,                TEXT("SM_CYFIXEDFRAME"),                TEXT("同SM_CYDLGFRAME，有标题但不可调整大小的窗口边框的高度"),
+    SM_CXFOCUSBORDER,               TEXT("SM_CXFOCUSBORDER"),               TEXT("DrawFocusRect绘制的焦点矩形的左边缘和右边缘的宽度"),
+    SM_CYFOCUSBORDER,               TEXT("SM_CYFOCUSBORDER"),               TEXT("DrawFocusRect绘制的焦点矩形的上边缘和下边缘的高度"),
+    SM_CXFRAME,                     TEXT("SM_CXFRAME"),                     TEXT("同SM_CXSIZEFRAME，可调大小窗口边框的宽度"),
+    SM_CYFRAME,                     TEXT("SM_CYFRAME"),                     TEXT("同SM_CYSIZEFRAME，可调大小窗口边框的高度"),
+    SM_CXHSCROLL,                   TEXT("SM_CXHSCROLL"),                   TEXT("水平滚动条中箭头位图的宽度"),
+    SM_CYHSCROLL,                   TEXT("SM_CYHSCROLL"),                   TEXT("水平滚动条中箭头位图的高度"),
+    SM_CXVSCROLL,                   TEXT("SM_CXVSCROLL"),                   TEXT("垂直滚动条中箭头位图的宽度"),
+    SM_CYVSCROLL,                   TEXT("SM_CYVSCROLL"),                   TEXT("垂直滚动条中箭头位图的高度"),
+    SM_CXHTHUMB,                    TEXT("SM_CXHTHUMB"),                    TEXT("水平滚动条中滚动框(滑块)的高度"),
+    SM_CYVTHUMB,                    TEXT("SM_CYVTHUMB"),                    TEXT("垂直滚动条中滚动框(滑块)的宽度"),
+    SM_CXICON,                      TEXT("SM_CXICON"),                      TEXT("图标的默认宽度"),
+    SM_CYICON,                      TEXT("SM_CYICON"),                      TEXT("图标的默认高度"),
+    SM_CXICONSPACING,               TEXT("SM_CXICONSPACING"),               TEXT("大图标视图中项目的网格单元格宽度"),
+    SM_CYICONSPACING,               TEXT("SM_CYICONSPACING"),               TEXT("大图标视图中项目的网格单元格高度"),
+    SM_CXMAXIMIZED,                 TEXT("SM_CXMAXIMIZED"),                 TEXT("最大化顶层窗口的默认宽度"),
+    SM_CYMAXIMIZED,                 TEXT("SM_CYMAXIMIZED"),                 TEXT("最大化顶层窗口的默认高度"),
+    SM_CXMAXTRACK,                  TEXT("SM_CXMAXTRACK"),                  TEXT("具有标题和大小调整边框的窗口可以拖动的最大宽度"),
+    SM_CYMAXTRACK,                  TEXT("SM_CYMAXTRACK"),                  TEXT("具有标题和大小调整边框的窗口可以拖动的最大高度"),
+    SM_CXMENUCHECK,                 TEXT("SM_CXMENUCHECK"),                 TEXT("菜单项前面复选框位图的宽度"),
+    SM_CYMENUCHECK,                 TEXT("SM_CYMENUCHECK"),                 TEXT("菜单项前面复选框位图的高度"),
+    SM_CXMENUSIZE,                  TEXT("SM_CXMENUSIZE"),                  TEXT("菜单栏按钮的宽度"),
+    SM_CYMENUSIZE,                  TEXT("SM_CYMENUSIZE"),                  TEXT("菜单栏按钮的高度"),
+    SM_CXMIN,                       TEXT("SM_CXMIN"),                       TEXT("窗口的最小宽度"),
+    SM_CYMIN,                       TEXT("SM_CYMIN"),                       TEXT("窗口的最小高度"),
+    SM_CXMINIMIZED,                 TEXT("SM_CXMINIMIZED"),                 TEXT("最小化窗口的宽度"),
+    SM_CYMINIMIZED,                 TEXT("SM_CYMINIMIZED"),                 TEXT("最小化窗口的高度"),
+    SM_CXMINSPACING,                TEXT("SM_CXMINSPACING"),                TEXT("最小化窗口的网格单元宽度"),
+    SM_CYMINSPACING,                TEXT("SM_CYMINSPACING"),                TEXT("最小化窗口的网格单元高度"),
+    SM_CXMINTRACK,                  TEXT("SM_CXMINTRACK"),                  TEXT("窗口的最小拖动宽度，用户无法将窗口拖动到小于这些尺寸"),
+    SM_CYMINTRACK,                  TEXT("SM_CYMINTRACK"),                  TEXT("窗口的最小拖动高度，用户无法将窗口拖动到小于这些尺寸"),
+    SM_CXPADDEDBORDER,              TEXT("SM_CXPADDEDBORDER"),              TEXT("标题窗口的边框填充量"),
+    SM_CXSIZE,                      TEXT("SM_CXSIZE"),                      TEXT("窗口标题或标题栏中按钮的宽度"),
+    SM_CYSIZE,                      TEXT("SM_CYSIZE"),                      TEXT("窗口标题或标题栏中按钮的高度"),
+    SM_CXSIZEFRAME,                 TEXT("SM_CXSIZEFRAME"),                 TEXT("同SM_CXFRAME，可调大小窗口边框的宽度"),
+    SM_CYSIZEFRAME,                 TEXT("SM_CYSIZEFRAME"),                 TEXT("同SM_CYFRAME，可调大小窗口边框的厚度"),
+    SM_CXSMICON,                    TEXT("SM_CXSMICON"),                    TEXT("小图标的建议宽度"),
+    SM_CYSMICON,                    TEXT("SM_CYSMICON"),                    TEXT("小图标的建议高度"),
+    SM_CXSMSIZE,                    TEXT("SM_CXSMSIZE"),                    TEXT("小标题按钮的宽度"),
+    SM_CYSMSIZE,                    TEXT("SM_CYSMSIZE"),                    TEXT("小标题按钮的高度"),
+    SM_CXVIRTUALSCREEN,             TEXT("SM_CXVIRTUALSCREEN"),             TEXT("虚拟屏幕的宽度"),
+    SM_CYVIRTUALSCREEN,             TEXT("SM_CYVIRTUALSCREEN"),             TEXT("虚拟屏幕的高度"),
+    SM_CYCAPTION,                   TEXT("SM_CYCAPTION"),                   TEXT("标题区域的高度"),
+    SM_CYKANJIWINDOW,               TEXT("SM_CYKANJIWINDOW"),               TEXT("屏幕底部的日文汉字窗口的高度"),
+    SM_CYMENU,                      TEXT("SM_CYMENU"),                      TEXT("单行菜单栏的高度"),
+    SM_CYSMCAPTION,                 TEXT("SM_CYSMCAPTION"),                 TEXT("小标题的高度"),
+    SM_DBCSENABLED,                 TEXT("SM_DBCSENABLED"),                 TEXT("User32.dll是否支持DBCS"),
+    SM_DEBUG,                       TEXT("SM_DEBUG"),                       TEXT("是否安装了User.exe的调试版本"),
+    SM_DIGITIZER,                   TEXT("SM_DIGITIZER"),                   TEXT("设备支持的数字转换器输入类型"),
+    SM_IMMENABLED,                  TEXT("SM_IMMENABLED"),                  TEXT("是否启用了输入法管理器／输入法编辑器功能"),
+    SM_MAXIMUMTOUCHES,              TEXT("SM_MAXIMUMTOUCHES"),              TEXT("系统中是否有数字化仪"),
+    SM_MEDIACENTER,                 TEXT("SM_MEDIACENTER"),                 TEXT("当前操作系统是不是Windows XP Media Center"),
+    SM_MENUDROPALIGNMENT,           TEXT("SM_MENUDROPALIGNMENT"),           TEXT("下拉菜单是否与相应的菜单栏项右对齐"),
+    SM_MIDEASTENABLED,              TEXT("SM_MIDEASTENABLED"),              TEXT("系统是否启用希伯来语和阿拉伯语"),
+    SM_MOUSEHORIZONTALWHEELPRESENT, TEXT("SM_MOUSEHORIZONTALWHEELPRESENT"), TEXT("是否安装了带有水平滚轮的鼠标"),
+    SM_MOUSEPRESENT,                TEXT("SM_MOUSEPRESENT"),                TEXT("是否安装了鼠标"),
+    SM_MOUSEWHEELPRESENT,           TEXT("SM_MOUSEWHEELPRESENT"),           TEXT("是否安装了带有垂直滚轮的鼠标"),
+    SM_NETWORK,                     TEXT("SM_NETWORK"),                     TEXT("是否存在网络"),
+    SM_PENWINDOWS,                  TEXT("SM_PENWINDOWS"),                  TEXT("是否安装了Microsoft Windows for Pen Computing扩展"),
+    SM_REMOTECONTROL,               TEXT("SM_REMOTECONTROL"),               TEXT("当前终端服务器会话是否被远程控制"),
+    SM_REMOTESESSION,               TEXT("SM_REMOTESESSION"),               TEXT("调用进程是否与终端服务客户机会话关联"),
+    SM_SAMEDISPLAYFORMAT,           TEXT("SM_SAMEDISPLAYFORMAT"),           TEXT("所有显示器的颜色格式是否相同"),
+    SM_SECURE,                      TEXT("SM_SECURE"),                      TEXT("始终返回0"),
+    SM_SERVERR2,                    TEXT("SM_SERVERR2"),                    TEXT("系统是否是Windows Server 2003 R2"),
+    SM_SHOWSOUNDS,                  TEXT("SM_SHOWSOUNDS"),                  TEXT("用户是否要求应用程序在其他情况下以可视方式呈现信息"),
+    SM_SHUTTINGDOWN,                TEXT("SM_SHUTTINGDOWN"),                TEXT("当前会话是否正在关闭"),
+    SM_SLOWMACHINE,                 TEXT("SM_SLOWMACHINE"),                 TEXT("计算机是否具有低端(慢速)处理器"),
+    SM_STARTER,                     TEXT("SM_STARTER"),                     TEXT("当前操作系统版本"),
+    SM_SWAPBUTTON,                  TEXT("SM_SWAPBUTTON"),                  TEXT("鼠标左键和右键的功能是否互换了"),
+    SM_TABLETPC,                    TEXT("SM_TABLETPC"),                    TEXT("是否启动了Tablet PC输入服务"),
+    SM_XVIRTUALSCREEN,              TEXT("SM_XVIRTUALSCREEN"),              TEXT("虚拟屏幕左侧的坐标"),
+    SM_YVIRTUALSCREEN,              TEXT("SM_YVIRTUALSCREEN"),              TEXT("虚拟屏幕顶部的坐标")
+};
+const int NUMLINES = sizeof(METRICS) / sizeof(METRICS[0]);
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;                          
+    TCHAR szClassName[] = TEXT("MyWindow");         
+    TCHAR szAppName[] = TEXT("GetSystemMetrics");   
+    HWND hwnd;                                      
+    MSG msg;                                       
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass); //采用水平滚动条、垂直滚动条
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW | WS_VSCROLL| WS_HSCROLL,
+        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    TEXTMETRIC tm;
+    SCROLLINFO si;
+    HFONT hFont, hFontOld;
+    static int s_iCol1, s_iCol2, s_iCol3, s_iHeight;
+    static int s_cxClient, s_cyClient;              // 客户区宽度、高度
+    static int s_cxChar;                            // 平均字符宽度，用于水平滚动条滚动单位
+    int iVertPos, iHorzPos;                         // 垂直、水平滚动条的当前位置
+    SIZE size = { 0 };
+    int x, y;
+    TCHAR szBuf[10];
+    RECT rect;
+
+    if (uMsg == WM_CREATE)
+    {
+        hdc = GetDC(hwnd);
+        hFont = CreateFont(12, 0, 0, 0, 0, 0, 0, 0, GB2312_CHARSET, 0, 0, 0, 0, TEXT("宋体"));
+        hFontOld = (HFONT)SelectObject(hdc, hFont);    
+        for (int i = 0; i < NUMLINES; i++)
+        {
+            GetTextExtentPoint32(hdc, METRICS[i].m_pLabel, _tcslen(METRICS[i].m_pLabel), &size);
+            if (size.cx > s_iCol1)
+                s_iCol1 = size.cx;
+            GetTextExtentPoint32(hdc, METRICS[i].m_pDesc, _tcslen(METRICS[i].m_pDesc), &size);
+            if (size.cx > s_iCol2)
+                s_iCol2 = size.cx;
+            GetTextExtentPoint32(hdc, szBuf,wsprintf(szBuf, TEXT("%d"), GetSystemMetrics(METRICS[i].m_nIndex)), &size);
+            if (size.cx > s_iCol3)
+                s_iCol3 = size.cx;
+        }
+        s_iHeight = size.cy + 2;             
+        GetTextMetrics(hdc, &tm);
+        s_cxChar = tm.tmAveCharWidth;     
+        
+        //根据显示内容,更新客户区大小
+        GetClientRect(hwnd, &rect);
+        rect.right = s_iCol1 + s_iCol2 + s_iCol3 + GetSystemMetrics(SM_CXVSCROLL);
+        AdjustWindowRectEx(&rect, GetWindowLongPtr(hwnd, GWL_STYLE), GetMenu(hwnd) != NULL, GetWindowLongPtr(hwnd, GWL_EXSTYLE));
+        SetWindowPos(hwnd, NULL, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER | SWP_NOMOVE);
+
+
+        SelectObject(hdc, hFontOld);
+        DeleteObject(hFont);
+        ReleaseDC(hwnd, hdc);
+        return 0;
+    }
+    else if (uMsg == WM_SIZE)
+    {
+
+        s_cxClient = LOWORD(lParam);
+        s_cyClient = HIWORD(lParam); 
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_RANGE | SIF_PAGE;
+        si.nMin = 0;
+        si.nMax = NUMLINES - 1;
+        si.nPage = s_cyClient / s_iHeight;
+        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);        
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_RANGE | SIF_PAGE;
+        si.nMin = 0;
+        si.nMax = (s_iCol1 + s_iCol2 + s_iCol3) / s_cxChar - 1;
+        si.nPage = s_cxClient / s_cxChar;
+        SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);         
+        return 0;
+    }
+    else if (uMsg == WM_VSCROLL)
+    {
+
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_ALL;
+
+        GetScrollInfo(hwnd, SB_VERT, &si);
+        iVertPos = si.nPos;
+        switch (LOWORD(wParam))
+        {
+        case SB_LINEUP:
+            si.nPos -= 1;
+            break;
+        case SB_LINEDOWN:
+            si.nPos += 1;
+            break;
+        case SB_PAGEUP:
+            si.nPos -= si.nPage;
+            break;
+        case SB_PAGEDOWN:
+            si.nPos += si.nPage;
+            break;
+        case SB_THUMBTRACK:
+            si.nPos = si.nTrackPos;
+            break;
+        }
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+        GetScrollInfo(hwnd, SB_VERT, &si);
+        if (iVertPos != si.nPos)
+        {
+            ::ScrollWindow(hwnd, 0, s_iHeight * (iVertPos - si.nPos), NULL, NULL);
+            ::UpdateWindow(hwnd);
+        }
+        return 0;
+    }
+    else if (uMsg == WM_HSCROLL)
+    {
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_ALL;
+        GetScrollInfo(hwnd, SB_HORZ, &si);
+        iHorzPos = si.nPos;
+        switch (LOWORD(wParam))
+        {
+        case SB_LINELEFT:
+            si.nPos -= 1;
+            break;
+        case SB_LINERIGHT:
+            si.nPos += 1;
+            break;
+        case SB_PAGELEFT:
+            si.nPos -= si.nPage;
+            break;
+        case SB_PAGERIGHT:
+            si.nPos += si.nPage;
+            break;
+        case SB_THUMBTRACK:
+            si.nPos = si.nTrackPos;
+            break;
+        }
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS | SIF_DISABLENOSCROLL;
+        SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
+        GetScrollInfo(hwnd, SB_HORZ, &si);
+        if (iHorzPos != si.nPos)
+        {
+            ::ScrollWindow(hwnd, s_cxChar * (iHorzPos - si.nPos), 0, NULL, NULL);
+            ::UpdateWindow(hwnd);
+        }
+        return 0;
+    }
+    else if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        GetScrollInfo(hwnd, SB_VERT, &si);
+        iVertPos = si.nPos;
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        GetScrollInfo(hwnd, SB_HORZ, &si);
+        iHorzPos = si.nPos;
+
+        SetBkMode(hdc, TRANSPARENT);
+        hFont = CreateFont(12, 0, 0, 0, 0, 0, 0, 0, GB2312_CHARSET, 0, 0, 0, 0, TEXT("宋体"));
+        hFontOld = (HFONT)SelectObject(hdc, hFont);
+
+        //获取无效区域做重绘
+        int  nPaintBeg = max(0, iVertPos + ps.rcPaint.top / s_iHeight);
+        int nPaintEnd = min(NUMLINES - 1, iVertPos + ps.rcPaint.bottom / s_iHeight);
+        for (int i = nPaintBeg; i <= nPaintEnd; i++)
+        {
+            x = s_cxChar * (-iHorzPos);
+            y = s_iHeight * (i - iVertPos);
+            TextOut(hdc, x, y, METRICS[i].m_pLabel, _tcslen(METRICS[i].m_pLabel));
+            TextOut(hdc, x + s_iCol1, y, METRICS[i].m_pDesc, _tcslen(METRICS[i].m_pDesc));
+            TextOut(hdc, x + s_iCol1 + s_iCol2, y, szBuf, wsprintf(szBuf, TEXT("%d"), GetSystemMetrics(METRICS[i].m_nIndex)));
+        }
+        SelectObject(hdc, hFontOld);
+        DeleteObject(hFont);
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240202230449041.png)
+
+窗口高度我们没有改变。首先通过调用GetClientRect函数获取客户区坐标，客户区坐标是相对于窗口客户区左上角的，因此获取到的左上角的坐标是(0,0)，即rect.right等于客户区宽度，rect.bottom等于客户区高度。
+
+
+
+把客户区的宽度重新设置为三列文本宽度之和再加上垂直滚动条的宽度。
+
+
+
+为AdjustWindowRectEx函数指定窗口样式、扩展窗口样式以及是否有菜单栏，该函数可以根据客户区坐标计算窗口坐标，但是计算出的窗口坐标不包括滚动条，所以前面客户区的宽度我们又加上了一个垂直滚动条的宽度，需要注意的是，计算出来的窗口坐标是相对于客户区左上角的。窗口坐标的左上角并不是(0,0)，所以
+窗口宽度等于rect.right-rect.left，窗口高度等于rect.bottom-rect.top;最后调用SetWindowPos函数设置窗口大小。
+
+
+
+`GetMenu`函数获取指定窗口的菜单句柄，如果函数执行成功，则返回值是菜单的句柄;如果这个窗口没有菜单，则返回NULL，这个函数很简单。
+
+:::
+
+
+
+
+
+总结一下，窗口过程在什么时候会收到**WM_PAINT**消息?
+
+- 当程序窗口被首次创建时，整个客户区都是无效的，因为此时应用程序尚未在该窗口上绘制任何东西，此时窗口过程会收到第一条 `WM_PAINT`消息。
+- 在调整程序窗口的尺寸时，客户区也会变为无效。我们把WNDCLASSEX结构的style字段设置为
+  `CS_HREDRAW|CS_VREDRAW`，表示当程序窗口尺寸发生变化时整个窗口客户区都应宣布无效，窗口过程会接收到一条`WM_PAINT`消息。
+
+- 如果先最小化程序窗口，然后将窗口恢复到原先的尺寸，那么Windows并不会保存原先客户区的内容，窗口过程接收到`WM_PAINT`消息后需要自行恢复客户区的内容。
+
+- 程序调用InvalidateRect或InvalidateRgn函数向客户区添加无效区域，会生成`WM_PAINT`消息。
+
+- 在屏幕中拖动程序窗口的全部或一部分到屏幕以外，然后又拖动回屏幕中的时候，窗口被标记为无效，窗口过程会收到一条`WM_PAINT` 消息，并对客户区的内容进行重绘.
+
+- 程序调用`ScrollWindow`或`ScrollDC`函数滚动客户区。
+
+
+
+## 保存设备环境
+
+调用`GetDC`或`BeginPaint`函数以后，会返回一个DC句柄，DC的所有属性都被设定为默认值。如果程序需要使用非默认的DC属性，可以在获取到DC句柄以后设置相关DC属性;在调用`ReleaseDC`或`EndPaint`函数以后，系统将恢复DC属性的默认值，对属性所做的任何改变都会丢失。例如:
+
+```c
+case WM_PAINT:
+    hdc = BeginPaint(hwnd, &ps);
+    //设置设备环境属性
+    // 绘制代码
+    EndPaint(hwnd, &ps);
+    return 0;
+```
+
+有没有办法在释放DC时保存对属性所做的更改，以便在下次调用GetDC或BeginPaint函数时这些属性仍然有效呢?
+
+
+
+:::tip
+
+还记得WNDCLASSEX结构的第2个字段style吗?这个字段指定窗口类样式，其中`CS_OWNDC`表示为窗口类的每个窗口分配唯一的DC。可以按如下方式设置style字段
+
+```c
+wndclass.style = CS_HREDRAWI|CS_VREDRAWI|CS_OWNDC:
+```
+
+现在，每个基于这个窗口类创建的窗口都有它私有的专用DC。使用`CS_OWNDC`样式以后，只需要初始化DC属性一次，例如，在处理`WM_CREATE`消息时:
+
+```c
+case WM_CREATE:
+    hdc = GetDC(hwnd);
+    //设置设备环境属性
+    ReleaseDC(hwnd, hdc);
+	return 0;
+```
+
+
+
+在窗口的生命周期内，除非再次改变DC的属性值，原DC属性会一直有效。对于`SystemMetrics`程序，我们可以在`WM_CREATE`消息中设置背景模式和字体，这样一来就不需要每一次都在`WM_PAINT`消息中
+设置了。对于客户区需要大量绘图操作的情况，指定`CS_OWNDC`样式可以提高程序性能。
+需要注意的是，指定`CS_OWNDC`样式仅影响通过`GetDC`和`BeginPaint`函数获取的DC句柄，通过其他函数 (例如`GetWindowDC`) 获取的DC是不受影响的。
+
+:::
+
+
+
+:::details `保存设备环境示例:`
+
+```c{116,155-184}
+#include <Windows.h>
+#include <tchar.h>
+struct
+{
+    int     m_nIndex;
+    PCTSTR   m_pLabel;
+    PCTSTR   m_pDesc;
+}METRICS[] = {
+    SM_CXSCREEN,                    TEXT("SM_CXSCREEN"),                    TEXT("屏幕的宽度"),
+    SM_CYSCREEN,                    TEXT("SM_CYSCREEN"),                    TEXT("屏幕的高度"),
+    SM_CXFULLSCREEN,                TEXT("SM_CXFULLSCREEN"),                TEXT("全屏窗口的客户区宽度"),
+    SM_CYFULLSCREEN,                TEXT("SM_CYFULLSCREEN"),                TEXT("全屏窗口的客户区高度"),
+    SM_ARRANGE,                     TEXT("SM_ARRANGE"),                     TEXT("如何排列最小化窗口"),
+    SM_CLEANBOOT,                   TEXT("SM_CLEANBOOT"),                   TEXT("系统启动方式"),
+    SM_CMONITORS,                   TEXT("SM_CMONITORS"),                   TEXT("监视器的数量"),
+    SM_CMOUSEBUTTONS,               TEXT("SM_CMOUSEBUTTONS"),               TEXT("鼠标上的按钮数"),
+    SM_CXBORDER,                    TEXT("SM_CXBORDER"),                    TEXT("窗口边框的宽度"),
+    SM_CYBORDER,                    TEXT("SM_CYBORDER"),                    TEXT("窗口边框的高度"),
+    SM_CXCURSOR,                    TEXT("SM_CXCURSOR"),                    TEXT("光标的宽度"),
+    SM_CYCURSOR,                    TEXT("SM_CYCURSOR"),                    TEXT("光标的高度"),
+    SM_CXDLGFRAME,                  TEXT("SM_CXDLGFRAME"),                  TEXT("同SM_CXFIXEDFRAME，有标题但不可调整大小的窗口边框的宽度"),
+    SM_CYDLGFRAME,                  TEXT("SM_CYDLGFRAME"),                  TEXT("同SM_CYFIXEDFRAME，有标题但不可调整大小的窗口边框的高度"),
+    SM_CXDOUBLECLK,                 TEXT("SM_CXDOUBLECLK"),                 TEXT("鼠标双击事件两次点击的X坐标不可以超过这个值"),
+    SM_CYDOUBLECLK,                 TEXT("SM_CYDOUBLECLK"),                 TEXT("鼠标双击事件两次点击的Y坐标不可以超过这个值"),
+    SM_CXDRAG,                      TEXT("SM_CXDRAG"),                      TEXT("拖动操作开始之前，鼠标指针可以移动的鼠标下方点的任意一侧的像素数"),
+    SM_CYDRAG,                      TEXT("SM_CYDRAG"),                      TEXT("拖动操作开始之前，鼠标指针可以移动的鼠标下移点上方和下方的像素数"),
+    SM_CXEDGE,                      TEXT("SM_CXEDGE"),                      TEXT("三维边框的宽度"),
+    SM_CYEDGE,                      TEXT("SM_CYEDGE"),                      TEXT("三维边框的高度"),
+    SM_CXFIXEDFRAME,                TEXT("SM_CXFIXEDFRAME"),                TEXT("同SM_CXDLGFRAME，有标题但不可调整大小的窗口边框的宽度"),
+    SM_CYFIXEDFRAME,                TEXT("SM_CYFIXEDFRAME"),                TEXT("同SM_CYDLGFRAME，有标题但不可调整大小的窗口边框的高度"),
+    SM_CXFOCUSBORDER,               TEXT("SM_CXFOCUSBORDER"),               TEXT("DrawFocusRect绘制的焦点矩形的左边缘和右边缘的宽度"),
+    SM_CYFOCUSBORDER,               TEXT("SM_CYFOCUSBORDER"),               TEXT("DrawFocusRect绘制的焦点矩形的上边缘和下边缘的高度"),
+    SM_CXFRAME,                     TEXT("SM_CXFRAME"),                     TEXT("同SM_CXSIZEFRAME，可调大小窗口边框的宽度"),
+    SM_CYFRAME,                     TEXT("SM_CYFRAME"),                     TEXT("同SM_CYSIZEFRAME，可调大小窗口边框的高度"),
+    SM_CXHSCROLL,                   TEXT("SM_CXHSCROLL"),                   TEXT("水平滚动条中箭头位图的宽度"),
+    SM_CYHSCROLL,                   TEXT("SM_CYHSCROLL"),                   TEXT("水平滚动条中箭头位图的高度"),
+    SM_CXVSCROLL,                   TEXT("SM_CXVSCROLL"),                   TEXT("垂直滚动条中箭头位图的宽度"),
+    SM_CYVSCROLL,                   TEXT("SM_CYVSCROLL"),                   TEXT("垂直滚动条中箭头位图的高度"),
+    SM_CXHTHUMB,                    TEXT("SM_CXHTHUMB"),                    TEXT("水平滚动条中滚动框(滑块)的高度"),
+    SM_CYVTHUMB,                    TEXT("SM_CYVTHUMB"),                    TEXT("垂直滚动条中滚动框(滑块)的宽度"),
+    SM_CXICON,                      TEXT("SM_CXICON"),                      TEXT("图标的默认宽度"),
+    SM_CYICON,                      TEXT("SM_CYICON"),                      TEXT("图标的默认高度"),
+    SM_CXICONSPACING,               TEXT("SM_CXICONSPACING"),               TEXT("大图标视图中项目的网格单元格宽度"),
+    SM_CYICONSPACING,               TEXT("SM_CYICONSPACING"),               TEXT("大图标视图中项目的网格单元格高度"),
+    SM_CXMAXIMIZED,                 TEXT("SM_CXMAXIMIZED"),                 TEXT("最大化顶层窗口的默认宽度"),
+    SM_CYMAXIMIZED,                 TEXT("SM_CYMAXIMIZED"),                 TEXT("最大化顶层窗口的默认高度"),
+    SM_CXMAXTRACK,                  TEXT("SM_CXMAXTRACK"),                  TEXT("具有标题和大小调整边框的窗口可以拖动的最大宽度"),
+    SM_CYMAXTRACK,                  TEXT("SM_CYMAXTRACK"),                  TEXT("具有标题和大小调整边框的窗口可以拖动的最大高度"),
+    SM_CXMENUCHECK,                 TEXT("SM_CXMENUCHECK"),                 TEXT("菜单项前面复选框位图的宽度"),
+    SM_CYMENUCHECK,                 TEXT("SM_CYMENUCHECK"),                 TEXT("菜单项前面复选框位图的高度"),
+    SM_CXMENUSIZE,                  TEXT("SM_CXMENUSIZE"),                  TEXT("菜单栏按钮的宽度"),
+    SM_CYMENUSIZE,                  TEXT("SM_CYMENUSIZE"),                  TEXT("菜单栏按钮的高度"),
+    SM_CXMIN,                       TEXT("SM_CXMIN"),                       TEXT("窗口的最小宽度"),
+    SM_CYMIN,                       TEXT("SM_CYMIN"),                       TEXT("窗口的最小高度"),
+    SM_CXMINIMIZED,                 TEXT("SM_CXMINIMIZED"),                 TEXT("最小化窗口的宽度"),
+    SM_CYMINIMIZED,                 TEXT("SM_CYMINIMIZED"),                 TEXT("最小化窗口的高度"),
+    SM_CXMINSPACING,                TEXT("SM_CXMINSPACING"),                TEXT("最小化窗口的网格单元宽度"),
+    SM_CYMINSPACING,                TEXT("SM_CYMINSPACING"),                TEXT("最小化窗口的网格单元高度"),
+    SM_CXMINTRACK,                  TEXT("SM_CXMINTRACK"),                  TEXT("窗口的最小拖动宽度，用户无法将窗口拖动到小于这些尺寸"),
+    SM_CYMINTRACK,                  TEXT("SM_CYMINTRACK"),                  TEXT("窗口的最小拖动高度，用户无法将窗口拖动到小于这些尺寸"),
+    SM_CXPADDEDBORDER,              TEXT("SM_CXPADDEDBORDER"),              TEXT("标题窗口的边框填充量"),
+    SM_CXSIZE,                      TEXT("SM_CXSIZE"),                      TEXT("窗口标题或标题栏中按钮的宽度"),
+    SM_CYSIZE,                      TEXT("SM_CYSIZE"),                      TEXT("窗口标题或标题栏中按钮的高度"),
+    SM_CXSIZEFRAME,                 TEXT("SM_CXSIZEFRAME"),                 TEXT("同SM_CXFRAME，可调大小窗口边框的宽度"),
+    SM_CYSIZEFRAME,                 TEXT("SM_CYSIZEFRAME"),                 TEXT("同SM_CYFRAME，可调大小窗口边框的厚度"),
+    SM_CXSMICON,                    TEXT("SM_CXSMICON"),                    TEXT("小图标的建议宽度"),
+    SM_CYSMICON,                    TEXT("SM_CYSMICON"),                    TEXT("小图标的建议高度"),
+    SM_CXSMSIZE,                    TEXT("SM_CXSMSIZE"),                    TEXT("小标题按钮的宽度"),
+    SM_CYSMSIZE,                    TEXT("SM_CYSMSIZE"),                    TEXT("小标题按钮的高度"),
+    SM_CXVIRTUALSCREEN,             TEXT("SM_CXVIRTUALSCREEN"),             TEXT("虚拟屏幕的宽度"),
+    SM_CYVIRTUALSCREEN,             TEXT("SM_CYVIRTUALSCREEN"),             TEXT("虚拟屏幕的高度"),
+    SM_CYCAPTION,                   TEXT("SM_CYCAPTION"),                   TEXT("标题区域的高度"),
+    SM_CYKANJIWINDOW,               TEXT("SM_CYKANJIWINDOW"),               TEXT("屏幕底部的日文汉字窗口的高度"),
+    SM_CYMENU,                      TEXT("SM_CYMENU"),                      TEXT("单行菜单栏的高度"),
+    SM_CYSMCAPTION,                 TEXT("SM_CYSMCAPTION"),                 TEXT("小标题的高度"),
+    SM_DBCSENABLED,                 TEXT("SM_DBCSENABLED"),                 TEXT("User32.dll是否支持DBCS"),
+    SM_DEBUG,                       TEXT("SM_DEBUG"),                       TEXT("是否安装了User.exe的调试版本"),
+    SM_DIGITIZER,                   TEXT("SM_DIGITIZER"),                   TEXT("设备支持的数字转换器输入类型"),
+    SM_IMMENABLED,                  TEXT("SM_IMMENABLED"),                  TEXT("是否启用了输入法管理器／输入法编辑器功能"),
+    SM_MAXIMUMTOUCHES,              TEXT("SM_MAXIMUMTOUCHES"),              TEXT("系统中是否有数字化仪"),
+    SM_MEDIACENTER,                 TEXT("SM_MEDIACENTER"),                 TEXT("当前操作系统是不是Windows XP Media Center"),
+    SM_MENUDROPALIGNMENT,           TEXT("SM_MENUDROPALIGNMENT"),           TEXT("下拉菜单是否与相应的菜单栏项右对齐"),
+    SM_MIDEASTENABLED,              TEXT("SM_MIDEASTENABLED"),              TEXT("系统是否启用希伯来语和阿拉伯语"),
+    SM_MOUSEHORIZONTALWHEELPRESENT, TEXT("SM_MOUSEHORIZONTALWHEELPRESENT"), TEXT("是否安装了带有水平滚轮的鼠标"),
+    SM_MOUSEPRESENT,                TEXT("SM_MOUSEPRESENT"),                TEXT("是否安装了鼠标"),
+    SM_MOUSEWHEELPRESENT,           TEXT("SM_MOUSEWHEELPRESENT"),           TEXT("是否安装了带有垂直滚轮的鼠标"),
+    SM_NETWORK,                     TEXT("SM_NETWORK"),                     TEXT("是否存在网络"),
+    SM_PENWINDOWS,                  TEXT("SM_PENWINDOWS"),                  TEXT("是否安装了Microsoft Windows for Pen Computing扩展"),
+    SM_REMOTECONTROL,               TEXT("SM_REMOTECONTROL"),               TEXT("当前终端服务器会话是否被远程控制"),
+    SM_REMOTESESSION,               TEXT("SM_REMOTESESSION"),               TEXT("调用进程是否与终端服务客户机会话关联"),
+    SM_SAMEDISPLAYFORMAT,           TEXT("SM_SAMEDISPLAYFORMAT"),           TEXT("所有显示器的颜色格式是否相同"),
+    SM_SECURE,                      TEXT("SM_SECURE"),                      TEXT("始终返回0"),
+    SM_SERVERR2,                    TEXT("SM_SERVERR2"),                    TEXT("系统是否是Windows Server 2003 R2"),
+    SM_SHOWSOUNDS,                  TEXT("SM_SHOWSOUNDS"),                  TEXT("用户是否要求应用程序在其他情况下以可视方式呈现信息"),
+    SM_SHUTTINGDOWN,                TEXT("SM_SHUTTINGDOWN"),                TEXT("当前会话是否正在关闭"),
+    SM_SLOWMACHINE,                 TEXT("SM_SLOWMACHINE"),                 TEXT("计算机是否具有低端(慢速)处理器"),
+    SM_STARTER,                     TEXT("SM_STARTER"),                     TEXT("当前操作系统版本"),
+    SM_SWAPBUTTON,                  TEXT("SM_SWAPBUTTON"),                  TEXT("鼠标左键和右键的功能是否互换了"),
+    SM_TABLETPC,                    TEXT("SM_TABLETPC"),                    TEXT("是否启动了Tablet PC输入服务"),
+    SM_XVIRTUALSCREEN,              TEXT("SM_XVIRTUALSCREEN"),              TEXT("虚拟屏幕左侧的坐标"),
+    SM_YVIRTUALSCREEN,              TEXT("SM_YVIRTUALSCREEN"),              TEXT("虚拟屏幕顶部的坐标")
+};
+const int NUMLINES = sizeof(METRICS) / sizeof(METRICS[0]);
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+// 函数声明，窗口过程
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;                            
+    TCHAR szClassName[] = TEXT("MyWindow");        
+    TCHAR szAppName[] = TEXT("GetSystemMetrics");   
+    HWND hwnd;                                      
+    MSG msg;                    
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC; //激活~~~~令窗口分配唯一的DC实例，而不是每一次都创建新的
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL,
+        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    TEXTMETRIC tm;
+    SCROLLINFO si;
+    HFONT hFont, hFontOld;
+    static int s_iCol1, s_iCol2, s_iCol3, s_iHeight;
+    static int s_cxClient, s_cyClient;             
+    static int s_cxChar;                          
+    int iVertPos, iHorzPos;                      
+    SIZE size = { 0 };
+    int x, y;
+    RECT rect;
+    TCHAR szBuf[10];
+    if (uMsg == WM_CREATE)
+    {
+        hdc = GetDC(hwnd);
+        hFont = CreateFont(12, 0, 0, 0, 0, 0, 0, 0, GB2312_CHARSET, 0, 0, 0, 0, TEXT("宋体"));
+        hFontOld = (HFONT)SelectObject(hdc, hFont);        
+        SetBkMode(hdc, TRANSPARENT);
+        for (int i = 0; i < NUMLINES; i++)
+        {
+            GetTextExtentPoint32(hdc, METRICS[i].m_pLabel, _tcslen(METRICS[i].m_pLabel), &size);
+            if (size.cx > s_iCol1)
+                s_iCol1 = size.cx;
+            GetTextExtentPoint32(hdc, METRICS[i].m_pDesc, _tcslen(METRICS[i].m_pDesc), &size);
+            if (size.cx > s_iCol2)
+                s_iCol2 = size.cx;
+            GetTextExtentPoint32(hdc, szBuf,wsprintf(szBuf, TEXT("%d"), GetSystemMetrics(METRICS[i].m_nIndex)), &size);
+            if (size.cx > s_iCol3)
+                s_iCol3 = size.cx;
+        }
+        s_iHeight = size.cy + 2;             //高度，加2px，搞多一点点行间距 
+        GetTextMetrics(hdc, &tm);
+        s_cxChar = tm.tmAveCharWidth;       
+
+        GetClientRect(hwnd, &rect);
+        rect.right = s_iCol1 + s_iCol2 + s_iCol3 + GetSystemMetrics(SM_CXVSCROLL);
+        AdjustWindowRectEx(&rect, GetWindowLongPtr(hwnd, GWL_STYLE), GetMenu(hwnd) != NULL, GetWindowLongPtr(hwnd, GWL_EXSTYLE));
+        SetWindowPos(hwnd, NULL, 0, 0, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER | SWP_NOMOVE);
+        DeleteObject(hFont);
+        ReleaseDC(hwnd, hdc);
+        return 0;
+    }
+    else if (uMsg == WM_SIZE)
+    {
+
+        s_cxClient = LOWORD(lParam);
+        s_cyClient = HIWORD(lParam); 
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_RANGE | SIF_PAGE;
+        si.nMin = 0;
+        si.nMax = NUMLINES - 1;
+        si.nPage = s_cyClient / s_iHeight;
+        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_RANGE | SIF_PAGE;
+        si.nMin = 0;
+        si.nMax = (s_iCol1 + s_iCol2 + s_iCol3) / s_cxChar - 1;
+        si.nPage = s_cxClient / s_cxChar;
+        SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);        
+        return 0;
+
+    }
+    else if (uMsg == WM_VSCROLL)
+    {
+
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_ALL;
+        GetScrollInfo(hwnd, SB_VERT, &si);
+        iVertPos = si.nPos;
+        //根据用户行为先更新一波垂直滚动条的当前位置
+        switch (LOWORD(wParam))
+        {
+        case SB_LINEUP:
+            si.nPos -= 1;
+            break;
+        case SB_LINEDOWN:
+            si.nPos += 1;
+            break;
+        case SB_PAGEUP:
+            si.nPos -= si.nPage;
+            break;
+        case SB_PAGEDOWN:
+            si.nPos += si.nPage;
+            break;
+        case SB_THUMBTRACK:
+            si.nPos = si.nTrackPos;
+            break;
+        }
+
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+        GetScrollInfo(hwnd, SB_VERT, &si);
+        if (iVertPos != si.nPos)
+        {
+            ::ScrollWindow(hwnd, 0, s_iHeight * (iVertPos - si.nPos), NULL, NULL);
+            ::UpdateWindow(hwnd);
+        }
+        return 0;
+
+    }
+    else if (uMsg == WM_HSCROLL)
+    {
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_ALL;
+        GetScrollInfo(hwnd, SB_HORZ, &si);
+        iHorzPos = si.nPos;
+        switch (LOWORD(wParam))
+        {
+        case SB_LINELEFT:
+            si.nPos -= 1;
+            break;
+        case SB_LINERIGHT:
+            si.nPos += 1;
+            break;
+        case SB_PAGELEFT:
+            si.nPos -= si.nPage;
+            break;
+        case SB_PAGERIGHT:
+            si.nPos += si.nPage;
+            break;
+        case SB_THUMBTRACK:
+            si.nPos = si.nTrackPos;
+            break;
+        }
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS | SIF_DISABLENOSCROLL;
+        SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
+        GetScrollInfo(hwnd, SB_HORZ, &si);
+        if (iHorzPos != si.nPos)
+        {
+            ::ScrollWindow(hwnd, s_cxChar * (iHorzPos - si.nPos), 0, NULL, NULL);
+            ::UpdateWindow(hwnd);
+
+        }
+        return 0;
+    }
+    else if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        GetScrollInfo(hwnd, SB_VERT, &si);
+        iVertPos = si.nPos;
+
+        si.cbSize = sizeof(SCROLLINFO);
+        si.fMask = SIF_POS;
+        GetScrollInfo(hwnd, SB_HORZ, &si);
+        iHorzPos = si.nPos;
+
+
+        //只对无效区域做重绘
+        int nPaintBeg = max(0, iVertPos + ps.rcPaint.top / s_iHeight);
+        int nPaintEnd = min(NUMLINES - 1, iVertPos + ps.rcPaint.bottom / s_iHeight);
+        for (int i = nPaintBeg; i <= nPaintEnd; i++)
+        {
+            x = s_cxChar * (-iHorzPos);
+            y = s_iHeight * (i - iVertPos);
+            TextOut(hdc, x, y, METRICS[i].m_pLabel, _tcslen(METRICS[i].m_pLabel));
+            TextOut(hdc, x + s_iCol1, y, METRICS[i].m_pDesc, _tcslen(METRICS[i].m_pDesc));
+            TextOut(hdc, x + s_iCol1 + s_iCol2, y, szBuf, wsprintf(szBuf, TEXT("%d"), GetSystemMetrics(METRICS[i].m_nIndex)));
+        }
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+:::
+
+
+
+有时候可能想改变某些DC属性，然后使用改变后的属性进行绘制，接着再恢复原来的DC属性，可以使用`SaveDC`和`RestoreDC`函数来保存和恢复DC状态。
+
+
+
+:::details `SaveDC 函数说明`
+
+`SaveDC`函数通过把DC属性压入DC堆栈来保存指定DC的当前状态
+
+```c
+/// <summary>
+/// 保存设备DC
+/// </summary>
+/// <param name="hdc">要保存其状态的设备环境句柄</param>
+/// <returns></returns>
+int SaveDC(HDC hdc); 
+```
+
+如果函数执行成功，则返回值将标识保存的状态; 如果函数执行失败，则返回值为0。
+
+:::
+
+
+
+:::details `RestoreDC 函数说明`
+
+```c
+/// <summary>
+/// 从DC堆栈中弹出状态信息来恢复DC到指定状态
+/// </summary>
+/// <param name="hdc">要恢复其状态的设备环境句柄</param>
+/// <param name="nSavedDC">要还原的保存状态</param>
+/// <returns></returns>
+BOOL RestoreDC(HDC hdc,int nSavedDC);
+```
+
+- 参数nSavedDC指定要还原的保存状态，可以指定为SaveDC函数的返回值，或者指定为负数，例如-1表示最近保存的状态，-2表示最近保存的状态的前一次。
+- 同一状态不能多次恢复，恢复状态后保存的所有状态将被弹出销毁。请看违规操作代码:
+
+```c
+//设置设备环境属性，然后保存
+nDC1 = SaveDC(hdc);
+
+//再次设置设备环境属性，然后保存
+nDC2 = SaveDC(hdc):
+...........
+RestoreDC(hdc, nDC1);
+
+//使用状态1进行绘图
+RestoreDC(hdc,nDC2); // 恢复失败
+
+//使用状态2进行绘图
+```
+
+调用RestoreDC函数把DC状态恢复到nDC1，DC堆栈会弹出nDC1及以后压入堆栈的内容。
+
+:::
+
+
+
+## 绘制直线和曲线
+
+并且实际上，许多应用程序经常需要绘制直线和曲线，例如CAD和绘图程序会使用直线和曲线来绘制对象的轮廓、指定对象的中心，电子表格程序会使用直线和曲线绘制单元格、图表等。
+
+
+
+### 绘制像素点
+
+:::details `SetPixel 函数说明`
+
+```c
+/// <summary>
+/// 将指定坐标处的像素设置为指定的颜色
+/// </summary>
+/// <param name="hdc">设备上下文的句柄/param>
+/// <param name="X">要设置的点的x坐标（以逻辑单位为单位）</param>
+/// <param name="Y">要设置的点的 y 坐标（以逻辑单位为单位）</param>
+/// <param name="crColor">用于绘制点的颜色。若要创建COLORREF颜色值，请使用 RGB 宏</param>
+/// <returns></returns>
+COLORREF SetPixel(HDC hdc,int X,int Y,COLORREF crColor);
+```
+
+:::
+
+
+
+:::details `GetPixel 函数说明`
+
+```c
+/// <summary>
+/// GetPixel 函数检索指定坐标处像素的红色、绿色、蓝色 (RGB) 颜色值。
+/// </summary>
+/// <param name="hdc">设备上下文的句柄</param>
+/// <param name="x">要检查的像素的 x 坐标（以逻辑单位为单位）</param>
+/// <param name="Y">要检查的像素的 y 坐标（以逻辑单位为单位）</param>
+/// <returns></returns>
+COLORREF GetPixel(HDC hdc, int x, int Y);
+```
+
+GetPixel函数返回一个COLORREF颜色值，可以分别使用`GetRValue GetGValue和GetBValue`宏提取COLORREF颜色值中的的红色，绿色和蓝色值.
+
+:::
+
+
+
+
+
+:::details  `SetPixel函数可以绘制任意复杂的图形，例如画一条线`
+
+```c{42-45}
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;                            
+    TCHAR szClassName[] = TEXT("MyWindow");        
+    TCHAR szAppName[] = TEXT("直线");   
+    HWND hwnd;                                      
+    MSG msg;                    
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL,
+        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+     if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        for (size_t i = 0; i < 100; i++)
+        {
+            SetPixel(hdc,i,10,RGB(255,0,0));
+        }
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240203225823200.png)
+
+
+
+虽然绘制像素是最基本的绘图操作方法，但是在程序中一般很少使用`SetPixel`函数，因为它的开销很大，只适合用在需要绘制少量像素的地方。如果需要绘制一个线条或者一片区域，那么推荐使用后面介绍的画线函数或填充图形函数，因为这些函数是在驱动程序级别上完成的，用到了硬件加速功能。
+
+
+
+我们也经常需要获取某个坐标处像素的颜色值，但是不应该通过`GetPixel`函数来获取一大块像素数据。如果需要分析一片区域的像素数据，可以把全部像素数据复制到内存中再进行处理。
+
+:::
+
+### 绘制直线
+
+常用的绘制直线的函数有`LineTo`  `Polyline`  `PolylineTo`和`PolyPolyline`。绘制直线的函数比较简单：
+
+- `LineTo`函数从当前位置到指定的点之间绘制一条直线 (线段) 
+- `Polyline` `PolylineTo`函数通过连接指定数组中的点来绘制一系列线段
+- `PolyPolyline`函数相当于多次调用多个`Polyline`
+
+
+
+:::details `LineTo 函数说明`
+
+```c
+/// <summary>
+/// 以当前位置为起点，以指定的点为终点，画一条线段
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="nXEnd">终点的X坐标，逻辑单位</param>
+/// <param name="nYEnd">终点的Y坐标，逻辑单位</param>
+/// <returns></returns>
+BOOL LineTo(HDC hdc,int nXEnd,int nYEnd);
+```
+
+函数执行成功，指定的终点 `(nXEnd,nYEnd)`会被设置为新的当前位置。
+
+
+
+当前位置作为某些GDI函数绘制的起点，DC中的默认当前位置是客户区坐标(0,0)处。以`LineTo`函数为例，如果没有设置当前位置，那么调用`LineTo`函数就会从客户区的左上角开始到指定的终点之间画一条线。
+
+:::
+
+
+
+
+
+:::details `MoveToEx 函数说明`
+
+```c
+/// <summary>
+/// 将当前位置更新为指定的点，并可以返回上一个当前位置
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="X">新当前位置的X坐标，逻辑单位</param>
+/// <param name="Y">新当前位置的Y坐标，逻辑单位</param>
+/// <param name="IpPoint">out 在这个POINT结构中返回上一个当前位置，可以设置为NULL</param>
+/// <returns></returns>
+BOOL MoveToEx(HDC hdc,int X,int Y,LPPOINT IpPoint); 
+```
+
+在调用需要使用当前位置的GDI函数进行绘制以前，通常需要先调用MoveToEx设置DC的当前位置。
+
+:::
+
+
+
+
+
+:::details `Polyline 函数说明`
+
+Polyline函数通过连接指定数组中的点来绘制一系列线段
+
+```c
+/// <summary>
+/// 通过连接指定数组中的点来绘制一系列线段
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="Ippt">点结构数组，逻辑单位</param>
+/// <param name="cPoints"> lppt数组中点的个数，必须大于或等于2</param>
+/// <returns></returns>
+BOOL Polyline(HDC hdc,const POINT* Ippt,int cPoints); 
+```
+
+需要注意的是 `Polyline ` 既不使用页不更新当前位置。
+
+:::
+
+
+
+:::details `PolylineTo 函数声明`
+
+```c
+
+/// <summary>
+/// PolylineTo 函数绘制一条或多条直线
+/// </summary>
+/// <param name="hdc">设备上下文的句柄</param>
+/// <param name="apt">指向 POINT 结构的数组的指针，该数组包含线条的顶点（以逻辑单元为单位）。</param>
+/// <param name="cpt">数组中的点数</param>
+/// <returns>如果该函数成功，则返回值为非零值。如果函数失败，则返回值为零。</returns>
+BOOL PolylineTo(HDC  hdc,const POINT* apt, DWORD cpt)
+```
+
+唯一不同的是，`PolylineTo`函数会使用并更新当前位置。函数从当前位置到lppt参数指定数组中的第一个点绘制第一条线，然后从上一条线段的终点到Ippt数组指定的下一点画第二条线，直到最后一个点。绘制结束时PolylineTo函数会将当前位置设置为最后一条线的终点。
+
+:::
+
+
+
+
+
+:::details `PolyPolyline 函数说明`
+
+```c
+/// <summary>
+/// 绘制多个连接的线段系列
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="apt">点结构数组，逻辑单位。可以理解为是多个组，一个组可以画一系列线段</param>
+/// <param name="asz">DWORD类型数组，每个数组元秦指定apt数组中每一个组有几个点</param>
+/// <param name="csz">组的个数，也就是asz数组的数组元素个数，也就是画多个一系列线段</param>
+/// <returns></returns>
+BOOL PolyPolyline(HDC hdc,const POINT* apt,const DWORD* asz,DWORD csz); 
+```
+
+- 参数asz是一个DWORD类型的数组，分别指定apt数组中每一个组有几个点，每一个组的点个数必须大于或等于2。该函数既不使用也不更新当前位置。
+
+:::
+
+
+
+:::tip
+
+可以看出只有带`To`的函数才使用和**更新当前位置**。
+
+DC包含影响直线和曲线输出的一些属性，直线和曲线用到的属性包括当前位置、画笔样式、宽度和颜色、画刷样式和颜色等。
+
+:::
+
+
+
+接下来看一下创建画笔的几个函数。
+
+
+
+:::details `CreatePen/CreatePenIndirect 函数声明`
+
+```c
+/// <summary>
+/// 创建画笔
+/// </summary>
+/// <param name="fnPenStyle">画笔样式</param>
+/// <param name="nWidth">画笔宽度，逻辑单位</param>
+/// <param name="crColor">画笔颜色，使用RGB宏</param>
+/// <returns></returns>
+HPEN CreatePen(int fnPenStyle,int nWidth,COLORREF crColor); 
+```
+
+- 参数`fnPenStyle`指定画笔样式，值如下表所示。
+
+|                   宏常量                   |                             含义                             |
+| :----------------------------------------: | :----------------------------------------------------------: |
+|                 `PS_SOLID`                 |                           实心画笔                           |
+|                 `PS_DASH`                  |                             划线                             |
+|                  `PS_DOT`                  |                             点线                             |
+|                `PS_DASHDOT`                |                       交替的划线和点线                       |
+|              `PS_DASHDOTDOT`               |                      交替的划线和双点线                      |
+| `PS_INSIDEFRAMEPS_SOLID`和`PS_INSIDEFRAME` | PS_INSIDEFRAMEPS_SOLID和PS_INSIDEFRAME样式的画笔使用的都是实心线条，它们之间的区别是当画笔的宽度大于1像素，且使用区域绘画函数（例如绘制矩形)的时候，PS_SOLID样式的线条会居中画于边框线上﹔而PS_INSIDEFRAME样式的线条会全部画在边框线里面，画笔的宽度会向区域的内部扩展，所以它的名称是INSIDEFRAME |
+|                 `PS_NULL`                  |                        空，什么也不画                        |
+
+这几种样式的画笔效果如下图所示。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204091227426-17070091507491.png)
+
+
+
+对于`PS_DASH PS_DOT, PS_DASHDOT和PS_DASHDOTDOT样式`，如果指定的宽度`nWidth`大于1，那么会被替换为具有`nWidth`宽度的`PS_SOLID`样式的画笔，即这些样式的画笔只能是1像素宽。
+
+
+
+
+
+对于上述4种样式的画笔，划线和点线中间的空白默认是不透明、白色，可以通过调用`SetBkMode`和`SetBkColor`函数改变背景模式和背景颜色。
+
+
+
+```c
+
+/// <summary>
+/// 创建具有结构中指定的样式、宽度和颜色的画笔
+/// </summary>
+/// <param name="lplgpn">指向 LOGPEN 结构的指针，该结构指定笔的样式、宽度和颜色。</param>
+/// <returns></returns>
+HPEN CreatePenIndirect(const LOGPEN* lplgpn);
+```
+
+`CreatePenIndirect`函数的`Iplgpn`参数是一个指向`LOGPEN`结构的指针，用于定义画笔的样式、宽度和颜色。这3个字段的含义和`CreatePen`函数的3个参数一一对应。
+
+```c
+typedef struct tagLOGPEN
+{
+	UINT	lopnStyle;
+	POINT	lopnWidth;
+	COLORREF lopnColor;
+}LOGPEN，*PLOGPEN，NEAR*NPLOGPEN,FAR*LPLOGPEN;
+```
+
+如果函数执行成功，则返回值是逻辑画笔的句柄，HPEN是画笔句柄类型;如果函数执行失败，则返回值为NULL。
+
+:::
+
+
+
+再看一下创建画刷的几个函数。
+
+:::details `CreateSolidBrush`
+
+```c
+/// <summary>
+/// 创建具有指定颜色的纯色逻辑画刷
+/// </summary>
+/// <param name="color">COLORREF颜色值，使用RGB宏</param>
+/// <returns></returns>
+HBRUSH CreateSolidBrush(COLORREF color);
+
+
+/// <summary>
+/// 检索指定显示元素的当前颜色。
+/// </summary>
+/// <param name="nIndex">nlndex指定为标准系统颜色，返回对应的COLORREF颜色值</param>
+/// <returns></returns>
+COLORREF GetSysColor(int nIndex);  
+
+/// <summary>
+/// 检索标识与指定颜色索引对应的逻辑画笔的句柄。
+/// </summary>
+/// <param name="nIndex">nIndex指定为标准系统颜色，返回这个颜色的画刷句柄</param>
+/// <returns></returns>
+HBRUSH GetSysColorBrush(int nIndex);
+```
+
+函数执行成功，返回一个逻辑画刷句柄，HBRUSH是画刷句柄类型。
+
+如果需要使用系统颜色画刷进行绘制，直接使用`GetSysColorBrush`即可，不需要使用`CreateSolidBrush (GetSysColor(nIndex))`创建画刷。因为`GetSysColorBrush`直接返回系统缓存的画刷，而不是创建新的画刷，不用的时候不需要调用`DeleteObject`函数将其删除。
+
+
+
+:::
+
+
+
+
+
+:::details `CreateHatchBrush 函数说明`	
+
+```c
+/// <summary>
+/// 创建具有阴影样式的逻辑画刷
+/// </summary>
+/// <param name="fnStyle">阴影样式</param>
+/// <param name="clrref">COLORREF颜色值</param>
+/// <returns></returns>
+HBRUSH CreateHatchBrush(int fnStyle,COLORREF clrref); 
+```
+
+- fnStyle指定阴影样式，可用的值如下表所示。
+
+|      宏常量      |            含义            |
+| :--------------: | :------------------------: |
+|  `HS_BDIAGONAL`  | 从左到右看是向上45度的斜线 |
+|    `HS_CROSS`    |      水平和垂直交叉线      |
+| `HS_DIAGCROSS45` |         45度交叉线         |
+|  `HS_FDIAGONAL`  | 从左到右看是向下45度的斜线 |
+| `HS_HORIZONTAL`  |           水平线           |
+|  `HS_VERTICAL`   |           垂直线           |
+
+这几种样式的阴影画刷效果如下图所示。
+
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204092257524.png)
+
+
+
+阴影中间的空白默认为不透明、白色，可以调用`SetBkMode`和`SetBkColor`函数改变背景模式和背景颜色。
+
+
+
+:::
+
+
+
+:::details `CreatePatternBrush 函数说明`
+
+```c
+// <summary>
+/// 创建一个具有位图图案的逻辑画刷
+/// </summary>
+/// <param name="hbm">位图句柄</param>
+/// <returns></returns>
+HBRUSH CreatePatternBrush(HBITMAP hbm);
+```
+
+:::
+
+
+
+:::details `CreateBrushIndirect 函数说明`
+
+CreateBrushIndirect函数创建具有指定样式、颜色和图案的逻辑画刷.
+
+```
+HBRUSH CreateBrushIndirect(_In_ const LOGBRUSH *lplb);
+```
+
+CreateBrushIndirect函数具有前面所有函数的功能，而且也比较简单。参数lplb是一个指向LOGBRUSH结构的指针。
+
+```c
+typedef struct tagLOGBRUSH
+{
+	UINT	lbStyle;//样式
+    COLORREF lbColor;//颜色
+    ULoNG_PTR lbHatch;//图案
+}LOGBRUSH,*PLOGBRUSH,NEAR *NPLOGBRUSH,FAR*LPLOGBRUSH;
+```
+
+- `lbStyle`字段指定画刷样式，值如下表所示。
+
+|               宏常量                |                             含义                             |
+| :---------------------------------: | :----------------------------------------------------------: |
+| `BS_DIBPATTERN ` `BS_DIBPATTERN8*8` | 由设备无关位图（`DIB`）定义图案画刷，lbHatch字段指定为DIB的句柄 |
+|             `BS_SOLID`              |                           实心画刷                           |
+|            `BS_HATCHED`             |                           阴影画刷                           |
+|     `BS_PATTERN BS_PATTERN8*8`      |   由内存位图定义的图案画刷,lbHatch字段指定为内存位图的句柄   |
+|         `BS_HOLLOW BS_NULL`         |                            空画刷                            |
+
+- `lbColor`字段指定画刷的颜色，通常用于BS_SOLID或BS_HATCHED样式的画刷。
+- `lbHatch`字段的含义取决于lbStyle定义的画刷样式。如果lbStyle字段指定为BS_HATCHED，则lbHatch字段指定阴影填充的线的方向，可用的值与CreateHatchBrush函数的fnStyle字段相同﹔如果lbStyle字段指定为BS_SOLID或BS_HOLLOWBS_NULL，则忽略lbHatch字段。
+
+
+
+当不再需要创建的逻辑画笔、画刷时，需要调用`DeleteObject`函数将其删除。
+
+:::
+
+
+
+先练习一下这几个画线函数的用法。Line程序使用前面介绍的` LineTo  Polyline  PolylineTo PolyPolyline`函数画线。程序运行效果如下图所示。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204094350457.png)
+
+其中，Line程序使用`PolyPolyline`函数画了一个立方体，分为2组，第1组画了1～3，第2组画了①～⑥。
+
+
+
+:::details `绘制直线函数示例`
+
+```c
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("直线");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 240, 300, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    POINT arrPtPolyPolyline[] = {                           // PolyPolyline函数的点
+        110,60, 10,60, 60,10, 160,10,
+        10,60, 10,160, 110,160, 110,60, 160,10, 160,110, 110,160,
+    };
+    DWORD arrGroup[] = { 4, 7 };
+    POINT arrPtPolyline[] = { 10,220, 110,200, 210,220 };   // Polyline函数的点
+    POINT arrPtPolylineTo[] = { 110,260, 210,240 };         // PolylineTo函数的点
+    if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc, TRANSPARENT);
+
+        SelectObject(hdc, CreatePen(PS_SOLID, 3, RGB(255, 0, 0)));
+        PolyPolyline(hdc, arrPtPolyPolyline, arrGroup, _countof(arrGroup));
+        
+        DeleteObject(SelectObject(hdc, CreatePen(PS_DASH, 1, RGB(0, 255, 0))));
+        MoveToEx(hdc, 10, 180, NULL);
+        LineTo(hdc, 210, 180);
+
+        DeleteObject(SelectObject(hdc, CreatePen(PS_DOT, 1, RGB(0, 0, 255))));
+        Polyline(hdc, arrPtPolyline, _countof(arrPtPolyline));
+
+        DeleteObject(SelectObject(hdc, CreatePen(PS_DASHDOT, 1, RGB(0, 0, 0))));
+        MoveToEx(hdc, 10, 240, NULL);
+        PolylineTo(hdc, arrPtPolylineTo, _countof(arrPtPolylineTo));
+        DeleteObject(SelectObject(hdc, GetStockObject(BLACK_PEN)));
+
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240611000032750.png)
+
+
+
+:::
+
+### 绘制曲线
+
+常用的绘制曲线的函数有`Arc ArcTo PolyBezier  PolyBezierTo`，可以绘制直线和曲线组合的函数有`AngleArc PolyDraw`。
+
+
+
+
+
+:::details `Arc 函数说明`
+
+```c
+/// <summary>
+/// 绘制椭圆弧线
+/// </summary>
+/// <param name="hdc">设备环境句柄，以下单位均是逻辑单位</param>
+/// <param name="nLeftRect">边界矩形左上角的X坐标</param>
+/// <param name="nTopRect">边界矩形左上角的Y坐标</param>
+/// <param name="nRightRect">边界矩形右下角的X坐标</param>
+/// <param name="nBottomRect">边界矩形右下角的Y坐标</param>
+/// <param name="nXStartArc">弧起点的X坐标</param>
+/// <param name="nYStartArc">/弧起点的Y坐标</param>
+/// <param name="nXEndArc">弧终点的X坐标</param>
+/// <param name="nYEndArc">弧终点的Y坐标</param>
+/// <returns></returns>
+BOOL Arc(HDC hdc, int nLeftRect,int nTopRect,int nRightRect,int nBottomRect,int nXStartArc,int nYStartArc,int nXEndArc,int nYEndArc);
+```
+
+- 点(nLeftRect,nTopRect)和(nRightRect,nBottomRect)指定边界矩形，边界矩形内的椭圆定义了椭圆弧线的范围。
+- 将矩形中心到起点(nXStartArc,nYStartArc)与椭圆的相交点作为弧线的起点，矩形中心到终点(nXEndArc,nYEndArc)与椭圆的相交点作为弧线的终点，从弧线的起点到终点浴当前绘图方向绘制。
+- 如果起点和终点相同，则会绘制一个完整的椭圆形(内部不会填充)。具体请结合下图理解，其中的实心弧线就是Arc函数所画的弧线。
+- DC有一个当前绘图方向属性对Arc函数有影响。默认绘图方向是逆时针方向，可以通过调用GetArcDirection和SetArcDirection函数获取和设置DC的当前绘图方向。如果更改绘图方向为顺时针，那么下图中的椭圆弧线就会变为椭圆的虚线部分。
+- Arc函数既不使用也不更新当前位置。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204095030425.png)
+
+:::
+
+
+
+:::details `ArcTo 函数说明`
+
+```c
+/// <summary>
+/// 绘制椭圆弧线
+/// </summary>
+/// <param name="hdc">设备环境句柄，以下单位均是逻辑单位</param>
+/// <param name="nLeftRect">边界矩形左上角的X坐标</param>
+/// <param name="nTopRect">边界矩形左上角的Y坐标</param>
+/// <param name="nRightRect">边界矩形右下角的X坐标</param>
+/// <param name="nBottomRect">边界矩形右下角的Y坐标</param>
+/// <param name="nXStartArc">弧起点的X坐标</param>
+/// <param name="nYStartArc">/弧起点的Y坐标</param>
+/// <param name="nXEndArc">弧终点的X坐标</param>
+/// <param name="nYEndArc">弧终点的Y坐标</param>
+/// <returns></returns>
+BOOL ArcTo(HDC hdc, int nLeftRect,int nTopRect,int nRightRect,int nBottomRect,int nXStartArc,int nYStartArc,int nXEndArc,int nYEndArc);
+```
+
+ArcTo函数的参数和Arc完全相同，只不过ArcTo函数会从当前位置到弧线起点额外画一条线，而且会更新DC的当前位置为弧线终点。注意，这里的弧线起点不一定是函数中定义的起点，除非起点(nXStartArc,nYStartArc）正好定义为弧线起点，这里的弧线终点不一定是函数中定义的终点，除非终点(nXEndArc,nYEndArc)正好定义为弧线终点。
+
+
+
+下图中的实心直线和弧线就是ArcTo函数绘制的结果
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204095355858-17070116405225.png)
+
+
+
+:::
+
+
+
+
+
+**贝塞尔曲线**(Bezier curve）又称贝兹曲线或贝济埃曲线，是应用于二维图形应用程序的数学不规则曲线，由法国数学家皮埃尔·贝塞尔(Pierre Bezier)发明，为计算机矢量图形学寞定了基础。我们在绘图工具上看到的钢笔工具就是用来绘制这种矢量曲线的。
+
+
+
+:::details `PolyBezier 函数说明`
+
+```c
+/// <summary>
+/// 绘制一条或多条贝塞尔曲线
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="apt">端点和控制点的点结构数组，逻辑单位</param>
+/// <param name="cpt">apt数组中点的个数</param>
+/// <returns></returns>
+BOOL PolyBezier(HDC	hdc,const POINT* apt,DWORD cpt);
+```
+
+参数cpt指定apt数组中点的个数，该值必须是要绘制曲线个数的3倍以上，因为每个贝塞尔曲线需要2个控制点和1个端点。另外，贝塞尔曲线的开始还需要1个额外的起点。如果不明白，继续往下看。
+
+
+
+PolyBezier函数使用apt参数指定的端点和控制点进行绘制。以第2点和第3点为控制点，从第1点到第4点绘制第一条曲线，就是说第一条曲线需要使用4个点; apt数组中的每个后续曲线需要提供3个点，以上一条曲线的终点为起点，后续2个点为控制点，后续第3个点为终点。
+
+
+
+PolyBezier函数使用当前画笔绘制线条，该函数既不使用也不更新当前位置。
+
+:::
+
+
+
+:::details `PolyBezier 示例:`
+
+```c
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("直线");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 240, 300, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc, TRANSPARENT);
+        SelectObject(hdc, CreatePen(PS_SOLID, 2, RGB(0, 0, 0)));
+
+        POINT arrPoint[] = { 10,100,100,10,150,150,200,50 };
+        //曲线起点、控点1，控点2,曲线终点
+
+        //绘制贝赛尔曲线
+        PolyBezier(hdc, arrPoint, _countof(arrPoint));
+        DeleteObject(SelectObject(hdc, CreatePen(PS_DOT, 1, RGB(0, 0, 0))));
+
+        //曲线起点到控制点1画一条点线
+        MoveToEx(hdc, arrPoint[0].x, arrPoint[0].y, NULL);
+        LineTo(hdc, arrPoint[1].x, arrPoint[1].y);
+
+        //曲线起点到控制点2画一条点线
+        MoveToEx(hdc, arrPoint[2].x, arrPoint[2].y, NULL);
+        LineTo(hdc, arrPoint[3].x, arrPoint[3].y);
+        DeleteObject(SelectObject(hdc, GetStockObject(BLACK_PEN)));
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+程序执行效果如下图所示。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204101205574-17070127267841.png)
+
+`PolyBezier`函数只是画了一条曲线(图中的实心黑线)。绘制控制线是程序的责任，一般的绘图程序通常是鼠标按住控制·点1或2拖动可以调整曲线的形状。这个实现起来很简单，只需要处理鼠标按下、松开和鼠标移动消息，然后重新计算控制点坐标，再次调用`PolyBezier`函数即可(曲线的起点和终点坐标通常不会再改变)。
+
+:::
+
+
+
+:::details `PolyBezierTo 函数说明`
+
+```c
+/// <summary>
+/// 绘制一条或多条贝塞尔曲线
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="apt">端点和控制点的点结构数组，逻辑单位</param>
+/// <param name="cpt">apt数组中点的个数</param>
+/// <returns></returns>
+BOOL PolyBezierTo(HDC	hdc,const POINT* apt,DWORD cpt);
+```
+
+PolyBezierTo函数的参数和PolyBezier完全相同。PolyBezierTo函数从当前位置到apt数组提供的第3个点绘制一条贝塞尔曲线，使用第1·2个点作为控制点﹔对于每个后续曲线，函数也是需要3个点，使用前一条曲线的终点作为下一条曲线的起点。PolyBezierTo函数将当前位置设置为最后一条贝塞尔曲线的终点。
+
+:::
+
+
+
+:::details `AngleArc 函数说明`
+
+```c
+/// <summary>
+/// 绘制一条直线和一条弧线（一个正圆形边框的一部分)
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="x">圆心的X坐标，逻辑单位</param>
+/// <param name="y">圆心的Y坐标，逻辑单位</param>
+/// <param name="r">圆的半径，逻辑单位</param>
+/// <param name="StartAngle">相对于X轴的起始角度，单位是度</param>
+/// <param name="SweepAngle">扫描角度，即相对于起始角度StartAngle的角度，单位是度</param>
+/// <returns></returns>
+BOOL AngleArc(HDC hdc,int x,int y, DWORD r, FLOAT StartAngle, FLOAT SweepAngle);
+```
+
+AngleArc函数会将当前位置设置为弧线的终点。
+
+:::
+
+
+
+:::details `AngleArc 示例`
+
+```c
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("直线");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 240, 300, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    if (uMsg == WM_PAINT)
+    {
+   
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc,TRANSPARENT);
+        
+        MoveToEx(hdc,250,50,NULL); //设置当前位置
+        AngleArc(hdc,150,150,100,0,270); //调用AngleAr函数进行绘制
+
+        //绘制参考点线
+        SelectObject(hdc,CreatePen(PS_DOT,1,RGB(0,0,0)));
+        MoveToEx(hdc,150,150,NULL);
+        LineTo(hdc, 270, 150);
+        
+        MoveToEx(hdc,150,150,NULL);
+        LineTo(hdc,150,270);
+
+        DeleteObject(SelectObject(hdc,GetStockObject(BLACK_PEN)));
+
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+程序执行效果如下图所示。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204102536328.png)
+
+:::
+
+
+
+:::details `PolyDraw 函数说明`
+
+```c
+/// <summary>
+/// 一组直线和贝塞尔曲线
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="apt">点结构数组，包含每条直线的端点以及每条贝塞尔曲线的端点和控制点</param>
+/// <param name="aj">一个数组，每个数组元素指定如何使用apt数组中对应的每个点</param>
+/// <param name="cpt">apt数组中点的个数</param>
+/// <returns></returns>
+BOOL PolyDraw(HDC hdc,const POINT* apt, const BYTE* aj,int cpt);
+```
+
+参数aj中的每个数组元素指定如何使用apt数组中对应的每个点，该参数如下表所示。
+
+|    宏常量     |                             含义                             |
+| :-----------: | :----------------------------------------------------------: |
+|  `PT_MOVETO`  |            从该点开始绘制，该点将成为新的当前位置            |
+|  `PT_LINETO`  |   从当前位置到该点绘制一条直线，然后该点将成为新的当前位置   |
+| `PT_BEZIERTO` | 该点是贝塞尔曲线的控制点或端点。PT_BEZIERTO类型总是以3个一组出现，当前位置作为贝塞尔曲线的起点，前2个点是控制点，第3个点是终点，终点会变为新的当前位置 |
+
+PT_LINETO或PT_BEZIERTO还可以和PT_CLOSEFIGURE标志一起使用，即PT_LINETO | PT_CLOSEFIGURE或PT_BEZIERTO | PT_CLOSEFIGURE，表示绘制完直线或贝塞尔曲线以后，直线或贝塞尔曲线的终点和最近使用PT_MOVETO的点之间会画一条线，形成一个封闭区域，但其内部不会被填充。
+
+:::
+
+
+
+:::details `PolyDraw 示例`
+
+```c
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("直线");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 240, 300, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    if (uMsg == WM_PAINT)
+    {
+   
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc,TRANSPARENT);
+        POINT arrPoint[] = { 10,100,100,10,150,150,200,50,10,100,100,10,150,150,200,50 }; //这四个点用于绘制控制线
+        BYTE arrFlag[] = {PT_MOVETO,PT_BEZIERTO,PT_BEZIERTO,PT_BEZIERTO ,PT_MOVETO ,PT_LINETO,PT_MOVETO,PT_LINETO }; 
+        PolyDraw(hdc,arrPoint,arrFlag,_countof(arrPoint));
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+效果是一样的，只不过是贝塞尔曲线和控制线都是实心黑线，不能分别控制其样式。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204103330566-17070140117483.png)
+
+:::
+
+## 填充图形
+
+填充图形，也叫填充形状。有许多应用程序会用到填充图形，例如电子表格程序使用填充图形来绘制图表。填充图形使用当前画笔绘制边框线，使用当前画刷绘制内部的填充色。常见的填充图形如下所示。
+
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240611001925078.png)
+
+
+
+默认的DC使用1像素的黑色实心画笔和白色画刷，所以这些填充图形的边框线是1像素的实心黑线，内部填充为白色。为了能看出填充图形的内部填充颜色，本节程序指定WNDCLASSEX结构的hbrBackground字段为`COLOR_BTNFACE＋1`(浅灰色窗口背景)。
+
+
+
+
+
+:::details `Rectangle 函数说明`
+
+```c
+
+/// <summary>
+/// 绘制一个直角矩形
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="nLeftRect">矩形左上角的X坐标，逻辑单位</param>
+/// <param name="nTopRect">矩形左上角的Y坐标，逻辑单位</param>
+/// <param name="nRightRect">矩形右下角的X坐标，逻辑单位</param>
+/// <param name="nBottomRect">矩形右下角的Y坐标，逻辑单位</param>
+/// <returns></returns>
+BOOL Rectangle(HDC hdc, int nLeftRect,int nTopRect,int nRightRect, int nBottomRect); 
+```
+
+:::
+
+
+
+:::details `RoundRect 函数说明`
+
+```c
+/// <summary>
+/// 绘制一个圆角矩形
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="nLeftRect">矩形左上角的X坐标，逻辑单位</param>
+/// <param name="nTopRect">矩形左上角的Y坐标，逻辑单位</param>
+/// <param name="nRightRect">矩形右下角的X坐标，逻辑单位</param>
+/// <param name="nBottomRect">矩形右下角的Y坐标，逻辑单位</param>
+/// <param name="nWidth">用于绘制圆角的椭圆的宽度，逻辑单位</param>
+/// <param name="nHeight">用于绘制圆角的椭圆的高度，逻辑单位</param>
+/// <returns></returns>
+BOOL RoundRect(HDC hdc,int nLeftRect,int nTopRect,int nRightRect,int nBottomRect,int nWidth, int nHeight );
+```
+
+
+
+可以把圆角矩形的圆角想象成是一个较小的椭圆，如下图所示。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204103723364.png)
+
+这个小椭圆的宽度是nWidth，高度是nHeight，可以想象成Windows将这个小椭圆分成了4个象限，4个圆角分别是该小椭圆的一个象限。当nWidth和nHeight的值较大时，对应的圆角显得比较明显.
+
+
+
+- 如果nWidth的值等于nLeftRect与nRightRect的差，并且nHeight的值等于nTopRect与nBottomRect的差，那么RoundRect函数画出来的就是一个椭圆，而不是一个圆角矩形。
+- 上图中在圆角矩形的长边上的那部分圆角和短边上的那部分圆角是相同大小的，因为使用了相同的nWidth和nHeight值，也可以把这两个参数指定为不同的值，实现不同的效果。
+
+:::
+
+
+
+:::details `Ellipse 函数说明`
+
+```c
+
+/// <summary>
+/// 在指定的边界矩形内绘制椭圆
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="nLeftRect">矩形左上角的X坐标，逻辑单位</param>
+/// <param name="nTopRect">矩形左上角的Y坐标，逻辑单位</param>
+/// <param name="nRightRect">矩形右下角的X坐标，逻辑单位</param>
+/// <param name="nBottomRect">矩形右下角的Y坐标，逻辑单位</param>
+/// <returns></returns>
+BOOL Ellipse(HDC hdc,int nLeftRect,int nTopRect,int nRightRect,int nBottomRect);
+```
+
+Ellipse函数在指定的边界矩形内绘制椭圆，函数参数和Rectangle完全相同，该函数既不使用也不更新当前位置
+
+:::
+
+
+
+:::details `Chord 函数说明`
+
+```c
+BOOL Chord(
+_In_ HDC hdc, //设备环境句柄
+_In_ int nLeftRect,//边界矩形左上角的X坐标，逻辑单位
+_In_ int nTopRect,//边界矩形左上角的Y坐标，逻辑单位
+_In_ int nRightRect,//边界矩形右下角的X坐标，逻辑单位
+_In_ int nBottomRect,//边界矩形右下角的Y坐标，逻辑单位
+_In_ int nXRadiall, //弦起点的径向端点的X坐标，逻辑单位
+_In_ int nYRadial1, //弦起点的径向端点的Y坐标，逻辑单位
+_In_ int nXRadial2，//弦终点的径向端点的X坐标，逻辑单位
+_In_ int nYRadial2);//弦终点的径向端点的Y坐标，逻辑单位
+```
+
+弦形曲线部分的绘制和Arc函数类似，只不过Chord函数会闭合曲线的两个端点。点(nLeftRect,nTopRect)和
+(nRightRect,nBottomRect)指定边界矩形，边界矩形内的椭圆定义了弦形的曲线。
+
+
+
+矩形中心到起点(nXRadial1, nYRadial1)与椭圆的相交点作为弦形曲线的起点，矩形中心到终点
+(nXRadial2,nYRadial2)与椭圆的相交点作为弦形曲线的终点，从弦形曲线的起点到终点浴当前绘图方向绘制，然后在弦形曲线的起点和终点之间绘制一条直线来闭合弦形。如果起点和终点相同，则会绘制一个完整的椭圆形。具体请结合下图理解。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204104519602-17070147207016.png)
+
+DC有一个当前绘图方向属性对Chord函数有影响，默认绘图方向是逆时针方向，可以调用GetChordDirection和SetChordDirection函数获取和设置DC的当前绘图方向。
+
+:::
+
+
+
