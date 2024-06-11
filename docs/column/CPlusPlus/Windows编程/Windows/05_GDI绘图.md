@@ -5833,6 +5833,81 @@ BOOL Rectangle(HDC hdc, int nLeftRect,int nTopRect,int nRightRect, int nBottomRe
 
 :::
 
+:::details `Rectangle 示例`
+
+```c{52}
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("直线");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 400, 500, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc, TRANSPARENT);
+        SelectObject(hdc, CreatePen(PS_SOLID, 2, RGB(0, 0, 0)));
+
+
+        //绘制矩形
+        RECT rect ={0};
+        rect.left = 100; 
+        rect.top = 150;
+        rect.right = rect.left + 200; 
+        rect.bottom = rect.top + 150; 
+        Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
+
+        DeleteObject(SelectObject(hdc, GetStockObject(BLACK_PEN)));
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240611221332644.png)
+
+:::
+
+
+
 
 
 :::details `RoundRect 函数说明`
@@ -5852,8 +5927,6 @@ BOOL Rectangle(HDC hdc, int nLeftRect,int nTopRect,int nRightRect, int nBottomRe
 BOOL RoundRect(HDC hdc,int nLeftRect,int nTopRect,int nRightRect,int nBottomRect,int nWidth, int nHeight );
 ```
 
-
-
 可以把圆角矩形的圆角想象成是一个较小的椭圆，如下图所示。
 
 ![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204103723364.png)
@@ -5864,6 +5937,81 @@ BOOL RoundRect(HDC hdc,int nLeftRect,int nTopRect,int nRightRect,int nBottomRect
 
 - 如果nWidth的值等于nLeftRect与nRightRect的差，并且nHeight的值等于nTopRect与nBottomRect的差，那么RoundRect函数画出来的就是一个椭圆，而不是一个圆角矩形。
 - 上图中在圆角矩形的长边上的那部分圆角和短边上的那部分圆角是相同大小的，因为使用了相同的nWidth和nHeight值，也可以把这两个参数指定为不同的值，实现不同的效果。
+
+:::
+
+
+
+:::details `RoundRect() 代码示例`
+
+```c{50}
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("直线");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 400, 500, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc, TRANSPARENT);
+        SelectObject(hdc, CreatePen(PS_SOLID, 2, RGB(0, 0, 0)));
+        //绘制圆角矩形
+        RECT rect ={0};
+        rect.left = 100; 
+        rect.top = 150;
+        rect.right = rect.left + 200; 
+        rect.bottom = rect.top + 150; 
+        RoundRect(hdc, rect.left, rect.top, rect.right, rect.bottom,150,150);
+
+        DeleteObject(SelectObject(hdc, GetStockObject(BLACK_PEN)));
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240611221539246.png)
 
 :::
 
@@ -5891,34 +6039,815 @@ Ellipse函数在指定的边界矩形内绘制椭圆，函数参数和Rectangle�
 
 
 
-:::details `Chord 函数说明`
+:::details `Ellipse 示例`
 
-```c
-BOOL Chord(
-_In_ HDC hdc, //设备环境句柄
-_In_ int nLeftRect,//边界矩形左上角的X坐标，逻辑单位
-_In_ int nTopRect,//边界矩形左上角的Y坐标，逻辑单位
-_In_ int nRightRect,//边界矩形右下角的X坐标，逻辑单位
-_In_ int nBottomRect,//边界矩形右下角的Y坐标，逻辑单位
-_In_ int nXRadiall, //弦起点的径向端点的X坐标，逻辑单位
-_In_ int nYRadial1, //弦起点的径向端点的Y坐标，逻辑单位
-_In_ int nXRadial2，//弦终点的径向端点的X坐标，逻辑单位
-_In_ int nYRadial2);//弦终点的径向端点的Y坐标，逻辑单位
+```c{50}
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("直线");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 400, 500, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc, TRANSPARENT);
+        SelectObject(hdc, CreatePen(PS_SOLID, 2, RGB(0, 0, 0)));
+        //绘制椭圆
+        RECT rect ={0};
+        rect.left = 100; 
+        rect.top = 150;
+        rect.right = rect.left + 200; 
+        rect.bottom = rect.top + 150; 
+        Ellipse(hdc, rect.left, rect.top, rect.right, rect.bottom);
+
+        DeleteObject(SelectObject(hdc, GetStockObject(BLACK_PEN)));
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
 ```
 
-弦形曲线部分的绘制和Arc函数类似，只不过Chord函数会闭合曲线的两个端点。点(nLeftRect,nTopRect)和
-(nRightRect,nBottomRect)指定边界矩形，边界矩形内的椭圆定义了弦形的曲线。
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240611222317930.png)
+
+:::
 
 
 
-矩形中心到起点(nXRadial1, nYRadial1)与椭圆的相交点作为弦形曲线的起点，矩形中心到终点
-(nXRadial2,nYRadial2)与椭圆的相交点作为弦形曲线的终点，从弦形曲线的起点到终点浴当前绘图方向绘制，然后在弦形曲线的起点和终点之间绘制一条直线来闭合弦形。如果起点和终点相同，则会绘制一个完整的椭圆形。具体请结合下图理解。
+
+
+:::details `Chord 函数说明`
+
+绘制一个弦形，有一个椭圆和一条直线的交点界定的区域，该函数既不使用也不更新当前位置。
+
+```c
+/// <summary>
+/// 绘制一个弦形，有一个椭圆和一条直线的交点界定的区域。(绘制扇形)
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="nLeftRect">边界矩形左上角的X坐标，逻辑单位</param>
+/// <param name="nTopRect">边界矩形左上角的Y坐标，逻辑单位</param>
+/// <param name="nRightRect">边界矩形右下角的X坐标，逻辑单位</param>
+/// <param name="nBottomRect">边界矩形右下角的Y坐标，逻辑单位</param>
+/// <param name="nXRadiall">弦起点的径向端点的X坐标，逻辑单位</param>
+/// <param name="nYRadial1">弦起点的径向端点的Y坐标，逻辑单位</param>
+/// <param name="nXRadial2">弦终点的径向端点的X坐标，逻辑单位</param>
+/// <param name="nYRadial2">弦终点的径向端点的Y坐标，逻辑单位</param>
+/// <returns></returns>
+BOOL Chord(HDC hdc,int nLeftRect,int nTopRect,int nRightRect,int nBottomRect,int nXRadiall,int nYRadial1,int nXRadial2,int nYRadial2);
+```
+
+弦形曲线部分的绘制和Arc函数类似，只不过Chord函数会闭合曲线的两个端点。点(nLeftRect,nTopRect)和(nRightRect,nBottomRect)指定边界矩形，边界矩形内的椭圆定义了弦形的曲线。
+
+
+
+矩形中心到起点(nXRadial1, nYRadial1)与椭圆的相交点作为弦形曲线的起点，矩形中心到终点(nXRadial2,nYRadial2)与椭圆的相交点作为弦形曲线的终点，从弦形曲线的起点到终点浴当前绘图方向绘制，然后在弦形曲线的起点和终点之间绘制一条直线来闭合弦形。如果起点和终点相同，则会绘制一个完整的椭圆形。具体请结合下图理解。
 
 ![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204104519602-17070147207016.png)
 
-DC有一个当前绘图方向属性对Chord函数有影响，默认绘图方向是逆时针方向，可以调用GetChordDirection和SetChordDirection函数获取和设置DC的当前绘图方向。
+DC有一个当前绘图方向属性对Chord函数有影响，默认绘图方向是逆时针方向，可以调用`GetChordDirection`和`SetChordDirection`函数获取和设置DC的当前绘图方向。
 
 :::
+
+
+
+:::details `Chord 示例`
+
+```c{52}
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("直线");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 400, 500, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc, TRANSPARENT);
+        SelectObject(hdc, CreatePen(PS_SOLID, 2, RGB(0, 0, 0)));
+        int x1 = 10,
+        y1 = 10,
+        x2 = 200,
+        y2 = 200,
+        x3 = 130,
+        y3 = 200,
+        x4 = 160,
+        y4 = 10;
+        Chord(hdc, x1, y1, x2, y2, x3, y3, x4, y4);
+        DeleteObject(SelectObject(hdc, GetStockObject(BLACK_PEN)));
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+
+```
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240611223045524.png)
+
+:::
+
+
+
+
+
+:::details `Pie 函数说明`
+
+Pie函数绘制一个饼形，该函数的参数和Chord完全相同，只不过闭合方式不同，该函数既不使用也不更新当前位置∶
+
+```c
+/// <summary>
+/// 绘制一个饼形
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="nLeftRect">边界矩形左上角的X坐标，逻辑单位</param>
+/// <param name="nTopRect">边界矩形左上角的Y坐标，逻辑单位</param>
+/// <param name="nRightRect">边界矩形右下角的X坐标，逻辑单位</param>
+/// <param name="nBottomRect">边界矩形右下角的Y坐标，逻辑单位</param>
+/// <param name="nXRadiall">饼形起点的径向端点的X坐标，逻辑单位</param>
+/// <param name="nYRadial">饼形起点的径向端点的Y坐标，逻辑单位</param>
+/// <param name="nXRadial2">饼形终点的径向端点的X坐标，逻辑单位</param>
+/// <param name="nYRadial2">饼形终点的径向端点的Y坐标，逻辑单位</param>
+/// <returns></returns>
+BOOL Pie(HDC hdc, int nLeftRect,int nTopRect, int nRightRect,int nBottomRect,int nXRadiall, int nYRadial,int nXRadial2,int nYRadial2);
+```
+
+点(nLeftRect,nTopRect)和(nRightRect,nBottomRect)指定边界矩形，边界矩形内的椭圆定义了饼形的曲线。矩形中心到起点(nXRadial1,nYRadial1）与椭圆的相交点作为饼形曲线的起点，矩形中心到终点(nXRadial2,nYRadial2)与椭圆的相交点作为饼形曲线的终点，从饼形曲线的起点到终点治当前绘图方向绘制，然后在矩形中心到饼形曲线的起点和终点之间分别绘制一条直线来闭合饼形。具体结合下图理解。
+
+
+
+可以看到，函数Arc  Chord和Pie都使用同样的参数。同样，Pie函数会受当前绘图方向的影响。
+
+:::
+
+
+
+:::details `Pie 示例`
+
+```c
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("直线");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 400, 500, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc, TRANSPARENT);
+        SelectObject(hdc, CreatePen(PS_SOLID, 2, RGB(0, 0, 0)));
+      
+        Pie(hdc, 100, 100, 600, 400, 350, 400, 100, 400);
+        DeleteObject(SelectObject(hdc, GetStockObject(BLACK_PEN)));
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240611224326228.png)
+
+:::
+
+
+
+:::details `Polygon 函数说明`
+
+
+
+
+
+Polygon函数与Polyline有点类似，该函数通过连接指定数组中的点来绘制一条或多条直线。如果数组中的最后一个点与第一个点不同，则会额外绘制一条线连接最后一个点与第—个点(Polyline函数不会这么做)，形成一个多边形，内部会被填充。该函数既不使用也不更新当前位置∶
+
+```c
+/// <summary>
+/// 通过连接指定数组中的点，来绘制一条或者多条直线
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="lpPoints">点结构数组，逻辑单位</param>
+/// <param name="nCount">lpPoints数组中点的个数，必须大于或等于2</param>
+/// <returns></returns>
+BOOL Polygon(HDC hdc,const POINT* lpPoints,int nCount);
+
+```
+
+参数nCount指定lpPoints数组中点的个数，必须大于或等于2。如果只是指定了2个点，那么仅绘制一条直线。大家测试一下，把Line程序对Polyline函数的调用改为Polygon，会发现(10,220)，(110,200)，(210,220)这3个点会形成一个多边形，内部会被填充。
+
+:::
+
+
+
+:::details `Polygon 示例`
+
+```c
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("直线");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 400, 500, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc, TRANSPARENT);
+        POINT arrPt[] = { 0,40,100,40,20,100,50,0,80,100 };
+        POINT arrPt2[] = { 120,40,220,40,140,100,170,0,200,100 };
+        Polygon(hdc, arrPt, _countof(arrPt));
+        //设置多边形填充模式 WINDING
+        SetPolyFillMode(hdc, WINDING);
+        Polygon(hdc, arrPt2, _countof(arrPt2));
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+程序运行效果如下图所示。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204105950176.png)
+
+为了方便大家识别，我把5个点的先后顺序标识出来了。可以看到，默认情况下五角形内部那个五边形不会被填充﹔设置多边形填充模式为WINDING以后，五角形内部那个五边形会被填充。
+
+:::
+
+
+
+
+
+
+
+在填充复杂的重叠多边形的情况下，例如上面的五角形，不同的多边形填充模式可能会导致内部填充方式的不同。`SetPolyFillMode`函数为多边形填充函数设置多边形填充模式.
+
+
+
+:::details `SetPolyFillMode 函数说明`
+
+```c
+/// <summary>
+/// 设置多边形的填充模式
+/// </summary>
+/// <param name="hdc">设备环境</param>
+/// <param name="iPolyFillMode">新的多边形填充模式</param>
+/// <returns></returns>
+int SetPolyFillMode(HDC hdc,int iPolyFillMode); 
+```
+
+- 参数iPolyFillMode指定新的多边形填充模式，该参数如下表所示。
+
+|   宏常量    |                             含义                             |
+| :---------: | :----------------------------------------------------------: |
+| `ALTERNATE` | 交替模式，默认值。对于ALTERNATE填充模式，要判断一个封闭区域是否被填充，可以想象从这个封闭区域中的一个点向外部无穷远处水平或垂直画一条射线，只有该射线穿越奇数条边框线时，封闭区域才会被填充缠绕模式。WINDING模式在大多数情况下会填充所有封闭区域，但是也有例外。在WINDING模式下，要确定一个区域是否应该被填充，同样可以假想从区域内的一个点画一条伸向外部无穷远处的水平或垂直射线，如果射线穿越奇数条边框线，则区域被填充，这和ALTERNATE模式相同 |
+|  `WINDING`  | 如果射线穿越偶数条边框线，还要考虑到边框线的绘制方向。在被穿越的偶数条边框线中，不同方向的边框线（相对于射线的方向)的数目如果相等，则区域不会被填充﹔不同方向的边框线（相对于射线的方向)的数目如果不相等，则区域会被填充 |
+
+为了让大家理解多边形填充模式，再看一种更复杂的情况，下图中的箭头表示画线的方向。
+
+
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204110444362-17070158855198.png)
+
+
+
+WINDING模式和ALTERNATE模式都会填充号码为1～3的3个封闭的L型区域。两个更小的内部区域号码为4和5，在ALTERNATE模式下不被填充。但是在WINDING模式下，号码为5的区域会被填充，这是因为从区域的内部到达图形的外部会穿越两条相同方向的边框线;号码为4的区域不会被填充，这是因为射线会穿越两条边框线，但是这两条边框线的绘制方向相反。
+
+:::
+
+
+
+:::details `PolyPolygon 函数说明`
+
+```c
+/// <summary>
+/// 绘制—系列多边形
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="lpPoints">点结构数组，逻辑单位。可理解为是多个组，一个组画一个多边形</param>
+/// <param name="lpPolyCounts">整型数组</param>
+/// <param name="nCount">组的个数，也就是lpPolyCounts的数组元素个数，即几个多边形</param>
+/// <returns></returns>
+BOOL PolyPolygon(HDC hdc,const POINT* lpPoints,const INT* lpPolyCounts, int nCount);
+```
+
+参数lpPolyCounts是一个整型数组，每个数组元素用于指定每一个组分别有几个点，每一个组的点个数必须大于或等于2。每个多边形都会通过从最后一个顶点到第一个顶点绘制一条直线来自动闭合多边形，该函数同样受多边形填充模式影响。PolyPolygon在功能上等同于下面的代码∶
+
+```c
+    for (int i = 0, iGroup = 0; i < nCount; i++)
+    {
+        Polygon(hdc, lpPoints + iGroup, lpPolyCounts[i]);
+        iGroup += lpPolyCounts[i];
+    }
+```
+
+:::
+
+:::details `PolyPolygon 示例`
+
+举个小例子，画一个三菱车标。
+
+```c
+#include <Windows.h>
+#include <tchar.h>
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    WNDCLASSEX wndclass;
+    TCHAR szClassName[] = TEXT("MyWindow");
+    TCHAR szAppName[] = TEXT("直线");
+    HWND hwnd;
+    MSG msg;
+    wndclass.cbSize = sizeof(WNDCLASSEX);
+    wndclass.style = CS_HREDRAW | CS_VREDRAW;
+    wndclass.lpfnWndProc = WindowProc;
+    wndclass.cbClsExtra = 0;
+    wndclass.cbWndExtra = 0;
+    wndclass.hInstance = hInstance;
+    wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+    wndclass.lpszMenuName = NULL;
+    wndclass.lpszClassName = szClassName;
+    wndclass.hIconSm = NULL;
+    RegisterClassEx(&wndclass);
+    hwnd = CreateWindowEx(0, szClassName, szAppName, WS_OVERLAPPEDWINDOW,
+        CW_USEDEFAULT, CW_USEDEFAULT, 400, 500, NULL, NULL, hInstance, NULL);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
+    return msg.wParam;
+}
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    HDC hdc;
+    PAINTSTRUCT ps;
+    if (uMsg == WM_PAINT)
+    {
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc, TRANSPARENT);
+        POINT arrPoint[] = { 50,66,66,33,50,0,33,33,
+                            50,66,17,66,0,100,33,100,
+                            50,66,83,66,100,100,66,100 };
+        INT arrPolyCounts[] = { 4,4,4 };
+        PolyPolygon(hdc, arrPoint, arrPolyCounts, _countof(arrPolyCounts));
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    else if (uMsg == WM_DESTROY)
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240611225535541.png)
+
+:::
+
+
+
+可以看到，上面的函数都既不使用也不更新当前位置。
+
+填充图形使用当前画笔绘制边框线，使用当前画刷绘制内部的填充色。
+
+
+
+前面已经学习过创建逻辑画笔和逻辑画刷，我们可以创建各种不同样式、宽度和颜色的画笔，然后使用SelectObject函数将其选入DC中用于绘制边框线。
+
+
+
+可以创建各种不同颜色、阴影样式或图案的画刷，然后使用SelectObject函数将其选入DC中用于填充图形内部。
+
+
+
+## 一些矩形操作函数
+
+在GDI编程中经常使用矩形，以下矩形函数在实际开发中可能会用到。矩形的坐标值使用有符号整数，矩形右侧的坐标值必须大于左侧的坐标值。同样，矩形底部的坐标值必须大于顶部的坐标值。下面的所有矩形函数都使用逻辑单位。
+
+
+
+- `SetRect`函数设置指定矩形的坐标
+- `CopyRect`函数将一个矩形的坐标复制给另一个矩形，设置rect2 = rect1 
+- `SetRectEmpty`函数用于把一个矩形的所有坐标都设置为0
+- `IsRectEmpty`函数判断一个矩形的大小是否为0，即右侧的坐标是否小于或等于左侧的坐标，或底部的坐标是否小于或等于顶部的坐标，或同时小于或等于
+- `EqualRect`函数判断两个矩形是否相同，即两个矩形的左上角和右下角坐标是否都相同，若两个矩形的尺寸大小相同是不可以的，必须是坐标完全相同,
+
+:::details `SetRect/CopyRect/SetRectEmpty/IsRectEmpty/EqualRect 函数声明`
+
+```c
+/// <summary>
+/// 设置指定矩形的坐标
+/// </summary>
+/// <param name="lprc">out,要设置的矩形的RECT结构的指针</param>
+/// <param name="xLeft">指定矩形左上角的新X坐标</param>
+/// <param name="yTop">指定矩形左上角的新Y坐标</param>
+/// <param name="xRight">指定矩形右下角的新X坐标</param>
+/// <param name="yBottom">指定矩形右下角的新Y坐标</param>
+/// <returns></returns>
+BOOL SetRect(LPRECT lprc,int xLeft,int yTop,int xRight,int yBottom);
+
+/// <summary>
+/// 将一个矩形的坐标复制给另一个矩形
+/// </summary>
+/// <param name="lprcDst">out,目标矩形的RECT结构的指针</param>
+/// <param name="prcSrc">源矩形的RECT结构的指针</param>
+/// <returns></returns>
+BOOL CopyRect(LPRECT lprcDst,const RECT* prcSrc); 
+
+/// <summary>
+/// 把一个矩形的所有坐标都设置为0 
+/// </summary>
+/// <param name="Iprc">out,要设置的矩形的RECT结构的指针</param>
+/// <returns></returns>
+BOOL SetRectEmpty(LPRECT Iprc); 
+
+/// <summary>
+/// 函数判断一个矩形的大小是否为0
+/// </summary>
+/// <param name="lprc">要判断的矩形的RECT结构的指针</param>
+/// <returns></returns>
+BOOL lsRectEmpty(const RECT* lprc); 
+
+/// <summary>
+/// 判断两个矩形是否相同
+/// </summary>
+/// <param name="lprc1">第一个矩形的RECT结构的指针</param>
+/// <param name="lprc2">第二个矩形的RECT结构的指针</param>
+/// <returns></returns>
+BOOL EqualRect(const RECT* lprc1,const RECT* lprc2);
+```
+
+:::
+
+
+
+:::details `InflateRect 函数说明`
+
+InflateRect函数增加或减小一个矩形的宽度或高度，也可以同时增加或减小宽度和高度︰
+
+```c
+/// <summary>
+/// 增加或减小一个矩形的宽度或高度
+/// </summary>
+/// <param name="lprc">out,要设置的矩形的RECT结构的指针</param>
+/// <param name="dx">增加或减少矩形宽度的量，设置为负可以减小宽度</param>
+/// <param name="dy">增加或减少矩形高度的量，设置为负可以减小高度</param>
+/// <returns></returns>
+BOOL InflateRect(LPRECT lprc,int dx,int dy);
+```
+
+Inflate的字面意思是膨胀，该函数在矩形的左侧和右侧各添加dx单位，在顶部和底部各添加dy单位∶
+
+:::
+
+
+
+:::details `InflateRect 示例:`
+
+```c
+    // 矩形大小100 100
+	RECT rect = { 10,10,110,110 };  
+    // 变为rect = { -90,-90,210,210 } 矩形大小300 300
+	InflateRect(&rect, 100, 100); 
+
+   //变为rect = { 60,60,60,60 }矩形大小0 0
+	InflateRect(&rect, -150, -150); 
+```
+
+:::
+
+
+
+:::details `OffsetRect 函数说明`
+
+OffsetRect函数将矩形移动一定的量，大小不会改变
+
+```c
+/// <summary>
+/// 将矩形移动一定的量，大小不会改变
+/// </summary>
+/// <param name="lprc">out,要移动的矩形的RECT结构的指针</param>
+/// <param name="dx">向左或向右移动的量，设置为负值可以向左移动</param>
+/// <param name="dy">向上或向下移动的量，设置为负值可以向上移动</param>
+/// <returns></returns>
+BOOL OffsetRect(LPRECT lprc,int dx,int dy); 
+```
+
+:::
+
+
+
+:::details `OffsetRect 示例`
+
+为了帮助理解，请看代码︰
+
+```c
+RECT rect = { 10，10,110,110 };
+//rect = { 20，30，120,130 }100 100
+OffsetRect(&rect,10,20);  
+// rect = { -30,-20,70，80 } 100 100
+OffsetRect(&rect,-50,-50); 
+```
+
+:::
+
+
+
+`PtInRect`函数用于判断一个点是否位于指定的矩形内，这个函数经常使用。
+
+
+
+:::details `PtInRect 函数定义`
+
+```c
+/// <summary>
+/// 判断一个点是否位于指定的矩形内
+/// </summary>
+/// <param name="lprc">矩形的RECT结构的指针</param>
+/// <param name="pt">点结构</param>
+/// <returns></returns>
+BOOL PtInRect(const RECT* lprc,POINT pt); 
+```
+
+::: 
+
+
+
+`IntersectRect`函数计算两个源矩形的交集，并将交集矩形的坐标放入目标矩形参数.
+
+
+
+:::details `IntersectRect 函数说明`
+
+```c
+/// <summary>
+/// 计算两个源矩形的交集
+/// </summary>
+/// <param name="lprcDst">目标矩形的RECT结构的指针</param>
+/// <param name="IprcSrc1">源矩形1的RECT结构的指针</param>
+/// <param name="IprcSrc2">源矩形2的RECT结构的指针</param>
+/// <returns></returns>
+BOOL IntersectRect(LPRECT lprcDst, const RECT* IprcSrc1,const RECT* IprcSrc2); 
+```
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204113034097-17070174351329.png)
+
+源矩形1和源矩形2的并集就是实心黑线范围的大矩形，并集的结果是包含两个源矩形的最小矩形，而不会是一个不规则的形状。
+
+:::
+
+
+
+
+
+`SubtractRect`函数从一个矩形中减去另一个矩形.
+
+
+
+:::details `SubtractRect 函数说明`
+
+```c
+
+/// <summary>
+/// 一个矩形中减去另一个矩形
+/// </summary>
+/// <param name="lprcDst">存放相减结果的矩形的RECT结构的指针</param>
+/// <param name="lprcSrc1">源矩形1的RECT结构的指针，函数从该结构中减去lprcSrc2指向的矩形</param>
+/// <param name="lprcSrc2">源矩形2的RECT结构的指针</param>
+/// <returns></returns>
+BOOL SubtractRect(LPRECT lprcDst, const RECT* lprcSrc1,const RECT* lprcSrc2);
+```
+
+有一点需要注意，请看下图。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204113231938-170701755310610.png)
+
+
+
+图中粗边框的矩形为源矩形1，细边框的矩形为源矩形2，左图中源矩形1减源矩形2的结果还是源矩形1﹔右图中源矩形1减源矩形2的结果则是阴影填充那个小矩形，即无法只减去一个小角，和`UnionRect`函数的道理相同，结果不会是一个不规则形状。
+
+:::
+
+
+
+`FillRect`函数使用指定的画刷填充矩形
+
+
+
+`FrameRect`函数使用指定的画刷绘制矩形的边框，一般都是使用画笔绘制边框线，使用画刷绘制边框线比较少见
+
+
+
+`InvertRect`函数通过对矩形每个像素的颜色值执行逻辑非运算来反转矩形的边框和内部填充颜色，对同一个矩形调用`lnvertRect`两次又会还原为以前的颜色。
+
+
+
+:::details `FillRect/FrameRect/InvertRect 函数定义`
+
+```c
+/// <summary>
+/// 使用指定的画刷填充矩形
+/// </summary>
+/// <param name="hDC">设备环境句柄</param>
+/// <param name="lprc">要填充的矩形的RECT结构的指针</param>
+/// <param name="hbr">用于填充矩形的逻辑画刷句柄，或标准系统颜色，例如(HBRUSH)(COLOR_BTNFACE+ 1)</param>
+/// <returns></returns>
+int FillRect(HDC hDC,const RECT* lprc,HBRUSH hbr); 
+
+/// <summary>
+/// 使用指定的画刷绘制矩形的边框
+/// </summary>
+/// <param name="hDC">设备环境句柄</param>
+/// <param name="lprc">要绘制边框线的矩形的RECT结构的指针</param>
+/// <param name="hbr">用于绘制边框线的画刷句柄</param>
+/// <returns></returns>
+int FrameRect(HDC hDC,const RECT* lprc,HBRUSH hbr);
+
+
+/// <summary>
+/// 通过对矩形每个像素的颜色值执行逻辑非运算来反转矩形的边框和内部填充颜色
+/// </summary>
+/// <param name="hDC">设备环境句柄</param>
+/// <param name="lprc">out,要反转颜色的矩形的RECT结构的指针</param>
+/// <returns></returns>
+BOOL InvertRect(HDC hDC,const RECT* lprc);
+```
+
+:::
+
+## 逻辑坐标与设备坐标
+
+
+
+坐标空间是一个二维笛卡尔坐标系，通过使用相互垂直的两个参考轴来定位二维对象。系统中有**四层**坐标空间：世界、页面、设备和物理设备（客户区、桌面或打印纸页面)，如下所示。
+
+
+
+**世界坐标空间**
+
+可选，用作图形对象变换的起始坐标空间，可以对图形对象进行平移、缩放、旋转、剪切(倾斜、变形)和反射(镜像)。世界坐标空间高2单位，宽2单位。
+
+
+
+
+
+**页面坐标空间**
+
+
 
 
 
