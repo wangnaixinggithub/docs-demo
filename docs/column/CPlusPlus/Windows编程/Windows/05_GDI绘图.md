@@ -6849,5 +6849,434 @@ BOOL InvertRect(HDC hDC,const RECT* lprc);
 
 
 
+用作世界坐标空间之后的下一个坐标空间，或图形变换的起始坐标空间，该坐标空间可以设置映射模式。页面坐标空间也是高2单位，宽2单位
 
 
+
+
+
+**设备坐标空间**
+
+
+
+用作页面坐标空间之后的下一个坐标空间，该坐标空间只允许平移操作，这样可以确保设备坐标空间的原点映射到物理设备坐标空间中的正确位置。设备坐标空间高2个单位，宽2个单位
+
+
+
+**物理设备坐标空间**
+
+图形对象变换的最终(输出)空间，通常指应用程序窗口的客户区，也可以是整个桌面、全窗口(整个程序窗口，包括标题栏、菜单栏、客户区、边框等)或一页打印机或绘图仪纸张，具体取决于获取的是哪一种DC。
+
+
+
+世界坐标空间和页面坐标空间都称为逻辑坐标空间，这两种坐标空间配合使用，为应用程序提供与设备无关的单位，如毫米和英寸。系统使用变换技术将一个矩形区域从一个坐标空间复制（或映射)到下一个坐标空间，直到输出全部显示在物理设备上，变换是一种改变对象大小、方向和形状的算法。
+
+
+
+
+
+## 世界坐标空间到页面坐标空间的变换
+
+DC默认运行在兼容图形模式下。兼容图形模式只支持一种逻辑坐标空间，即页面坐标空间，而不支持世界坐标空间。如果应用程序需要支持世界坐标空间，就必须调用`SetGraphicsMode(hdc,GM_ADVANCED)`函数改变DC的图形模式为高级图形模式，这样一来，DC就支持两层逻辑坐标空间:世界坐标空间和页面坐标空间以及两种坐标空间之间的变换矩阵。
+
+
+
+
+
+世界坐标空间到页面坐标空间的变换支持平移、缩放、旋转、剪切(倾斜、变形)和反射（镜像)等功能，这都是通过调用`SetWorldTransform`函数实现的。调用该函数以后，映射将从世界坐标空间开始。否则，映射将从页面坐标空间开始。
+
+
+
+
+
+:::details `SetWorldTransform 函数说明`
+
+
+
+`SetWorldTransform`函数为指定的DC设置世界坐标空间和页面坐标空间之间的二维线性变换，该函数使用的是逻辑单位∶
+
+```c
+/// <summary>
+/// 数为指定的DC设置世界坐标空间和页面坐标空间之间的二维线性变换
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="lpXform">包含变换数据的XFORM结构的指针</param>
+/// <returns></returns>
+BOOL SetWorldTransform(HDC hdc,const XFORM* lpXform);
+```
+
+参数`lpXform`是一个指向XFORM结构的指针，包含世界坐标空间到页面坐标空间变换的数据。
+
+```c
+typedef struct tagXFORM
+{
+	FLOAT eM11;
+    FLOAT eM12;
+    FLOAT eM21;
+	FLOAT eM22;
+	FLOAT eDx;
+	FLOAT eDy;
+}XFORM，*PXFORM，FAR*LPXFORM;
+```
+
+这6个字段构成了一个`2*3`矩阵，不同的操作需要设置不同的字段，如下表所示。
+
+![](https://blogwnx-bucket.oss-cn-beijing.aliyuncs.com/img/image-20240204120056573.png)
+
+:::
+
+
+
+:::details `SetWorldTransform 示例`
+
+接下来让我们看一下不同变换的效果。对于`WorldPage`程序，读者分别用`NORMAL` `TRANSLATE` `SCALE` `ROTATE` `SHEAR` `REFLECT`为参数调用`TransformAndDraw`函数，看一下相等、平移、缩放、旋转、剪切、反射的效果，在学习了页面坐标空间到设备坐标空间的变换以后就可以读懂本程序。具体代码实现如下所示：
+
+```c
+#include <Windows.h>
+#include <tchar.h>
+#include<math.h>
+
+// 函数声明，窗口过程
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	WNDCLASSEX wndclass;
+	TCHAR szAppName[] = TEXT("世界空间到页面空间的变换");
+	HWND hwnd;
+	MSG msg;
+	wndclass.cbSize = sizeof(WNDCLASSEX);
+	wndclass.style = CS_HREDRAW | CS_VREDRAW;
+	wndclass.lpfnWndProc = WindowProc;
+	wndclass.cbClsExtra = 0;
+	wndclass.cbWndExtra = 0;
+	wndclass.hInstance = hInstance;
+	wndclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wndclass.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wndclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
+	wndclass.lpszMenuName = NULL;
+	wndclass.lpszClassName = szAppName;
+	wndclass.hIconSm = NULL;
+	RegisterClassEx(&wndclass);
+
+	hwnd = CreateWindowEx(0, szAppName, szAppName, WS_OVERLAPPEDWINDOW,
+		100, 100, 500, 400, NULL, NULL, hInstance, NULL);
+
+	ShowWindow(hwnd, nCmdShow);
+	UpdateWindow(hwnd);
+
+	while (GetMessage(&msg, NULL, 0, 0) != 0)
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	return msg.wParam;
+}
+
+enum MyEnum
+{
+	NORMAL, TRANSLATE, SCALE, ROTATE, SHEAR, REFLECT,
+};
+
+void TransformAndDraw(int iTransform, HWND hWnd)
+{
+	HDC hdc;
+	XFORM xForm;
+	RECT rect = {0};
+
+	// 将图形模式设置为高级图形模式
+	hdc = ::GetDC(hWnd);
+	::SetGraphicsMode(hdc, GM_ADVANCED);
+
+	// 将映射模式设置为MM_LOMETRIC，以0.1毫米为单位，这个函数稍后介绍
+	::SetMapMode(hdc, MM_LOMETRIC);
+	switch (iTransform)
+	{
+	case NORMAL:      // 相等
+		xForm.eM11 = (FLOAT)1.0;
+		xForm.eM12 = (FLOAT)0.0;
+		xForm.eM21 = (FLOAT)0.0;
+		xForm.eM22 = (FLOAT)1.0;
+		xForm.eDx = (FLOAT)0.0;
+		xForm.eDy = (FLOAT)0.0;
+		SetWorldTransform(hdc, &xForm);
+		break;
+	case TRANSLATE:   // 向右平移
+		xForm.eM11 = (FLOAT)1.0;
+		xForm.eM12 = (FLOAT)0.0;
+		xForm.eM21 = (FLOAT)0.0;
+		xForm.eM22 = (FLOAT)1.0;
+		xForm.eDx = (FLOAT)200.0;
+		xForm.eDy = (FLOAT)0.0;
+		SetWorldTransform(hdc, &xForm);
+		break;
+	case SCALE:        // 缩放到原始大小的1/2
+		xForm.eM11 = (FLOAT)0.5;
+		xForm.eM12 = (FLOAT)0.0;
+		xForm.eM21 = (FLOAT)0.0;
+		xForm.eM22 = (FLOAT)0.5;
+		xForm.eDx = (FLOAT)0.0;
+		xForm.eDy = (FLOAT)0.0;
+		SetWorldTransform(hdc, &xForm);
+		break;
+
+	case ROTATE:      // 逆时针旋转30度
+		xForm.eM11 = (FLOAT)0.8660;
+		xForm.eM12 = (FLOAT)0.5000;
+		xForm.eM21 = (FLOAT)-0.5000;
+		xForm.eM22 = (FLOAT)0.8660;
+		xForm.eDx = (FLOAT)0.0;
+		xForm.eDy = (FLOAT)0.0;
+		SetWorldTransform(hdc, &xForm);
+		break;
+	case SHEAR:       // 倾斜变形
+		xForm.eM11 = (FLOAT)1.0;
+		xForm.eM12 = (FLOAT)1.0;
+		xForm.eM21 = (FLOAT)0.0;
+		xForm.eM22 = (FLOAT)1.0;
+		xForm.eDx = (FLOAT)0.0;
+		xForm.eDy = (FLOAT)0.0;
+		SetWorldTransform(hdc, &xForm);
+		break;
+	case REFLECT:     // 沿X轴镜像
+		xForm.eM11 = (FLOAT)1.0;
+		xForm.eM12 = (FLOAT)0.0;
+		xForm.eM21 = (FLOAT)0.0;
+		xForm.eM22 = (FLOAT)-1.0;
+		xForm.eDx = (FLOAT)0.0;
+		xForm.eDy = (FLOAT)0.0;
+		SetWorldTransform(hdc, &xForm);
+		break;
+	}
+	GetClientRect(hWnd, (LPRECT)&rect);
+	// 设备坐标转换为逻辑坐标，此处逻辑单位为0.1毫米
+	DPtoLP(hdc, (LPPOINT)&rect, 2);
+	SelectObject(hdc, GetStockObject(NULL_BRUSH));
+	// 还记得吧，下面的绘图函数均使用逻辑单位
+	// 画外圆
+	Ellipse(hdc, (rect.right / 2 - 300), (rect.bottom / 2 + 300),
+		(rect.right / 2 + 300), (rect.bottom / 2 - 300));
+	// 画内圆
+	Ellipse(hdc, (rect.right / 2 - 270), (rect.bottom / 2 + 270),
+		(rect.right / 2 + 270), (rect.bottom / 2 - 270));
+
+	// 画小矩形
+	Rectangle(hdc, (rect.right / 2 - 20), (rect.bottom / 2 + 360),
+		(rect.right / 2 + 20), (rect.bottom / 2 + 210));
+
+	// 画水平线
+	MoveToEx(hdc, (rect.right / 2 - 400), (rect.bottom / 2 + 0), NULL);
+	LineTo(hdc, (rect.right / 2 + 400), (rect.bottom / 2 + 0));
+
+	// 画垂直线
+	MoveToEx(hdc, (rect.right / 2 + 0), (rect.bottom / 2 + 400), NULL);
+	LineTo(hdc, (rect.right / 2 + 0), (rect.bottom / 2 - 400));
+	ReleaseDC(hWnd, hdc);
+}
+
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	HDC hdc;
+	PAINTSTRUCT ps;
+	if (uMsg == WM_CREATE)
+	{
+		return 0;
+	}
+	else if (uMsg == WM_PAINT)
+	{
+		hdc = BeginPaint(hwnd, &ps);
+		// 请依次测试：NORMAL, TRANSLATE, SCALE, ROTATE, SHEAR, REFLECT
+		TransformAndDraw(NORMAL, hwnd);
+		EndPaint(hwnd, &ps);
+		return 0;
+	}
+	else if (uMsg == WM_DESTROY)
+	{
+		PostQuitMessage(0);
+		return 0;
+	}
+	return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+```
+
+:::
+
+
+
+## 页面坐标空间到设备坐标空间的变换
+
+页面坐标空间到设备坐标空间的变换决定了与DC关联的所有图形输出的映射模式。映射模式指定用于绘图操作的逻辑单位的大小。Windows提供了8种映射模式，如下表所示。
+
+
+
+
+
+**映射模式逻辑单位XY轴正方向**
+
+
+
+- `MM_TEXT`页面空间中的每个逻辑单位都映射到一个像素，也就是说，根本不执行缩放,这种映射模式下的页面空间相当于设备空间 Y坐标轴从上到下增加,X坐标轴从左向右增加.
+
+- `MM_HIENGLISH`页面空间中的每个逻辑单位映射到设备空间中的0.001英寸,Y坐标轴从下到上增加; X坐标轴从左向右增加
+
+- `MM_LOENGLISH`页面空间中的每个逻辑单位映射到设备空间中的0.01英寸;Y坐标轴从下到上增加;X坐标轴从左向右增加
+
+- `MM_HIMETRIC`页面空间中的每个逻辑单位映射到设备空间中的0.01毫米;Y坐标轴从下到上增加;X坐标轴从左向右增加
+
+- `MM_LOMETRIC`页面空间中的每个逻辑单位映射到设备空间中的0.1毫米;Y坐标轴从下到上增加;X坐标轴从左向右增加
+
+- `MM_TWIPS`页面空间中的每个逻辑单位映射到一个点的二十分之一(1/1440英寸);Y坐标轴从下到上增加;坐标轴总是等量缩放
+
+- `MM_ISOTROPIC`页面空间中的每个逻辑单位映射到设备空间中应用程序定义的单元
+  坐标轴的方向由应用程序指定坐标轴不一定等量缩放
+
+- `MM_ANISOTROPIC`页面空间中的每个逻辑单位映射到设备空间中应用程序定义的单元;坐标轴的方向由应用程序指定
+
+
+
+
+
+单词METRIC (公制)和ENGLISH(英制)指的是两种比较通用的测量系统，LO和HI是低(Low）和高(High)，指的是精度的高低。在排版中，一个点是一个基本测量单位，大约为1/72英寸，但是在图形程序设计中，通常假定它正好是1/72英寸，一个Twip是1/20点，也就是1/1440英寸。ISOTROPIC和ANISOTROPIC的意思分别是各向同性和各向异性。
+
+
+
+前6种映射模式属于系统预定义映射模式，MM_ISOTROPIC和MM_ANISOTROPIC属于程序自定义映射模式。
+
+
+
+在6种预定义的映射模式中，—种依赖于设备(MM_TEXT)，其余(MM_HIENGLISH MM_LOENGLISH MM_HIMETRIC MM_LOMETRIC MM_TWIPS)称为度量映射模式，度量映射模式独立于设备，即与设备无关。
+
+
+
+在6种预定义的映射模式中，X坐标轴都是从左向右增加﹔除了MM_TEXT映射模式Y坐标轴从上到下增加以外，其余5种的Y坐标轴都是从下到上增加。
+
+
+
+:::details `S/GetMapMode 设置映射模式 函数说明`
+
+要设置映射模式，需要调用`SetMapMode`函数。调用`GetMapMode`函数可以获取DC的当前映射模式。
+
+```c
+/// <summary>
+/// 设置映射模式
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <param name="fnMapMode">8种映射模式之一</param>
+/// <returns></returns>
+int SetMapMode(HDC hdc,int fnMapMode);
+```
+
+```c
+
+/// <summary>
+/// 获取映射模式
+/// </summary>
+/// <param name="hdc">设备环境句柄</param>
+/// <returns></returns>
+int GetMapMode(HDC hdc);
+```
+
+:::
+
+
+
+## 设备坐标系统
+
+在Windows中有3种设备坐标系统∶屏幕坐标、全窗口坐标和客户区坐标。注意，在所有的设备坐标系统中，都是以像素为单位，水平方向上X值从左向右增加，垂直方向上Y值从上往下增加。
+
+
+
+**屏幕坐标**
+
+
+
+很多函数的操作都是相对于屏幕的，比如创建一个程序窗口的CreateWindowEx函数，获取一个窗口位置、大小的GetWindowRect函数，获取光标位置的GetCursorPos函数，MSG结构的pt字段（消息发生时的光标位置)等，都是使用屏幕坐标。
+
+
+
+**全窗口坐标**
+
+
+
+全窗口坐标在Windows中用得不多，调用GetWindowDC函数获取的DC的原点是窗口的左上角而非客户区左上角。
+
+
+
+**客户区坐标**
+
+
+
+这是最常使用的设备坐标系统，调用GetDC或BeginPaint函数获取的DC的原点是客户区左上角。
+
+
+
+
+
+:::details `ClientToScreen/ScreenToClient 函数说明`
+
+```c
+/// <summary>
+/// 客户区坐标转为屏幕坐标
+/// </summary>
+/// <param name="hWnd">窗口句柄</param>
+/// <param name="lpPoint">要转换的客户区坐标的点结构，函数返回后屏幕坐标将被复制到该结构中</param>
+/// <returns></returns>
+BOOL ClientToScreen(HWND hWnd,LPPOINT lpPoint);
+```
+
+
+
+```c
+
+/// <summary>
+/// 屏幕坐标转为客户区坐标
+/// </summary>
+/// <param name="hWnd">窗口句柄</param>
+/// <param name="IpPoint">要转换的屏幕坐标的点结构，函数返回后客户区坐标将被复制到该结构中</param>
+/// <returns></returns>
+BOOL ScreenToClient(HWND hWnd,LPPOINT IpPoint);
+```
+
+:::
+
+
+
+:::details `GetWindowRect 函数说明`
+
+
+
+`GetWindowRect`函数获取指定窗口的尺寸，尺寸以屏幕坐标表示，相对于屏幕左上角
+
+```c
+/// <summary>
+/// 获取指定窗口的尺寸
+/// </summary>
+/// <param name="hWnd">窗口句柄</param>
+/// <param name="lpRect">接收窗口左上角和右下角屏幕坐标的RECT结构</param>
+/// <returns></returns>
+BOOL GetWindowRect(HWND hWnd,LPRECT lpRect);
+```
+
+:::
+
+
+
+:::details `MapWindowsPoints`
+
+全窗口坐标是相对于一个程序窗口的。如果想将一组点从相对于一个窗口的坐标空间转换(映射）到相对于另一个窗口的坐标空间，则可以调用`MapWindowPoints`函数.
+
+```c
+
+/// <summary>
+/// 将一组点从相对于一个窗口的坐标空间转换(映射）到相对于另一个窗口的坐标空间
+/// </summary>
+/// <param name="hWndFrom"></param>
+/// <param name="hWndTo"></param>
+/// <param name="IpPoints">指向POINT结构数组的指针，其中包含要转换的点</param>
+/// <param name="cPoints"> IpPoints参数指向的数组中POINT结构的数量</param>
+/// <returns></returns>
+int MapWindowPoints(HWND hWndFrom,HWND hWndTo,LPPOINT IpPoints,UINT cPoints);
+```
+
+:::

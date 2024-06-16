@@ -2,53 +2,23 @@ import { DefaultTheme } from 'vitepress';
 export const sidebar: DefaultTheme.Sidebar = {
   '/column/CPlusPlus/基础不牢地动山摇':
   [
-   
       {
-        text: '🚩Boost库大牛写的好框架',
+        text: '🚩从这里入门',
         collapsed: true,
         items: [
-          {
-            text: '👉C++ Boost 文件目录操作库',
-            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/28-C++ Boost 文件目录操作库'
-          },
-          {
-            text: '👉C++ Boost 日期时间操作库',
-            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/29-C++ Boost 日期时间操作库'
-          },
-          {
-            text: '👉C++ Boost 应用JSON解析库',
-            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/30-C++ Boost 应用JSON解析库'
-          },
-          {
-            text: '👉C++ Boost 字符串处理库',
-            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/31-C++ Boost 字符串处理库'
-          },
-          {
-            text:'👉C++ Boost 内存池管理库',
-            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/32-C++ Boost 内存池管理库'
-          },
-          {
-            text:'👉C++ Boost ThreadPool 线程池',
-            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/33-C++ Boost ThreadPool 线程池'
-          },
-          {
-            text:'👉C++ Boost 多线程并发库',
-            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/34-C++ Boost 多线程并发库'
-          },
-          {
-            text:'👉C++ Boost 数据集序列化库',
-            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/35-C++ Boost 数据集序列化库'
-          },
-          {
-            text:'👉C++ Boost 函数绑定回调库',
-            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/36-C++ Boost 函数绑定回调库'
-          }
-        ]
-      },
-      {
-        text: '🚩基础不牢地动山摇',
-        collapsed: true,
-        items: [
+            {
+              text:'👉准备开发环境',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/02-准备开发环境.md'
+            },
+            {
+              text:'👉第一个C++程序',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/03-第一个C++程序.md'
+            },
+            {
+              text:'👉C++输出数据',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/04-C++输出数据.md'
+            },
+
           {
             text:'👉函数模板的基本概念',
             link: '/column/CPlusPlus/基础不牢地动山摇/Base/51-函数模板的基本概念.md'
@@ -124,7 +94,6 @@ export const sidebar: DefaultTheme.Sidebar = {
 
         ]
       },
-
       {
         text: '🚩C Primer Plus',
         collapsed: true,
@@ -145,8 +114,56 @@ export const sidebar: DefaultTheme.Sidebar = {
           
 
         ]
+      },     
+      {
+        text: '🚩C++ Primer Plus',
+        collapsed: true,
+        items: [
+
+        ]
       },
-      
+      {
+        text: '🚩Boost库大牛写的好框架',
+        collapsed: true,
+        items: [
+          {
+            text: '👉C++ Boost 文件目录操作库',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/28-C++ Boost 文件目录操作库'
+          },
+          {
+            text: '👉C++ Boost 日期时间操作库',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/29-C++ Boost 日期时间操作库'
+          },
+          {
+            text: '👉C++ Boost 应用JSON解析库',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/30-C++ Boost 应用JSON解析库'
+          },
+          {
+            text: '👉C++ Boost 字符串处理库',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/31-C++ Boost 字符串处理库'
+          },
+          {
+            text:'👉C++ Boost 内存池管理库',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/32-C++ Boost 内存池管理库'
+          },
+          {
+            text:'👉C++ Boost ThreadPool 线程池',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/33-C++ Boost ThreadPool 线程池'
+          },
+          {
+            text:'👉C++ Boost 多线程并发库',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/34-C++ Boost 多线程并发库'
+          },
+          {
+            text:'👉C++ Boost 数据集序列化库',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/35-C++ Boost 数据集序列化库'
+          },
+          {
+            text:'👉C++ Boost 函数绑定回调库',
+            link: '/column/CPlusPlus/基础不牢地动山摇/Boost/36-C++ Boost 函数绑定回调库'
+          }
+        ]
+      },
       {
         text: '🚩C++并发编程',
         collapsed: true,
@@ -175,15 +192,6 @@ export const sidebar: DefaultTheme.Sidebar = {
             text:'👉设计基于锁的并发数据结构.md',
             link: '/column/CPlusPlus/基础不牢地动山摇/Thread/06_设计基于锁的并发数据结构.md'
           },
-
-        ]
-      },
-          
-      {
-        text: '🚩C++ Primer Plus',
-        collapsed: true,
-        items: [
-
 
         ]
       },
@@ -352,6 +360,24 @@ export const sidebar: DefaultTheme.Sidebar = {
   
 
   ],
+
+  '/column/CPlusPlus/项目':
+  [
+    {
+      text: '🚩项目',
+      collapsed: true,
+      items: [
+        {
+          text: '👉坦克动荡游戏',
+          link: '/column/CPlusPlus/项目/01-坦克动荡游戏.md'
+        },
+      ]
+
+    }
+  
+
+  ],
+
   '/column/CPlusPlus/Windows编程':
   [
     {
@@ -378,7 +404,22 @@ export const sidebar: DefaultTheme.Sidebar = {
           text:'👉GDI绘图',
           link: '/column/CPlusPlus/Windows编程/Windows/05_GDI绘图.md'
         },
-
+        {
+          text:'👉鼠标和键盘',
+          link: '/column/CPlusPlus/Windows编程/Windows/06_鼠标和键盘.md'
+        },
+        {
+          text:'👉定时器和时间',
+          link: '/column/CPlusPlus/Windows编程/Windows/07_定时器和时间.md'
+        },
+        {
+          text:'👉菜单和其他资源',
+          link: '/column/CPlusPlus/Windows编程/Windows/08_菜单和其他资源.md'
+        },
+        {
+          text:'👉CC++ 获取主机网卡MAC地址',
+          link: '/column/CPlusPlus/Windows编程/Windows/36_CC++ 获取主机网卡MAC地址.md'
+        },
         {
           text:'👉CC++ 实现FTP文件上传下载',
           link: '/column/CPlusPlus/Windows编程/Windows/37-CC++ 实现FTP文件上传下载.md'

@@ -21,6 +21,10 @@ export const nav: DefaultTheme.NavItem[] = [
              text:'✍️整合三方库✍️',
              link:'/column/CPlusPlus/整合三方库/'
            },
+           {
+            text:'✍️项目✍️',
+            link:'/column/CPlusPlus/项目/'
+          },
         ]
       },
       {
