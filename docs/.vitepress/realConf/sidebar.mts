@@ -18,6 +18,19 @@ export const sidebar: DefaultTheme.Sidebar = {
               text:'👉C++输出数据',
               link: '/column/CPlusPlus/基础不牢地动山摇/Base/04-C++输出数据.md'
             },
+            {
+              text:'👉基本数据类型和注释',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/05-基本数据类型和注释.md'
+            },
+            {
+              text:'👉变量常量枚举标识符',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/06-变量常量枚举标识符.md'
+            },
+
+            
+
+
+            
 
           {
             text:'👉函数模板的基本概念',
@@ -411,10 +424,30 @@ export const sidebar: DefaultTheme.Sidebar = {
         {
           text:'👉定时器和时间',
           link: '/column/CPlusPlus/Windows编程/Windows/07_定时器和时间.md'
-        },
+        }, 
         {
           text:'👉菜单和其他资源',
           link: '/column/CPlusPlus/Windows编程/Windows/08_菜单和其他资源.md'
+        },
+        {
+          text:'👉实现Windows注册表操作',
+          link: '/column/CPlusPlus/Windows编程/Windows/09_实现Windows注册表操作.md'
+        },
+        {
+          text:'👉位图',
+          link: '/column/CPlusPlus/Windows编程/Windows/10_位图.md'
+        },
+        {
+          text:'👉子窗口控件',
+          link: '/column/CPlusPlus/Windows编程/Windows/11_子窗口控件.md'
+        },
+        {
+          text:'👉CC++文件路径处理',
+          link: '/column/CPlusPlus/Windows编程/Windows/34_CC++文件路径处理.md'
+        },
+        {
+          text:'👉CC++ 实现动态资源文件释放',
+          link: '/column/CPlusPlus/Windows编程/Windows/35_CC++ 实现动态资源文件释放.md'
         },
         {
           text:'👉CC++ 获取主机网卡MAC地址',
