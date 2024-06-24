@@ -26,7 +26,11 @@ export const sidebar: DefaultTheme.Sidebar = {
               text:'👉变量常量枚举标识符',
               link: '/column/CPlusPlus/基础不牢地动山摇/Base/06-变量常量枚举标识符.md'
             },
-
+            {
+              text:'👉函数',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/07-函数.md'
+            },
+            
             
 
 
