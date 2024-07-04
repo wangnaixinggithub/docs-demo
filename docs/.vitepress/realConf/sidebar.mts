@@ -30,12 +30,78 @@ export const sidebar: DefaultTheme.Sidebar = {
               text:'👉函数',
               link: '/column/CPlusPlus/基础不牢地动山摇/Base/07-函数.md'
             },
-            
-            
+            {
+              text:'👉运算符',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/08-运算符.md'
+            },
+            {
+              text:'👉数组',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/09-数组.md'
+            },
+            {
+              text:'👉流程控制',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/10-流程控制.md'
+            },
+            {
+              text:'👉指针',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/11-指针.md'
+            },
+            {
+              text:'👉命名空间和访问控制',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/12-命名空间和访问控制.md'
+            },
+            {
+              text:'👉常量和枚举',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/13-常量和枚举.md'
+            },
+            {
+              text:'👉引用',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/14-引用'
+            },
+            {
+              text:'👉类和对象',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/15-类和对象.md'
+            },
+            {
+              text:'👉C++内存模型',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/16-C++内存模型.md'
+            },
+            {
+              text:'👉STL容器',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/17-STL容器.md'
+            },     
+            {
+              text:'👉STL算法',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/18-STL算法.md'
+            },     
+            {
+              text:'👉IO',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/19-IO.md'
+            },   
+            {
+              text:'👉封装字符串操作',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/20_封装字符串操作.md'
+            },  
+            {
+              text:'👉构建带树层级的数据',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/21_构建带树层级的数据.md'
+            },  
+            {
+              text:'👉类型转换',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/22-类型转换.md'
+            },  
 
+            {
+              text:'👉异常处理',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/23-异常处理.md'
+            },  
 
-            
+            {
+              text:'👉并发多线程',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/24-并发多线程.md'
+            },  
 
+          
           {
             text:'👉函数模板的基本概念',
             link: '/column/CPlusPlus/基础不牢地动山摇/Base/51-函数模板的基本概念.md'
