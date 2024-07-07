@@ -47,17 +47,22 @@ export const nav: DefaultTheme.NavItem[] = [
             text:'✍️Windows系统编程✍️',
             link:'/column/CPlusPlus/Windows编程/'
           },
-          {
-            text:'✍️OpenGL✍️',
-            link:'/column/CPlusPlus/深入浅出OpenGL/'
-          },
-       //     {
-      //       text:'✍️OpenCV学习笔记✍️',
-      //       link:'column/CPlusPlus/OpenCV学习笔记/'
-      //     },
-          
         ]
       },
+      {
+        text:'❤️图像/视频处理❤️',
+        items:
+        [
+          {
+            text:'✍️OpenGL✍️',
+            link:'/column/CPlusPlus/图像视频处理/OpenGL/'
+          },
+            {
+            text:'✍️OpenCV✍️',
+            link:'/column/CPlusPlus/图像视频处理/OpenCV/'
+          },
+        ]
+      }
     ]
   },
   //===================CPlusPlus======================
@@ -148,9 +153,22 @@ export const nav: DefaultTheme.NavItem[] = [
 
   {
    text: 'Algorithm',
-   link: '/column/Algorithm'
+   items: [
+    {
+      text: '❤️LeetCode❤️',
+      link:'/column/Algorithm/LeetCode/'
+    },
+    {
+      text: '❤️数据结构❤️',
+      link:'/column/Algorithm/数据结构/'
+    },
+    {
+      text: '❤️设计模式❤️',
+      link:'/column/Algorithm/设计模式/'
+    },
+    
+  ]
  },
-
 
   //===================Link======================
    {

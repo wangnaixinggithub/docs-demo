@@ -8,7 +8,7 @@ import { codeToHtml } from 'shiki'
 export default defineConfig({
   //base: '/docs-demo/',
  
-  title: 'JacksonWangBlog',
+  title: 'JacksonBlog',
   description: 'A VitePress Site',
   head: [
     [

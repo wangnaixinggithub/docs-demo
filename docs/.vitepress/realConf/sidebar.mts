@@ -101,7 +101,15 @@ export const sidebar: DefaultTheme.Sidebar = {
               link: '/column/CPlusPlus/基础不牢地动山摇/Base/24-并发多线程.md'
             },  
 
-          
+            {
+              text:'👉function和bind',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/25-function和bind.md'
+            },  
+            {
+              text:'👉实现Range序列生成器.md',
+              link: '/column/CPlusPlus/基础不牢地动山摇/Base/26_实现Range序列生成器.md'
+            },  
+
           {
             text:'👉函数模板的基本概念',
             link: '/column/CPlusPlus/基础不牢地动山摇/Base/51-函数模板的基本概念.md'
@@ -454,6 +462,11 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: '👉坦克动荡游戏',
           link: '/column/CPlusPlus/项目/01-坦克动荡游戏.md'
         },
+        {
+          text: '👉桌面破坏王游戏',
+          link: '/column/CPlusPlus/项目/02-桌面破坏王游戏.md'
+        },
+        
       ]
 
     }
@@ -577,10 +590,10 @@ export const sidebar: DefaultTheme.Sidebar = {
       collapsed: true,
       items: [
 
-    {
-      text:'👉CAM加工模块',
-      link: '/column/CPlusPlus/Windows编程/NX/01-CAM.md'
-    },
+        {
+          text:'👉CAM加工模块',
+          link: '/column/CPlusPlus/Windows编程/NX/01-CAM.md'
+        },
    
       ]
     },
@@ -1123,161 +1136,140 @@ export const sidebar: DefaultTheme.Sidebar = {
       ]
     },
   ],
-  '/column/CPlusPlus/深入浅出OpenGL/':
+  '/column/CPlusPlus/图像视频处理/OpenGL':
   [
     {
-      text: '🚩深入浅出OpenGL🚩',
+      text: '🚩OpenGL🚩',
       items:
       [
         {
           text: 'LearnOpenGL 你好窗口',
-          link: '/column/CPlusPlus/深入浅出OpenGL/01_LearnOpenGL 你好窗口.md'
+          link: '/column/CPlusPlus/OpenGL/01_LearnOpenGL 你好窗口.md'
         },
         {
           text: 'LearnOpenGL 你好，三角形',
-          link: '/column/CPlusPlus/深入浅出OpenGL/02_LearnOpenGL 你好，三角形.md'
+          link: '/column/CPlusPlus/OpenGL/02_LearnOpenGL 你好，三角形.md'
         },
         {
           text: 'LearnOpenGL 索引缓冲对象',
-          link: '/column/CPlusPlus/深入浅出OpenGL/03_LearnOpenGL 索引缓冲对象.md'
+          link: '/column/CPlusPlus/OpenGL/03_LearnOpenGL 索引缓冲对象.md'
         },
         {
           text: 'LearnOpenGL 着色器',
-          link: '/column/CPlusPlus/深入浅出OpenGL/04_LearnOpenGL 着色器.md'
+          link: '/column/CPlusPlus/OpenGL/04_LearnOpenGL 着色器.md'
         },
         {
           text: 'LearnOpenGL 我们自己的着色器类',
-          link: '/column/CPlusPlus/深入浅出OpenGL/05_LearnOpenGL 我们自己的着色器类.md'
+          link: '/column/CPlusPlus/OpenGL/05_LearnOpenGL 我们自己的着色器类.md'
         },
         {
           text: 'LearnOpenGL 纹理单元',
-          link: '/column/CPlusPlus/深入浅出OpenGL/07_LearnOpenGL 纹理单元.md'
+          link: '/column/CPlusPlus/OpenGL/07_LearnOpenGL 纹理单元.md'
         },
         {
           text: 'LearnOpenGL 十分简单的矩阵向量数学应用',
-          link: '/column/CPlusPlus/深入浅出OpenGL/08_LearnOpenGL 十分简单的矩阵向量数学应用.md'
+          link: '/column/CPlusPlus/OpenGL/08_LearnOpenGL 十分简单的矩阵向量数学应用.md'
         },
         {
           text: 'LearnOpenGL 变换',
-          link: '/column/CPlusPlus/深入浅出OpenGL/09_LearnOpenGL 变换.md'
+          link: '/column/CPlusPlus/OpenGL/09_LearnOpenGL 变换.md'
         },
         {
           text: 'LearnOpenGL 坐标系统',
-          link: '/column/CPlusPlus/深入浅出OpenGL/10_LearnOpenGL 坐标系统.md'
+          link: '/column/CPlusPlus/OpenGL/10_LearnOpenGL 坐标系统.md'
         },
         {
           text: 'LearnOpenGL 摄像机(Camera)',
-          link: '/column/CPlusPlus/深入浅出OpenGL/11_LearnOpenGL 摄像机(Camera).md'
+          link: '/column/CPlusPlus/OpenGL/11_LearnOpenGL 摄像机(Camera).md'
         },
         {
           text: 'LearnOpenGL 封装一个摄像机类',
-          link: '/column/CPlusPlus/深入浅出OpenGL/12_LearnOpenGL 封装一个摄像机类.md'
+          link: '/column/CPlusPlus/OpenGL/12_LearnOpenGL 封装一个摄像机类.md'
         },
         {
           text: 'LearnOpenGL 光照',
-          link: '/column/CPlusPlus/深入浅出OpenGL/13_LearnOpenGL 光照.md'
+          link: '/column/CPlusPlus/OpenGL/13_LearnOpenGL 光照.md'
         },
         {
           text: 'LearnOpenGL 光照基础',
-          link: '/column/CPlusPlus/深入浅出OpenGL/14_LearnOpenGL 光照基础.md'
+          link: '/column/CPlusPlus/OpenGL/14_LearnOpenGL 光照基础.md'
         },
         {
           text: 'LearnOpenGL 光照材质',
-          link: '/column/CPlusPlus/深入浅出OpenGL/LearnOpenGL 光照材质'
+          link: '/column/CPlusPlus/OpenGL/LearnOpenGL 光照材质'
         },
         {
           text: 'LearnOpenGL 光照贴图',
-          link: '/column/CPlusPlus/深入浅出OpenGL/LearnOpenGL 光照贴图'
+          link: '/column/CPlusPlus/OpenGL/LearnOpenGL 光照贴图'
         },
         {
           text: 'LearnOpenGL 投光物',
-          link: '/column/CPlusPlus/深入浅出OpenGL/17_LearnOpenGL 投光物.md'
+          link: '/column/CPlusPlus/OpenGL/17_LearnOpenGL 投光物.md'
         },
       ]
     },
   ],
-  '/column/Algorithm':
+
+  '/column/CPlusPlus/图像视频处理/OpenCV':
   [
     {
-      text: '🚩大话数据结构',
+      text: '🚩学习OpenCV3🚩',
+      items:
+      [
+        {
+          text: 'OpenCV初探',
+          link: '/column/CPlusPlus/图像视频处理/OpenCV/01-OpenCV初探.md'
+        },
+
+      ]
+    },
+  ],
+
+  
+  '/column/Algorithm/':
+  [
+    {
+      text: '🚩数据结构',
       collapsed: true,
       items:
       [
         {
           text: '算法',
-          link: '/column/Algorithm/大话数据结构/02_算法.md'
+          link: '/column/Algorithm/数据结构/02_算法.md'
         },
         {
           text: '线性表',
-          link: '/column/Algorithm/大话数据结构/03_线性表.md'
+          link: '/column/Algorithm/数据结构/03_线性表.md'
         },
         {
           text: '栈和队列',
-          link: '/column/Algorithm/大话数据结构/04_栈和队列.md'
+          link: '/column/Algorithm/数据结构/04_栈和队列.md'
         },
         {
           text: '串',
-          link: '/column/Algorithm/大话数据结构/05_串.md'
+          link: '/column/Algorithm/数据结构/05_串.md'
         },
         {
           text: '树',
-          link: '/column/Algorithm/大话数据结构/06_树.md'
+          link: '/column/Algorithm/数据结构/06_树.md'
         },
         {
           text: '图',
-          link: '/column/Algorithm/大话数据结构/07_图.md'
+          link: '/column/Algorithm/数据结构/07_图.md'
         },
         {
           text: '查找',
-          link: '/column/Algorithm/大话数据结构/08_查找.md'
+          link: '/column/Algorithm/数据结构/08_查找.md'
         },
         {
           text: '排序',
-          link: '/column/Algorithm/大话数据结构/09_排序.md'
+          link: '/column/Algorithm/数据结构/09_排序.md'
         },
         {
           text: '17个常用数据结构实现与原理分析',
-          link: '/column/Algorithm/大话数据结构/10_17个常用数据结构实现与原理分析.md'
+          link: '/column/Algorithm/数据结构/10_17个常用数据结构实现与原理分析.md'
         },
         
-      ]
-    },
-    {
-      text: '🚩蓝桥杯',
-      collapsed: true,
-      items:
-      [
-        {
-          text: '切面条',
-          link: '/column/Algorithm/蓝桥杯/01_切面条.md'
-        },
-        {
-          text: '大衍数列',
-          link: '/column/Algorithm/蓝桥杯/02_大衍数列.md'
-        },
-        {
-          text: '门牌制作',
-          link: '/column/Algorithm/蓝桥杯/03_门牌制作.md'
-        }, 
-      ]
-    },
-    {
-      text: '🚩蓝桥杯',
-      collapsed: true,
-      items:
-      [
-        {
-          text: '切面条',
-          link: '/column/Algorithm/蓝桥杯/01_切面条.md'
-        },
-        {
-          text: '大衍数列',
-          link: '/column/Algorithm/蓝桥杯/02_大衍数列.md'
-        },
-        {
-          text: '门牌制作',
-          link: '/column/Algorithm/蓝桥杯/03_门牌制作.md'
-        }, 
       ]
     },
     {
@@ -1301,6 +1293,101 @@ export const sidebar: DefaultTheme.Sidebar = {
           text: '合并两个有序链表',
           link: '/column/Algorithm/LeetCode/21. 合并两个有序链表.md'
         }, 
+      ]
+    },
+    {
+      text: '🚩设计模式',
+      collapsed: true,
+      items:
+      [
+        {
+          text: '工厂方法模式',
+          link: '/column/Algorithm/设计模式/01_工厂方法.md'
+        },
+        {
+          text: '抽象工厂模式',
+          link: '/column/Algorithm/设计模式/02_抽象工厂.md'
+        },
+        {
+          text: '建造者模式',
+          link: '/column/Algorithm/设计模式/03_建造者.md'
+        },
+        {
+          text: '原型模式',
+          link: '/column/Algorithm/设计模式/04_原型.md'
+        }, 
+        {
+          text: '单例模式',
+          link: '/column/Algorithm/设计模式/05_单例.md'
+        }, 
+        {
+          text: '适配器模式',
+          link: '/column/Algorithm/设计模式/06_适配器.md'
+        }, 
+        {
+          text: '桥接模式',
+          link: '/column/Algorithm/设计模式/07_桥接.md'
+        }, 
+        {
+          text: '组合模式',
+          link: '/column/Algorithm/设计模式/08_组合.md'
+        }, 
+        {
+          text: '装饰器模式',
+          link: '/column/Algorithm/设计模式/09_装饰器.md'
+        }, 
+        {
+          text: '外观模式',
+          link: '/column/Algorithm/设计模式/10_外观.md'
+        }, 
+        {
+          text: '享元模式',
+          link: '/column/Algorithm/设计模式/11_享元.md'
+        }, 
+        {
+          text: '代理模式',
+          link: '/column/Algorithm/设计模式/12_代理.md'
+        }, 
+        {
+          text: '责任链模式',
+          link: '/column/Algorithm/设计模式/13_责任链.md'
+        }, 
+        {
+          text: '迭代器模式',
+          link: '/column/Algorithm/设计模式/14_迭代器.md'
+        }, 
+        {
+          text: '中介者模式',
+          link: '/column/Algorithm/设计模式/15_中介者.md'
+        }, 
+        {
+          text: '备忘录模式',
+          link: '/column/Algorithm/设计模式/16_备忘录.md'
+        }, 
+        {
+          text: '观察者模式',
+          link: '/column/Algorithm/设计模式/17_观察者.md'
+        }, 
+        {
+          text: '状态模式',
+          link: '/column/Algorithm/设计模式/18_状态.md'
+        }, 
+        {
+          text: '策略模式',
+          link: '/column/Algorithm/设计模式/19_策略.md'
+        }, 
+        {
+          text: '模版模式',
+          link: '/column/Algorithm/设计模式/20_模版.md'
+        }, 
+        {
+          text: '访问者模式',
+          link: '/column/Algorithm/设计模式/21_访问者.md'
+        }, 
+        
+        
+        
+        
       ]
     }
   ]
