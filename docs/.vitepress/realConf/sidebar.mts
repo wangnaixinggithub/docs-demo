@@ -451,7 +451,6 @@ export const sidebar: DefaultTheme.Sidebar = {
   
 
   ],
-
   '/column/CPlusPlus/项目':
   [
     {
@@ -473,7 +472,6 @@ export const sidebar: DefaultTheme.Sidebar = {
   
 
   ],
-
   '/column/CPlusPlus/Windows编程':
   [
     {
@@ -524,6 +522,35 @@ export const sidebar: DefaultTheme.Sidebar = {
           text:'👉子窗口控件',
           link: '/column/CPlusPlus/Windows编程/Windows/11_子窗口控件.md'
         },
+        {
+          text:'👉对话框',
+          link: '/column/CPlusPlus/Windows编程/Windows/12_对话框.md'
+        },
+        {
+          text:'👉通用对话框',
+          link: '/column/CPlusPlus/Windows编程/Windows/13_通用对话框.md'
+        },
+        {
+          text:'👉多线程编程',
+          link: '/column/CPlusPlus/Windows编程/Windows/14_多线程编程.md'
+        },
+        {
+          text:'👉内存管理',
+          link: '/column/CPlusPlus/Windows编程/Windows/15_内存管理.md'
+        },
+        {
+          text:'👉文件 驱动器 和目录操作',
+          link: '/column/CPlusPlus/Windows编程/Windows/16_文件 驱动器 和目录操作.md'
+        },
+        
+
+      
+             
+      {
+        text:'👉CC++获取进程所在目录(全路径)',
+        link: '/column/CPlusPlus/Windows编程/Windows/33-CC++获取进程所在目录(全路径).md'
+      },
+        
         {
           text:'👉CC++文件路径处理',
           link: '/column/CPlusPlus/Windows编程/Windows/34_CC++文件路径处理.md'
@@ -1209,7 +1236,6 @@ export const sidebar: DefaultTheme.Sidebar = {
       ]
     },
   ],
-
   '/column/CPlusPlus/图像视频处理/OpenCV':
   [
     {
@@ -1223,9 +1249,7 @@ export const sidebar: DefaultTheme.Sidebar = {
 
       ]
     },
-  ],
-
-  
+  ], 
   '/column/Algorithm/':
   [
     {
@@ -1391,7 +1415,5 @@ export const sidebar: DefaultTheme.Sidebar = {
       ]
     }
   ]
-
-
 };
 
