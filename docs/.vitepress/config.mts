@@ -1,6 +1,5 @@
 import { defineConfig  } from 'vitepress';
 import { sidebar, nav } from './realConf/index.mts';
-import { codeToHtml } from 'shiki'
 
 
 
@@ -28,6 +27,10 @@ export default defineConfig({
       { rel: "icon", href: "/avatar.png" }]
   
   ],
+
+
+
+
   chunkSizeWarningLimit:1500,
   rollupOptions: {
     output:{
@@ -35,13 +38,20 @@ export default defineConfig({
           if (id.includes('node_modules')) {
               return id.toString().split('node_modules/')[1].split('/')[0].toString();
           }
-      }
+      } 
+    },
+    chunkFileNames: (chunkInfo) => {
+      const facadeModuleId = chunkInfo.facadeModuleId
+        ? chunkInfo.facadeModuleId.split('/')
+        : [];
+      const fileName =
+        facadeModuleId[facadeModuleId.length - 2] || '[name]';
+      return `js/${fileName}/[name].[hash].js`;
     }
+
 },
 
 
-  
-  // 配置markdown写作风格
   markdown: {
  
     theme: { light: 'one-dark-pro', dark: 'one-dark-pro' } ,
